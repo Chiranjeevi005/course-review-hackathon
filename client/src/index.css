@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline: 3px solid #0F4C81;
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Container styles */
+.container {
+  max-width: 1280px;
+}
+
+/* Custom utility classes */
+.hero-height {
+  min-height: 420px;
+}
+
+@media (min-width: 768px) {
+  .hero-height {
+    min-height: 520px;
+  }
+}
+
+/* Transition classes for animations */
+.transition-fast {
+  transition: all 120ms ease-in-out;
+}
+
+.transition-medium {
+  transition: all 240ms ease-in-out;
+}
+
+.transition-slow {
+  transition: all 360ms ease-in-out;
+}
+
+/* Custom focus styles */
+.focus-ring {
+  outline: 3px solid #0F4C81;
+  outline-offset: 2px;
+}
+
+/* Soft gradient background */
+.bg-soft-gradient {
+  background: linear-gradient(135deg, rgba(15, 76, 129, 0.05) 0%, rgba(79, 70, 229, 0.05) 100%);
+}
+
+/* Card hover effect */
+.card-hover {
+  transform: scale(1.02);
+}
+
+/* Reading column for long text */
+.reading-column {
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Testimonial carousel animation */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(10px); }
+  20% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.fade-in-out {
+  animation: fadeInOut 8s infinite;
+}
+
+/* Skeleton loading animation */
+.skeleton-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Enhanced shimmer animation for skeleton loaders */
+.animate-shimmer {
+  animation: shimmer 1.5s infinite linear;
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Bounce animation for bookmark icon */
+.animate-bounce {
+  animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(0.9); }
+  75% { transform: scale(1.1); }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Disable shimmer animation for reduced motion */
+  .animate-shimmer {
+    animation: none;
+    background: #e5e7eb; /* fallback to solid color */
+  }
+  
+  /* Disable smooth scrolling for reduced motion */
+  html {
+    scroll-behavior: auto;
+  }
+  
+  /* Disable bounce animation for reduced motion */
+  .animate-bounce {
+    animation: none;
+  }
+}
