@@ -51,6 +51,7 @@ if (process.env.MONGO_URI) {
 
 // Routes
 import authRoutes from './routes/authRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 
 app.get('/', (req, res) => {
   res.send('Course Review API is running 🚀');
@@ -58,6 +59,9 @@ app.get('/', (req, res) => {
 
 // Auth routes
 app.use('/auth', authRoutes);
+
+// Category routes
+app.use('/api/categories', categoryRoutes);
 
 // Test route to check all dependencies
 app.get('/test-dependencies', async (req, res) => {

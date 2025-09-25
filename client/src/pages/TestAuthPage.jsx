@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 const TestAuthPage = () => {
   const { user, accessToken, loading, login, logout, isAuthenticated, isAdmin } = useContext(AuthContext);
@@ -28,22 +29,24 @@ const TestAuthPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Authentication Test Page</h1>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      
+      <div className="container mx-auto p-4 sm:p-6 md:p-8 mt-16 sm:mt-20">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Authentication Test Page</h1>
         
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Auth Status</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Auth Status</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
-              <p className="text-sm text-gray-500">Authenticated</p>
-              <p className={`text-lg font-medium ${isAuthenticated ? 'text-green-600' : 'text-red-600'}`}>
+              <p className="text-xs sm:text-sm text-gray-500">Authenticated</p>
+              <p className={`text-base sm:text-lg font-medium ${isAuthenticated ? 'text-green-600' : 'text-red-600'}`}>
                 {isAuthenticated ? 'Yes' : 'No'}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Admin</p>
-              <p className={`text-lg font-medium ${isAdmin ? 'text-green-600' : 'text-red-600'}`}>
+              <p className="text-xs sm:text-sm text-gray-500">Admin</p>
+              <p className={`text-base sm:text-lg font-medium ${isAdmin ? 'text-green-600' : 'text-red-600'}`}>
                 {isAdmin ? 'Yes' : 'No'}
               </p>
             </div>
@@ -51,51 +54,51 @@ const TestAuthPage = () => {
         </div>
         
         {user && (
-          <div className="bg-white rounded-lg shadow p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">User Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">User Information</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <p className="text-sm text-gray-500">Name</p>
-                <p className="text-lg font-medium text-gray-900">{user.name}</p>
+                <p className="text-xs sm:text-sm text-gray-500">Name</p>
+                <p className="text-base sm:text-lg font-medium text-gray-900">{user.name}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Email</p>
-                <p className="text-lg font-medium text-gray-900">{user.email}</p>
+                <p className="text-xs sm:text-sm text-gray-500">Email</p>
+                <p className="text-base sm:text-lg font-medium text-gray-900">{user.email}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Role</p>
-                <p className="text-lg font-medium text-gray-900">{user.role}</p>
+                <p className="text-xs sm:text-sm text-gray-500">Role</p>
+                <p className="text-base sm:text-lg font-medium text-gray-900">{user.role}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Provider</p>
-                <p className="text-lg font-medium text-gray-900">{user.provider}</p>
+                <p className="text-xs sm:text-sm text-gray-500">Provider</p>
+                <p className="text-base sm:text-lg font-medium text-gray-900">{user.provider}</p>
               </div>
             </div>
           </div>
         )}
         
         {accessToken && (
-          <div className="bg-white rounded-lg shadow p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Access Token</h2>
-            <div className="break-words bg-gray-100 p-4 rounded-lg">
-              <p className="text-sm text-gray-500">Token</p>
-              <p className="text-gray-900">{accessToken}</p>
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Access Token</h2>
+            <div className="break-words bg-gray-100 p-3 sm:p-4 rounded-lg">
+              <p className="text-xs sm:text-sm text-gray-500">Token</p>
+              <p className="text-xs sm:text-sm text-gray-900">{accessToken}</p>
             </div>
           </div>
         )}
         
-        <div className="flex space-x-4">
+        <div className="flex flex-wrap gap-3 sm:gap-4">
           {!isAuthenticated ? (
             <button
               onClick={handleLogin}
-              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition"
+              className="bg-primary-600 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg hover:bg-primary-700 transition text-sm sm:text-base"
             >
               Test Login
             </button>
           ) : (
             <button
               onClick={handleLogout}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+              className="bg-red-600 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg hover:bg-red-700 transition text-sm sm:text-base"
             >
               Logout
             </button>
@@ -103,7 +106,7 @@ const TestAuthPage = () => {
           
           <button
             onClick={() => navigate('/dashboard')}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition text-sm sm:text-base"
           >
             Go to Dashboard
           </button>
@@ -111,7 +114,7 @@ const TestAuthPage = () => {
           {isAdmin && (
             <button
               onClick={() => navigate('/admin')}
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition"
+              className="bg-purple-600 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg hover:bg-purple-700 transition text-sm sm:text-base"
             >
               Go to Admin
             </button>

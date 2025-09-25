@@ -31,7 +31,7 @@ const SearchBox = ({ onSearch, initialFilters = {} }) => {
       <motion.form 
         role="search" 
         onSubmit={handleSearch}
-        className="relative max-w-3xl mx-auto flex shadow-lg rounded-lg overflow-hidden"
+        className="relative max-w-lg sm:max-w-xl md:max-w-3xl mx-auto flex shadow-lg rounded-lg overflow-hidden"
         whileHover={{ 
           boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
         }}
@@ -45,72 +45,67 @@ const SearchBox = ({ onSearch, initialFilters = {} }) => {
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           aria-label="Search courses"
           placeholder="Search courses, topics, or instructors"
-          className="flex-1 px-4 py-3 text-text-900 bg-white/95 focus:outline-none focus:ring-2 focus:ring-accent-500 transition-all duration-200 ease-in-out"
+          className="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-text-900 bg-white/95 focus:outline-none focus:ring-2 focus:ring-accent-500 transition-all duration-200 ease-in-out text-sm sm:text-base"
         />
         <motion.button
           type="submit"
           whileHover={{ backgroundColor: "#e6951d" }}
           whileTap={{ scale: 0.95 }}
-          className="px-6 py-3 bg-accent-500 text-text-900 font-semibold hover:bg-opacity-90 transition-all duration-200 ease-in-out shadow-md"
+          className="px-4 sm:px-6 py-2 sm:py-3 bg-accent-500 text-text-900 font-semibold hover:bg-opacity-90 transition-all duration-200 ease-in-out shadow-md text-sm sm:text-base"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </motion.button>
         
         {/* Filters button */}
-        <motion.button
+        <button
           type="button"
           onClick={() => setIsFilterSheetOpen(true)}
-          whileHover={{ 
-            backgroundColor: "#f9fafb",
-            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
-          }}
-          whileTap={{ scale: 0.95 }}
-          className="absolute right-24 top-1/2 transform -translate-y-1/2 bg-card-100 text-text-900 px-3 py-1 rounded-lg flex items-center text-sm border border-muted-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-accent-500"
+          className="absolute right-20 sm:right-24 top-1/2 bg-card-100 text-text-900 px-2 sm:px-3 py-1 rounded-lg flex items-center text-xs sm:text-sm border border-muted-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-accent-500 transform -translate-y-1/2 hover:bg-gray-100 transition-colors duration-200"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 sm:h-4 sm:w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
           </svg>
           Filters
-        </motion.button>
+        </button>
         
         {/* Search suggestions dropdown (mock) */}
         {isFocused && searchQuery.length > 0 && (
           <motion.div 
-            className="absolute left-0 right-0 mt-2 bg-white rounded-lg shadow-xl z-10 border border-muted-500"
+            className="absolute left-0 right-0 mt-1 sm:mt-2 bg-white rounded-lg shadow-xl z-10 border border-muted-500"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <div className="py-2">
+            <div className="py-1 sm:py-2">
               <motion.div 
-                className="px-4 py-2 hover:bg-muted-50 cursor-pointer flex items-center"
+                className="px-3 sm:px-4 py-2 hover:bg-muted-50 cursor-pointer flex items-center text-sm"
                 whileHover={{ backgroundColor: "#f9fafb" }}
                 transition={{ duration: 0.15 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-muted-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-muted-500 mr-2 sm:mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <span><span className="font-medium">React</span> fundamentals course</span>
               </motion.div>
               <motion.div 
-                className="px-4 py-2 hover:bg-muted-50 cursor-pointer flex items-center"
+                className="px-3 sm:px-4 py-2 hover:bg-muted-50 cursor-pointer flex items-center text-sm"
                 whileHover={{ backgroundColor: "#f9fafb" }}
                 transition={{ duration: 0.15 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-muted-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-muted-500 mr-2 sm:mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <span>Advanced <span className="font-medium">JavaScript</span> techniques</span>
               </motion.div>
               <motion.div 
-                className="px-4 py-2 hover:bg-muted-50 cursor-pointer flex items-center"
+                className="px-3 sm:px-4 py-2 hover:bg-muted-50 cursor-pointer flex items-center text-sm"
                 whileHover={{ backgroundColor: "#f9fafb" }}
                 transition={{ duration: 0.15 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-muted-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-muted-500 mr-2 sm:mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <span><span className="font-medium">Python</span> for data science</span>
