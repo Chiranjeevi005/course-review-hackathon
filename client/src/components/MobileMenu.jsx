@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const MobileMenu = ({ isOpen, onClose }) => {
+const MobileMenu = ({ isOpen, onClose, user, logout }) => {
   if (!isOpen) return null;
 
   return (
@@ -102,13 +102,54 @@ const MobileMenu = ({ isOpen, onClose }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.5 }}
           >
-            <motion.button 
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full bg-accent-500 text-text-900 py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold mb-3 focus:outline-none focus:ring-2 focus:ring-accent-500"
-            >
-              Sign In
-            </motion.button>
+            {user ? (
+              <>
+                <motion.button 
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full bg-primary-600 text-white py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 ease-in-out font-semibold mb-3 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  onClick={() => {
+                    onClose();
+                    window.location.href = '/dashboard';
+                  }}
+                >
+                  Dashboard
+                </motion.button>
+                <motion.button 
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full bg-accent-500 text-text-900 py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold mb-3 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                  onClick={logout}
+                >
+                  Logout
+                </motion.button>
+              </>
+            ) : (
+              <>
+                <motion.button 
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full bg-accent-500 text-text-900 py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold mb-3 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                  onClick={() => {
+                    onClose();
+                    window.location.href = '/login';
+                  }}
+                >
+                  Sign In
+                </motion.button>
+                <motion.button 
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full bg-primary-600 text-white py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 ease-in-out font-semibold mb-3 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  onClick={() => {
+                    onClose();
+                    window.location.href = '/login';
+                  }}
+                >
+                  Sign Up
+                </motion.button>
+              </>
+            )}
             <motion.button 
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}

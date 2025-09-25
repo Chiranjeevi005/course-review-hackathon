@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
+import { AuthContext } from '../context/AuthContext';
 import CourseCard from '../components/CourseCard';
 import CategoryChip from '../components/CategoryChip';
 import SearchBox from '../components/SearchBox';
 import MobileMenu from '../components/MobileMenu';
 import HowItWorksStep from '../components/HowItWorksStep';
 import Carousel from '../components/Carousel';
-import Stats from '../components/Stats';
 import SkeletonCard from '../components/SkeletonCard';
 
 const HomePage = () => {
+  const authContext = useContext(AuthContext);
+  const { user, logout } = authContext || {};
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
@@ -328,6 +330,8 @@ const HomePage = () => {
       <MobileMenu 
         isOpen={isMobileMenuOpen} 
         onClose={() => setIsMobileMenuOpen(false)} 
+        user={user}
+        logout={logout}
       />
 
       {/* Header */}
@@ -369,7 +373,7 @@ const HomePage = () => {
             
             <div className="flex items-center space-x-4">
               <motion.button 
-                className="text-muted-500 hover:text-primary-700 transition-colors duration-200 ease-in-out hidden sm:block"
+                className="text-muted-500 hover:text-primary-700 transition-colors duration-200 ease-in-out"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0 }}
@@ -380,16 +384,47 @@ const HomePage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </motion.button>
-              <motion.button 
-                className="bg-accent-500 text-text-900 px-4 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold hidden sm:block shadow-md hover:shadow-lg"
-                whileHover={{ scale: 1.05, backgroundColor: "#e6951d" }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                Sign In
-              </motion.button>
+              {user ? (
+                <>
+                  <motion.button 
+                    className="bg-primary-700 text-white px-4 py-2 rounded-lg hover:bg-primary-800 transition-all duration-200 ease-in-out font-semibold shadow-md hover:shadow-lg"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    onClick={() => window.location.href = '/dashboard'}
+                  >
+                    Dashboard
+                  </motion.button>
+                  <motion.button 
+                    className="bg-accent-500 text-gray-900 px-4 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold shadow-md hover:shadow-lg"
+                    whileHover={{ scale: 1.05, backgroundColor: "#e6951d" }}
+                    whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    onClick={logout}
+                  >
+                    Logout
+                  </motion.button>
+                </>
+              ) : (
+                <>
+                  <button 
+                    className="bg-accent-500 text-gray-900 px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-opacity-90 transition-all duration-200"
+                    onClick={() => window.location.href = '/login'}
+                  >
+                    Sign In
+                  </button>
+                  <button 
+                    className="bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-primary-800 transition-all duration-200"
+                    onClick={() => window.location.href = '/login'}
+                  >
+                    Sign Up
+                  </button>
+                </>
+              )}
               
               {/* Mobile Menu Button */}
               <motion.button 
@@ -505,15 +540,6 @@ const HomePage = () => {
           </motion.div>
         </div>
       </motion.section>
-
-      {/* Stats Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.2 }}
-      >
-        <Stats />
-      </motion.div>
 
       {/* Recommended for You */}
       <motion.div

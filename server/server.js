@@ -5,24 +5,59 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+import User from './models/User.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+// Get the directory name
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables with explicit path
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+
 const app = express();
 
+// Debug: Log environment variables
+console.log('Environment variables:');
+console.log('PORT:', process.env.PORT);
+console.log('MONGO_URI:', process.env.MONGO_URI);
+console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'Set' : 'Not set');
+console.log('Current directory:', __dirname);
+
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? 'https://your-frontend-domain.com' : 'http://localhost:5173',
+  credentials: true
+}));
 app.use(express.json());
+app.use(cookieParser());
 app.use(morgan('dev'));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch(err => console.error('❌ MongoDB Error:', err));
+if (process.env.MONGO_URI) {
+  mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(async () => {
+      console.log('✅ MongoDB Connected');
+      // Ensure admin user exists
+      await User.ensureAdmin();
+    })
+    .catch(err => console.error('❌ MongoDB Error:', err));
+} else {
+  console.log('⚠️  MONGO_URI not found in environment variables. Running in mock mode.');
+  // Mock mode - no database connection
+}
 
 // Routes
+import authRoutes from './routes/authRoutes.js';
+
 app.get('/', (req, res) => {
   res.send('Course Review API is running 🚀');
 });
+
+// Auth routes
+app.use('/auth', authRoutes);
 
 // Test route to check all dependencies
 app.get('/test-dependencies', async (req, res) => {
@@ -37,7 +72,7 @@ app.get('/test-dependencies', async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     // Test MongoDB connection status
-    const mongoStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
+    const mongoStatus = mongoose.connection && mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
     
     res.json({
       status: 'All dependencies are working!',
@@ -46,14 +81,14 @@ app.get('/test-dependencies', async (req, res) => {
         mongoose: `✅ ${mongoStatus}`,
         cors: '✅ Working',
         morgan: '✅ Working',
-        dotenv: '✅ Working',
+        dotenv: process.env.MONGO_URI ? '✅ Working' : '⚠️  MONGO_URI not found',
         bcryptjs: `✅ Working (Hash test: ${isPasswordValid ? 'Passed' : 'Failed'})`,
         jsonwebtoken: `✅ Working (Token test: ${decoded.userId === 'test123' ? 'Passed' : 'Failed'})`
       },
       details: {
         mongoDB: {
           connectionStatus: mongoStatus,
-          uri: process.env.MONGO_URI
+          uri: process.env.MONGO_URI || 'Not provided'
         },
         jwt: {
           tokenGenerated: token ? 'Yes' : 'No',
@@ -75,5 +110,5 @@ app.get('/test-dependencies', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
