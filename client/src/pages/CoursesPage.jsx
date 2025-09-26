@@ -263,7 +263,7 @@ const CoursesPage = () => {
       
       {/* Hero Section */}
       <section className="py-12 sm:py-16 md:py-20 lg:py-20 bg-gradient-to-r from-primary-700 to-indigo-700 text-white">
-        <div className="container mx-auto px-4 text-center">
+        <div className="px-4 sm:px-6 lg:px-8 text-center">
           <motion.h1 
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4"
             initial={{ opacity: 0, y: 20 }}
@@ -295,7 +295,7 @@ const CoursesPage = () => {
 
       {/* Category Filter Section - ENHANCED */}
       <section className="py-6 sm:py-8 bg-white shadow-sm">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-3 sm:mb-4">
             <h2 className="text-lg sm:text-xl font-bold text-text-900">Browse by Category</h2>
             <div className="flex space-x-2">
@@ -359,7 +359,7 @@ const CoursesPage = () => {
 
       {/* Filters & Sorting Section */}
       <section className="py-6 sm:py-8 bg-white shadow-sm">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             {/* Filters Summary */}
             <div className="flex flex-wrap gap-2">
@@ -475,7 +475,7 @@ const CoursesPage = () => {
 
       {/* Course Grid Section */}
       <section className="py-10 sm:py-12">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           {/* Results summary */}
           <div className="mb-4 sm:mb-6">
             <p className="text-muted-500">
@@ -605,7 +605,7 @@ const CoursesPage = () => {
 
       {/* Recommendation CTA Section */}
       <section className="py-12 sm:py-16 bg-gradient-to-r from-primary-700 to-indigo-700 text-white">
-        <div className="container mx-auto px-4 text-center">
+        <div className="px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2 
             className="text-2xl sm:text-3xl font-bold mb-4"
             initial={{ opacity: 0, y: 20 }}

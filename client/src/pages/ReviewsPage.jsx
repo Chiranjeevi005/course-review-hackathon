@@ -132,7 +132,7 @@ const ReviewsPage = () => {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-12">
+        <div className="px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center py-12">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Error Loading Reviews</h3>
             <p className="text-gray-500 mb-4">{error}</p>
@@ -152,7 +152,7 @@ const ReviewsPage = () => {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-12">
+        <div className="px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center py-12">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Course Not Found</h3>
             <p className="text-gray-500 mb-4">The requested course could not be found.</p>
@@ -174,7 +174,7 @@ const ReviewsPage = () => {
       
       {/* Breadcrumb */}
       <div className="bg-gray-50 py-3">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <nav className="text-sm">
             <button 
               onClick={() => navigate('/')} 
@@ -213,7 +213,7 @@ const ReviewsPage = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
         {course && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}

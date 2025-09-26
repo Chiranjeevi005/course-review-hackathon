@@ -23,9 +23,26 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Container styles */
+/* Container styles - removed max-width to allow full width */
 .container {
-  max-width: 1280px;
+  /* max-width: 1280px; */
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
 /* Custom utility classes */
@@ -145,4 +162,15 @@ html {
   .animate-bounce {
     animation: none;
   }
+}
+
+/* Ensure full width for the entire app */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+html {
+  width: 100%;
 }

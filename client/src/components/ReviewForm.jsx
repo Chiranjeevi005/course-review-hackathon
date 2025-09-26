@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
 import axios from '../utils/axiosConfig';
+import tracking from '../utils/tracking';
 
 const ReviewForm = ({ courseId, onReviewSubmit }) => {
   const { user } = useContext(AuthContext);
@@ -67,6 +68,10 @@ const ReviewForm = ({ courseId, onReviewSubmit }) => {
         setRating(0);
         setReviewText('');
         setSelectedTags([]);
+        
+        // Track review submission
+        tracking.trackReviewSubmission(user._id, courseId, rating);
+        
         onReviewSubmit(response.data.data);
       }
     } catch (error) {

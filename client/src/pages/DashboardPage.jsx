@@ -27,7 +27,7 @@ const DashboardPage = () => {
     <div className="min-h-screen">
       <Navbar />
       
-      <main className="container mx-auto px-4 py-6 sm:py-8 md:py-10 lg:py-12 mt-12 sm:mt-16 md:mt-20">
+      <main className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-10 lg:py-12 mt-12 sm:mt-16 md:mt-20">
         <div className="bg-white rounded-lg shadow p-4 sm:p-6 md:p-8">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900 mb-4 sm:mb-6">User Profile</h2>
           
@@ -96,6 +96,17 @@ const DashboardPage = () => {
                 <h3 className="font-medium text-gray-900 text-sm sm:text-base md:text-lg">System Settings</h3>
                 <p className="text-xs sm:text-sm md:text-base text-gray-500 mt-1">Configure application settings</p>
               </div>
+            </div>
+            <div className="mt-6">
+              <a 
+                href="/admin-dashboard" 
+                className="inline-flex items-center bg-primary-700 text-white px-4 py-2 rounded-md hover:bg-primary-800 transition-colors duration-200 font-medium"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                </svg>
+                Go to Admin Dashboard
+              </a>
             </div>
           </div>
         )}

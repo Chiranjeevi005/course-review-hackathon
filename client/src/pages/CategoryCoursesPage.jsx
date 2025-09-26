@@ -251,7 +251,7 @@ const CategoryCoursesPage = () => {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-12">
+        <div className="px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center py-12">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Error Loading Data</h3>
             <p className="text-gray-500 mb-4">{error}</p>
@@ -271,7 +271,7 @@ const CategoryCoursesPage = () => {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-12">
+        <div className="px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center py-12">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Category Not Found</h3>
             <p className="text-gray-500 mb-4">The requested category could not be found.</p>
@@ -293,7 +293,7 @@ const CategoryCoursesPage = () => {
       
       {/* Hero Section */}
       <section className="py-10 sm:py-12 md:py-16 lg:py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -316,7 +316,7 @@ const CategoryCoursesPage = () => {
 
       {/* Filters Section */}
       <section className="py-4 sm:py-6 bg-white shadow-sm">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-2 mb-4">
             {['beginner', 'intermediate', 'advanced'].map(level => (
               <button
@@ -391,7 +391,7 @@ const CategoryCoursesPage = () => {
 
       {/* Course Grid Section */}
       <section className="py-8 sm:py-10 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           {isLoading ? (
             <motion.div 
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"

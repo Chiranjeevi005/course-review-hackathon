@@ -78,14 +78,7 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
             >
               <a href="/categories" className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-sm sm:text-base">Categories</a>
             </motion.li>
-            <motion.li
-              variants={{
-                hidden: { opacity: 0, x: 20 },
-                visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } }
-              }}
-            >
-              <a href="/recommendations" className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-sm sm:text-base">Find Courses</a>
-            </motion.li>
+            {/* Removed 'Find Courses' option as per user request */}
             <motion.li
               variants={{
                 hidden: { opacity: 0, x: 20 },
@@ -112,17 +105,23 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
           >
             {user ? (
               <div className="space-y-3">
-                <motion.button 
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-primary-600 text-white py-2.5 sm:py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm sm:text-base"
-                  onClick={() => {
-                    onClose();
-                    window.location.href = '/dashboard';
-                  }}
-                >
-                  Dashboard
-                </motion.button>
+                {/* Admin Dashboard link for admin users - positioned before logout button */}
+                {user && user.role === 'admin' && (
+                  <motion.a
+                    href="/admin-dashboard"
+                    className="block w-full text-left bg-primary-100 text-primary-700 py-2.5 sm:py-3 rounded-lg hover:bg-primary-200 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm sm:text-base"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={onClose}
+                  >
+                    <div className="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                      </svg>
+                      Admin Dashboard
+                    </div>
+                  </motion.a>
+                )}
                 <motion.button 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}

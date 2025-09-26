@@ -205,7 +205,7 @@ const HomePage = () => {
           <div className="absolute top-1/3 left-1/3 w-6 h-6 rounded-full bg-blue-300 sm:top-1/3 sm:w-12 sm:h-12"></div>
         </div>
         
-        <div className="container mx-auto px-4 text-center relative z-10">
+        <div className="px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.h1 
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 max-w-2xl sm:max-w-3xl mx-auto"
             variants={item}
@@ -238,7 +238,7 @@ const HomePage = () => {
         animate="show"
         variants={container}
       >
-        <div className="container mx-auto px-4 text-center">
+        <div className="px-4 sm:px-6 lg:px-8 text-center">
           <motion.h1 
             className="text-3xl sm:text-4xl md:text-h1 font-extrabold text-text-900 mb-4 leading-tight"
             variants={item}
@@ -269,7 +269,7 @@ const HomePage = () => {
         animate="show"
         variants={container}
       >
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <motion.h2 
             className="text-2xl sm:text-h2 font-extrabold text-text-900 mb-6 sm:mb-8"
             variants={item}
@@ -301,7 +301,7 @@ const HomePage = () => {
         animate="show"
         variants={container}
       >
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <motion.h2 
             className="text-2xl sm:text-h2 font-extrabold text-text-900 mb-6 sm:mb-8"
             variants={item}
@@ -347,7 +347,7 @@ const HomePage = () => {
         animate="show"
         variants={container}
       >
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <motion.h2 
             className="text-2xl sm:text-h2 font-extrabold text-text-900 mb-6 sm:mb-8"
             variants={item}
@@ -395,7 +395,7 @@ const HomePage = () => {
         animate="show"
         variants={container}
       >
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <motion.h2 
             className="text-2xl sm:text-h2 font-extrabold text-text-900 mb-8 sm:mb-10 md:mb-12 text-center"
             variants={item}
@@ -427,7 +427,7 @@ const HomePage = () => {
         animate="show"
         variants={container}
       >
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <motion.h2 
             className="text-2xl sm:text-h2 font-extrabold text-text-900 mb-8 sm:mb-10 md:mb-12 text-center"
             variants={item}

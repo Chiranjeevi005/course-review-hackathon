@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Rating from '../components/Rating';
 import axios from '../utils/axiosConfig';
+import { useAuth } from '../context/AuthContext';
+import tracking from '../utils/tracking';
 
 // Function to generate category-specific gradient colors
 const getCategoryColors = (category) => {
@@ -48,6 +50,7 @@ const generatePlaceholderSVG = (category, width, height, isBanner = false) => {
 const CourseDetailsPage = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -98,6 +101,12 @@ const CourseDetailsPage = () => {
             };
             
             setCourse(transformedCourse);
+            
+            // Track course view if user is logged in
+            if (user) {
+              tracking.trackCourseView(user._id, courseId, apiCourse.title);
+            }
+            
             return;
           }
         } catch (apiError) {
@@ -120,13 +129,13 @@ const CourseDetailsPage = () => {
       setError('No course ID provided');
       setLoading(false);
     }
-  }, [courseId]);
+  }, [courseId, user]);
 
   if (loading) {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-12">
+        <div className="px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="mt-4 text-gray-600">Loading course details...</p>
@@ -140,7 +149,7 @@ const CourseDetailsPage = () => {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-12">
+        <div className="px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center py-12">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Error Loading Course</h3>
             <p className="text-gray-500 mb-4">{error}</p>
@@ -160,7 +169,7 @@ const CourseDetailsPage = () => {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-12">
+        <div className="px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center py-12">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Course Not Found</h3>
             <p className="text-gray-500 mb-4">The requested course could not be found.</p>
@@ -185,7 +194,7 @@ const CourseDetailsPage = () => {
       
       {/* Breadcrumb */}
       <div className="bg-gray-50 py-3">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <nav className="text-sm">
             <Link to="/" className="text-blue-600 hover:underline">Home</Link>
             <span className="mx-2 text-gray-400">/</span>
@@ -200,7 +209,7 @@ const CourseDetailsPage = () => {
 
       {/* Course Details */}
       <section className="py-6 sm:py-8 md:py-10 lg:py-12">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2">

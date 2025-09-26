@@ -9,24 +9,13 @@ const CategoryCard = ({ category }) => {
     navigate(`/courses/category/${category._id}`);
   };
 
-  // Generate a gradient based on category name
-  const generateGradient = (name) => {
-    if (!name) return 'from-blue-400 to-purple-500';
-    const hash = name.split('').reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
-    const gradients = [
-      'from-blue-400 to-purple-500',
-      'from-green-400 to-blue-500',
-      'from-yellow-400 to-red-500',
-      'from-purple-400 to-pink-500',
-      'from-indigo-400 to-blue-500',
-      'from-teal-400 to-green-500',
-      'from-orange-400 to-red-500',
-      'from-cyan-400 to-blue-500'
-    ];
-    return gradients[Math.abs(hash) % gradients.length];
+  // Use a professional, subdued color scheme instead of vibrant gradients
+  const getProfessionalColor = (name) => {
+    // Using a consistent professional color scheme based on primary-700
+    return 'from-blue-700 to-indigo-800';
   };
 
-  const gradient = generateGradient(category.name);
+  const gradient = getProfessionalColor(category.name);
 
   return (
     <motion.div
@@ -45,10 +34,10 @@ const CategoryCard = ({ category }) => {
           {category.description}
         </p>
         <div className="flex justify-between items-center">
-          <span className="text-blue-600 font-medium text-xs sm:text-sm">
+          <span className="text-blue-700 font-medium text-xs sm:text-sm">
             {category.courseCount || 0} courses
           </span>
-          <div className="flex items-center text-blue-600 font-medium text-xs sm:text-sm">
+          <div className="flex items-center text-blue-700 font-medium text-xs sm:text-sm">
             <span className="mr-1">Explore</span>
             <svg 
               xmlns="http://www.w3.org/2000/svg" 

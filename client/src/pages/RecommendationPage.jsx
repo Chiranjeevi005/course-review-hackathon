@@ -273,7 +273,7 @@ const RecommendationPage = () => {
           <div className="absolute bottom-20 right-1/3 w-10 h-10 rounded-full bg-white sm:bottom-40 sm:w-20 sm:h-20"></div>
           <div className="absolute top-1/3 left-1/3 w-6 h-6 rounded-full bg-white sm:top-1/3 sm:w-12 sm:h-12"></div>
         </div>
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -290,7 +290,7 @@ const RecommendationPage = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-8 sm:py-10 md:py-12 lg:py-16">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 sm:py-10 md:py-12 lg:py-16">
         {!isSubmitted ? (
           /* Questionnaire Section */
           <motion.div

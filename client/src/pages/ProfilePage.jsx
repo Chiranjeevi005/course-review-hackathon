@@ -27,7 +27,7 @@ const ProfilePage = () => {
     <div className="min-h-screen">
       <Navbar />
       
-      <main className="container mx-auto px-4 py-6 sm:py-8 md:py-10 mt-16 sm:mt-20">
+      <main className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-10 mt-16 sm:mt-20">
         <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">User Profile</h2>
           

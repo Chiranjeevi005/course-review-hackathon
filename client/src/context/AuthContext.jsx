@@ -1,8 +1,17 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import axios from 'axios';
 
 // Create the context
 export const AuthContext = createContext();
+
+// Create a custom hook to use the auth context
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
 // Create a provider component
 export const AuthProvider = ({ children }) => {
@@ -13,7 +22,8 @@ export const AuthProvider = ({ children }) => {
 
   // Set up axios defaults
   useEffect(() => {
-    axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+    // Set base URL for API requests
+    axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3003';
     axios.defaults.withCredentials = true;
     
     // Check if we have a stored access token
@@ -37,6 +47,7 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.get('/auth/profile');
       setUser(response.data.user);
     } catch (err) {
+      console.error('Error loading user profile:', err);
       // If token is invalid, clear it
       localStorage.removeItem('accessToken');
       setAccessToken(null);
@@ -152,6 +163,7 @@ export const AuthProvider = ({ children }) => {
       
       return newAccessToken;
     } catch (err) {
+      console.error('Token refresh error:', err);
       // If refresh fails, logout user
       logout();
       throw new Error('Session expired. Please log in again.');

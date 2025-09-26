@@ -33,7 +33,7 @@ const PlaceholderDemoPage = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-3xl font-bold text-text-900 mb-2">Enhanced Course Placeholder System</h1>
         <p className="text-muted-500 mb-8">Professional placeholders with course titles and category-specific icons</p>
         

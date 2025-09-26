@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import FilterSheet from './FilterSheet';
+import { useAuth } from '../context/AuthContext';
+import tracking from '../utils/tracking';
 
 const SearchBox = ({ onSearch, initialFilters = {} }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
+  const { user } = useAuth();
 
   const handleSearch = (e) => {
     e.preventDefault();
+    
+    // Track search event if user is logged in
+    if (user && searchQuery.trim()) {
+      tracking.trackSearch(user._id, searchQuery);
+    }
+    
     // Pass search query and filters to parent component
     if (onSearch) {
       onSearch(searchQuery, appliedFilters);

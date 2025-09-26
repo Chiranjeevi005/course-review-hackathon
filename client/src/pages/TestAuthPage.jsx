@@ -32,7 +32,7 @@ const TestAuthPage = () => {
     <div className="min-h-screen">
       <Navbar />
       
-      <div className="container mx-auto p-4 sm:p-6 md:p-8 mt-16 sm:mt-20">
+      <div className="px-4 sm:px-6 lg:px-8 p-4 sm:p-6 md:p-8 mt-16 sm:mt-20">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Authentication Test Page</h1>
         
         <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6 sm:mb-8">

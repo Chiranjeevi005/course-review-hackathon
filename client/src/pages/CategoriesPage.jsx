@@ -134,9 +134,9 @@ const CategoriesPage = () => {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-8">
+        <div className="px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700 mx-auto"></div>
             <p className="mt-4 text-gray-600">Loading categories...</p>
           </div>
         </div>
@@ -148,13 +148,13 @@ const CategoriesPage = () => {
     return (
       <div className="min-h-screen">
         <Navbar />
-        <div className="container mx-auto px-4 py-8">
+        <div className="px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Error Loading Categories</h3>
             <p className="text-gray-500 mb-4">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
             >
               Try Again
             </button>
@@ -168,9 +168,9 @@ const CategoriesPage = () => {
     <div className="min-h-screen">
       <Navbar />
       
-      {/* Hero Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
-        <div className="container mx-auto px-4 text-center">
+      {/* Hero Section with professional color scheme */}
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-blue-700 to-indigo-800 text-white">
+        <div className="px-4 sm:px-6 lg:px-8 text-center">
           <motion.h1 
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4"
             initial={{ opacity: 0, y: 20 }}
@@ -202,7 +202,7 @@ const CategoriesPage = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search categories..."
-                  className="w-full px-4 py-2 sm:py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                  className="w-full px-4 py-2 sm:py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
@@ -217,7 +217,7 @@ const CategoriesPage = () => {
               <select
                 value={selectedFilter}
                 onChange={(e) => setSelectedFilter(e.target.value)}
-                className="px-4 py-2 sm:py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-accent-500 bg-white"
+                className="px-4 py-2 sm:py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               >
                 {filterOptions.map(option => (
                   <option key={option.value} value={option.value}>{option.label}</option>
@@ -230,7 +230,7 @@ const CategoriesPage = () => {
 
       {/* Categories Grid */}
       <section className="py-10 sm:py-12 md:py-16">
-        <div className="container mx-auto px-4">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-6 sm:mb-8">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
               {searchQuery || selectedFilter !== 'all' 
@@ -261,7 +261,7 @@ const CategoriesPage = () => {
                   setSearchQuery('');
                   setSelectedFilter('all');
                 }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
               >
                 Clear Filters
               </button>
