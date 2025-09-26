@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Navbar from '../components/Navbar';
+import Navbar from '../layouts/Navbar';
 import ReviewCard from '../components/ReviewCard';
 import ReviewForm from '../components/ReviewForm';
-import axios from '../utils/axiosConfig';
+import axios from '../services/axiosConfig';
 import { AuthContext } from '../context/AuthContext';
 
 const ReviewsPage = () => {

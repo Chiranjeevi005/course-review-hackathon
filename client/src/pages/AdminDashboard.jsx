@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 import CourseManagement from '../components/CourseManagement';
@@ -7,7 +7,7 @@ import UserManagement from '../components/UserManagement';
 import CategoryManagement from '../components/CategoryManagement';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import Navbar from '../components/Navbar'; // Import the default Navbar
+import Navbar from '../layouts/Navbar'; 
 
 const AdminDashboard = ({ socket }) => {
   const { user, isAdmin } = useAuth();
@@ -72,16 +72,21 @@ const AdminDashboard = ({ socket }) => {
   const fetchActiveUsers = async () => {
     try {
       const response = await axios.get('/api/admin/active-users');
-      setOnlineUsers(response.data);
+      // Ensure all users have unique IDs
+      const usersWithUniqueIds = response.data.map((user, index) => ({
+        ...user,
+        id: user.id || user._id || `user-${index}-${Date.now()}`
+      }));
+      setOnlineUsers(usersWithUniqueIds);
     } catch (err) {
       console.error('Error fetching active users:', err);
       // Fallback to mock data if API fails
       const mockActiveUsers = [
-        { id: 1, name: 'Alex Johnson', email: 'alex@example.com', status: 'online', lastActive: '2 min ago' },
-        { id: 2, name: 'Maria Garcia', email: 'maria@example.com', status: 'online', lastActive: '5 min ago' },
-        { id: 3, name: 'James Wilson', email: 'james@example.com', status: 'online', lastActive: '10 min ago' },
-        { id: 4, name: 'Sarah Chen', email: 'sarah@example.com', status: 'away', lastActive: '15 min ago' },
-        { id: 5, name: 'Robert Davis', email: 'robert@example.com', status: 'online', lastActive: '20 min ago' },
+        { id: 'mock-1', name: 'Alex Johnson', email: 'alex@example.com', status: 'online', lastActive: '2 min ago' },
+        { id: 'mock-2', name: 'Maria Garcia', email: 'maria@example.com', status: 'online', lastActive: '5 min ago' },
+        { id: 'mock-3', name: 'James Wilson', email: 'james@example.com', status: 'online', lastActive: '10 min ago' },
+        { id: 'mock-4', name: 'Sarah Chen', email: 'sarah@example.com', status: 'away', lastActive: '15 min ago' },
+        { id: 'mock-5', name: 'Robert Davis', email: 'robert@example.com', status: 'online', lastActive: '20 min ago' },
       ];
       setOnlineUsers(mockActiveUsers);
     }
@@ -94,15 +99,26 @@ const AdminDashboard = ({ socket }) => {
       const events = response.data;
       
       // Transform events into activity stream format
-      const activities = events.map(event => ({
-        id: event._id,
+      const activities = events.map((event, index) => ({
+        id: event._id || event.id || `event-${index}-${Date.now()}`,
         user: event.userId?.name || 'Unknown User',
         action: getActionText(event.type),
         target: getTargetText(event.type, event.metadata),
         time: getTimeAgo(event.createdAt)
       }));
       
-      setActivityStream(activities);
+      // Ensure all activities have unique IDs
+      const uniqueActivities = [];
+      const seenIds = new Set();
+      
+      for (const activity of activities) {
+        if (!seenIds.has(activity.id)) {
+          seenIds.add(activity.id);
+          uniqueActivities.push(activity);
+        }
+      }
+      
+      setActivityStream(uniqueActivities);
     } catch (err) {
       console.error('Error fetching recent events:', err);
     }
@@ -224,6 +240,16 @@ const AdminDashboard = ({ socket }) => {
     }
   }, [user, isAdmin]);
 
+  // Debugging: Log data to check for issues
+  useEffect(() => {
+    console.log('Active Users:', activeUsers);
+    console.log('Total Courses:', totalCourses);
+    console.log('New Reviews Today:', newReviewsToday);
+    console.log('Trending Category:', trendingCategory);
+    console.log('Online Users:', onlineUsers);
+    console.log('Activity Stream:', activityStream);
+  }, [activeUsers, totalCourses, newReviewsToday, trendingCategory, onlineUsers, activityStream]);
+
   // Set up real-time updates with Socket.IO
   useEffect(() => {
     if (!socket || !user || !isAdmin) return;
@@ -296,6 +322,14 @@ const AdminDashboard = ({ socket }) => {
     { name: 'Reviews', key: 'reviews' },
     { name: 'Settings', key: 'settings' }
   ];
+
+  // Hero cards data
+  const heroCards = useMemo(() => [
+    { title: 'Active Users', value: activeUsers, change: '+12%', icon: '👥', color: 'bg-blue-500', id: 'active-users' },
+    { title: 'Total Courses', value: totalCourses, change: '+5%', icon: '📚', color: 'bg-green-500', id: 'total-courses' },
+    { title: 'New Reviews Today', value: newReviewsToday, change: '+8%', icon: '⭐', color: 'bg-yellow-500', id: 'new-reviews' },
+    { title: 'Trending Category', value: trendingCategory, change: 'Hot 🔥', icon: '🔥', color: 'bg-red-500', id: 'trending-category' }
+  ], [activeUsers, totalCourses, newReviewsToday, trendingCategory]);
 
   if (loading) {
     return (
@@ -430,22 +464,17 @@ const AdminDashboard = ({ socket }) => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Dashboard Tab */}
         {activeTab === 'dashboard' && (
-          <>
+          <div key="dashboard-content">
             {/* Dashboard Overview Section - Hero Cards Row */}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-              {[
-                { title: 'Active Users', value: activeUsers, change: '+12%', icon: '👥', color: 'bg-blue-500' },
-                { title: 'Total Courses', value: totalCourses, change: '+5%', icon: '📚', color: 'bg-green-500' },
-                { title: 'New Reviews Today', value: newReviewsToday, change: '+8%', icon: '⭐', color: 'bg-yellow-500' },
-                { title: 'Trending Category', value: trendingCategory, change: 'Hot 🔥', icon: '🔥', color: 'bg-red-500' }
-              ].map((card, index) => (
+              {heroCards.map((card) => (
                 <motion.div
-                  key={index}
+                  key={card.id}
                   className="bg-white overflow-hidden shadow-lg rounded-2xl cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                   whileHover={{ y: -5 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  transition={{ duration: 0.3 }}
                 >
                   <div className="p-6">
                     <div className="flex items-center">
@@ -668,12 +697,13 @@ const AdminDashboard = ({ socket }) => {
                 </motion.div>
               </div>
             </div>
-          </>
+          </div>
         )}
 
         {/* Courses Tab */}
         {activeTab === 'courses' && (
           <motion.div
+            key="courses-tab"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
@@ -685,6 +715,7 @@ const AdminDashboard = ({ socket }) => {
         {/* Categories Tab */}
         {activeTab === 'categories' && (
           <motion.div
+            key="categories-tab"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
@@ -696,6 +727,7 @@ const AdminDashboard = ({ socket }) => {
         {/* Users Tab */}
         {activeTab === 'users' && (
           <motion.div
+            key="users-tab"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
@@ -707,6 +739,7 @@ const AdminDashboard = ({ socket }) => {
         {/* Reviews Tab */}
         {activeTab === 'reviews' && (
           <motion.div
+            key="reviews-tab"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
@@ -718,6 +751,7 @@ const AdminDashboard = ({ socket }) => {
         {/* Settings Tab */}
         {activeTab === 'settings' && (
           <motion.div
+            key="settings-tab"
             className="bg-white shadow-lg rounded-2xl p-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

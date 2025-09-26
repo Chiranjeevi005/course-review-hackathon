@@ -2,8 +2,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import CategoryCard from '../components/CategoryCard';
-import axios from '../utils/axiosConfig';
-import Navbar from '../components/Navbar';
+import axios from '../services/axiosConfig';
+import Navbar from '../layouts/Navbar';
 
 const CategoriesPage = () => {
   const navigate = useNavigate();

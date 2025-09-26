@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
-import axios from '../utils/axiosConfig';
+import axios from '../services/axiosConfig';
 import tracking from '../utils/tracking';
 
 const ReviewForm = ({ courseId, onReviewSubmit }) => {

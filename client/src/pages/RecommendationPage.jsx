@@ -2,8 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
 import CourseCard from '../components/CourseCard';
-import Navbar from '../components/Navbar';
-import axios from '../utils/axiosConfig';
+import Navbar from '../layouts/Navbar';
+import axios from '../services/axiosConfig';
 
 const RecommendationPage = () => {
   const { user } = useContext(AuthContext);

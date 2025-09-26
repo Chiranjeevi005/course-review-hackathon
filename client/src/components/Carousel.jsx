@@ -118,7 +118,7 @@ const Carousel = ({ title, courses, isLoading = false }) => {
                   key={course.id}
                   variants={item}
                 >
-                  <CourseCard key={course.id} course={course} />
+                  <CourseCard course={course} />
                 </motion.div>
               ))}
             </motion.div>

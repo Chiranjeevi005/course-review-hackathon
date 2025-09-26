@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import CourseCard from '../components/CourseCard';
-import Navbar from '../components/Navbar';
-import axios from '../utils/axiosConfig';
+import Navbar from '../layouts/Navbar';
+import axios from '../services/axiosConfig';
 import SkeletonCard from '../components/SkeletonCard';
 
 const CategoryCoursesPage = () => {

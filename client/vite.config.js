@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5173, // Changed back to default port
-    strictPort: true, // Prevents trying another port if 5173 is in use
+    port: 5173, // Use default port 5173
+    strictPort: true, // Don't allow fallback to another port
     proxy: {
       '/api': {
         target: 'http://localhost:3003',

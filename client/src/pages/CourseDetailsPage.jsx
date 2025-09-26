@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Navbar from '../components/Navbar';
+import Navbar from '../layouts/Navbar';
 import Rating from '../components/Rating';
-import axios from '../utils/axiosConfig';
+import axios from '../services/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 import tracking from '../utils/tracking';
 

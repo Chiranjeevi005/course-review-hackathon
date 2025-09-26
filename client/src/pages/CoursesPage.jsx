@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import CourseCard from '../components/CourseCard';
 import SearchBox from '../components/SearchBox';
-import Navbar from '../components/Navbar';
+import Navbar from '../layouts/Navbar';
 import SkeletonCard from '../components/SkeletonCard';
-import axios from '../utils/axiosConfig';
+import axios from '../services/axiosConfig';
 
 const CoursesPage = () => {
   const [courses, setCourses] = useState([]);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from '../utils/axiosConfig';
+import axios from '../services/axiosConfig';
 
 const FilterSheet = ({ isOpen, onClose, onApplyFilters, initialFilters = {} }) => {
   const [filters, setFilters] = useState({

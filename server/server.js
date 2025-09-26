@@ -9,6 +9,9 @@ import cookieParser from 'cookie-parser';
 import User from './models/User.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import UserTrackingService from './services/userTrackingService.js';
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +21,19 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
+
+// Create HTTP server
+const server = createServer(app);
+
+// Initialize Socket.IO
+const io = new Server(server, {
+  cors: {
+    origin: process.env.NODE_ENV === 'production' 
+      ? process.env.CLIENT_ORIGIN || 'https://your-production-domain.com' 
+      : 'http://localhost:5173',
+    credentials: true
+  }
+});
 
 // Debug: Log environment variables
 console.log('Environment variables:');
@@ -53,11 +69,92 @@ if (process.env.MONGO_URI) {
   // Mock mode - no database connection
 }
 
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+
+  // Handle user coming online
+  socket.on('user_online', async (data) => {
+    const { userId, userName, ipAddress } = data;
+    await UserTrackingService.setUserOnline(userId, userName, ipAddress);
+    
+    // Broadcast to all clients that a user came online
+    io.emit('user_status_change', { userId, userName, isOnline: true });
+  });
+
+  // Handle user going offline
+  socket.on('user_offline', async (data) => {
+    const { userId, userName } = data;
+    await UserTrackingService.setUserOffline(userId, userName);
+    
+    // Broadcast to all clients that a user went offline
+    io.emit('user_status_change', { userId, userName, isOnline: false });
+  });
+
+  // Handle user activity (heartbeat)
+  socket.on('user_activity', async (data) => {
+    const { userId, userName, ipAddress } = data;
+    await UserTrackingService.updateUserActivity(userId, userName, ipAddress);
+  });
+
+  // Handle course view
+  socket.on('view_course', async (data) => {
+    const { userId, courseId, courseTitle, ipAddress, userAgent } = data;
+    await UserTrackingService.logUserEvent(
+      userId, 
+      'view_course', 
+      { courseId, courseTitle }, 
+      ipAddress, 
+      userAgent
+    );
+    
+    // Emit event for real-time updates
+    io.emit('new_event', { type: 'view_course', ...data });
+  });
+
+  // Handle review submission
+  socket.on('review_submit', async (data) => {
+    const { userId, courseId, rating, ipAddress, userAgent } = data;
+    await UserTrackingService.logUserEvent(
+      userId, 
+      'review_submit', 
+      { courseId, rating }, 
+      ipAddress, 
+      userAgent
+    );
+    
+    // Emit event for real-time updates
+    io.emit('new_event', { type: 'review_submit', ...data });
+  });
+
+  // Handle search
+  socket.on('search', async (data) => {
+    const { userId, query, ipAddress, userAgent } = data;
+    await UserTrackingService.logUserEvent(
+      userId, 
+      'search', 
+      { query }, 
+      ipAddress, 
+      userAgent
+    );
+    
+    // Emit event for real-time updates
+    io.emit('new_event', { type: 'search', ...data });
+  });
+
+  // Handle disconnect
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
+
 // Routes
 import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
 
 app.get('/', (req, res) => {
   res.send('Course Review API is running 🚀');
@@ -74,6 +171,12 @@ app.use('/api/courses', courseRoutes);
 
 // Review routes
 app.use('/api/courses/:courseId/reviews', reviewRoutes);
+
+// Admin routes
+app.use('/api/admin', adminRoutes);
+
+// Analytics routes
+app.use('/api/analytics', analyticsRoutes);
 
 // Test route to check all dependencies
 app.get('/test-dependencies', async (req, res) => {
@@ -127,4 +230,4 @@ app.get('/test-dependencies', async (req, res) => {
 });
 
 const PORT = 3003; // Fixed port for backend
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

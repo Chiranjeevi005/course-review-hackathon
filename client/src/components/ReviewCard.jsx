@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
-import axios from '../utils/axiosConfig';
+import axios from '../services/axiosConfig';
 
 const ReviewCard = ({ review, onHelpfulnessChange }) => {
   const { user } = useContext(AuthContext);

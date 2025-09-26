@@ -10,7 +10,8 @@
     "seed": "node seedUnifiedData.js",
     "seed:categories": "node seedUnifiedData.js --categories-only",
     "seed:courses": "node seedUnifiedData.js --courses-only",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:realtime": "node testRealtimeTracking.js"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +24,9 @@
     "express": "^4.18.2",
     "google-auth-library": "^8.7.0",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.3"
+    "mongoose": "^7.0.3",
+    "redis": "^4.6.7",
+    "socket.io": "^4.7.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

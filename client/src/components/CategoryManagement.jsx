@@ -40,10 +40,10 @@ const CategoryManagement = () => {
     setCurrentCategory(category);
     if (category) {
       setFormData({
-        name: category.name,
-        description: category.description,
-        icon: category.icon,
-        filter: category.filter
+        name: category.name || '',
+        description: category.description || '',
+        icon: category.icon || '📁',
+        filter: category.filter || 'technology'
       });
     } else {
       setFormData({
@@ -90,7 +90,7 @@ const CategoryManagement = () => {
       closeModal();
     } catch (err) {
       console.error('Error saving category:', err);
-      setError('Failed to save category');
+      setError('Failed to save category: ' + err.message);
     }
   };
 
@@ -101,7 +101,7 @@ const CategoryManagement = () => {
       closeModal();
     } catch (err) {
       console.error('Error deleting category:', err);
-      setError('Failed to delete category');
+      setError('Failed to delete category: ' + err.message);
     }
   };
 
@@ -313,7 +313,7 @@ const CategoryManagement = () => {
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
                 >
-                  {filterOptions.map(option => (
+                  {filterOptions.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>

@@ -16,41 +16,41 @@ const CourseCard = ({ course }) => {
     setTimeout(() => setIsAnimating(false), 600);
   };
 
-  // Use CoursePlaceholder for the image
-  const renderImage = () => {
-    // If course has a real thumbnail, use it
-    if (course.thumbnail && !course.thumbnail.includes('placehold.co')) {
-      return (
-        <img 
-          src={course.thumbnail} 
-          alt={course.title} 
-          className="w-full h-32 sm:h-40 md:h-48 object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-          onError={(e) => {
-            // Fallback to placeholder if the image fails to load
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'block';
-          }}
-        />
-      );
+  // Get category name with better handling
+  const getCategoryName = () => {
+    // Handle different data structures for category
+    if (course.category) {
+      if (typeof course.category === 'object') {
+        // If it's an object with a name property
+        if (course.category.name) {
+          return course.category.name;
+        }
+        // If it's an object with a title property
+        if (course.category.title) {
+          return course.category.title;
+        }
+        // If it's just an object with an _id
+        return 'Course';
+      }
+      // If it's a string
+      return course.category;
     }
-    
-    // Otherwise, use the CoursePlaceholder
+    // Fallback
+    return 'Course';
+  };
+
+  // Always use CoursePlaceholder for the image - this ensures consistency
+  const renderImage = () => {
     return (
       <div className="w-full h-32 sm:h-40 md:h-48">
         <CoursePlaceholder 
+          category={getCategoryName()}
           courseTitle={course.title}
           courseDescription={course.description}
+          className="w-full h-full object-cover"
         />
       </div>
     );
-  };
-
-  // Get category name
-  const getCategoryName = () => {
-    if (course.category && typeof course.category === 'object') {
-      return course.category.name;
-    }
-    return course.category;
   };
 
   // Determine the correct ID to use for the course link
@@ -63,13 +63,6 @@ const CourseCard = ({ course }) => {
     <div className="bg-card-100 rounded-lg shadow-soft overflow-hidden transition-all duration-200 ease-in-out hover:shadow-soft-lg group border border-muted-500">
       <div className="relative overflow-hidden">
         {renderImage()}
-        {/* Fallback placeholder element (hidden by default) */}
-        <div className="w-full h-32 sm:h-40 md:h-48 hidden">
-          <CoursePlaceholder 
-            courseTitle={course.title}
-            courseDescription={course.description}
-          />
-        </div>
         
         <motion.button
           onClick={toggleBookmark}

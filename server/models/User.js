@@ -44,6 +44,15 @@ const userSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  // Real-time tracking fields
+  isOnline: {
+    type: Boolean,
+    default: false
+  },
+  lastActiveAt: {
+    type: Date,
+    default: Date.now
   }
 }, {
   timestamps: true

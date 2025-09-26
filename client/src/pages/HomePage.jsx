@@ -5,8 +5,8 @@ import CourseCard from '../components/CourseCard';
 import CategoryChip from '../components/CategoryChip';
 import SearchBox from '../components/SearchBox';
 import HowItWorksStep from '../components/HowItWorksStep';
-import Navbar from '../components/Navbar';
-import axios from '../utils/axiosConfig';
+import Navbar from '../layouts/Navbar';
+import axios from '../services/axiosConfig';
 
 const HomePage = () => {
   const authContext = useContext(AuthContext);

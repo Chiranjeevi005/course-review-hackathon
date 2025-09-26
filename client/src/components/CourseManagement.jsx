@@ -58,17 +58,17 @@ const CourseManagement = () => {
     setCurrentCourse(course);
     if (course) {
       setFormData({
-        title: course.title,
-        description: course.description,
-        thumbnail: course.thumbnail,
+        title: course.title || '',
+        description: course.description || '',
+        thumbnail: course.thumbnail || '',
         instructor: {
           name: course.instructor?.name || '',
           profileImage: course.instructor?.profileImage || ''
         },
         categoryId: course.categoryId?._id || course.categoryId || '',
-        duration: course.duration,
-        difficulty: course.difficulty,
-        price: course.price
+        duration: course.duration || '',
+        difficulty: course.difficulty || 'Beginner',
+        price: course.price || 0
       });
     } else {
       setFormData({
@@ -135,7 +135,7 @@ const CourseManagement = () => {
       closeModal();
     } catch (err) {
       console.error('Error saving course:', err);
-      setError('Failed to save course');
+      setError('Failed to save course: ' + err.message);
     }
   };
 
@@ -146,7 +146,7 @@ const CourseManagement = () => {
       closeModal();
     } catch (err) {
       console.error('Error deleting course:', err);
-      setError('Failed to delete course');
+      setError('Failed to delete course: ' + err.message);
     }
   };
 
@@ -361,7 +361,7 @@ const CourseManagement = () => {
                   required
                 >
                   <option value="">Select a category</option>
-                  {categories.map(category => (
+                  {categories.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.name}
                     </option>

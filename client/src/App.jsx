@@ -7,20 +7,18 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import DashboardPage from './pages/DashboardPage';
 import AdminPage from './pages/AdminPage';
 import ProfilePage from './pages/ProfilePage';
-import TestAuthPage from './pages/TestAuthPage';
+import RegisterPage from './pages/RegisterPage';
+import ContactPage from './pages/ContactPage';
+
 import CategoriesPage from './pages/CategoriesPage';
 import RecommendationPage from './pages/RecommendationPage';
 import CoursesPage from './pages/CoursesPage';
 import CategoryCoursesPage from './pages/CategoryCoursesPage';
 import CourseDetailsPage from './pages/CourseDetailsPage';
 import ReviewsPage from './pages/ReviewsPage';
-import PlaceholderDemoPage from './pages/PlaceholderDemoPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import TestAxiosPage from './TestAxiosPage';
-import EnvTest from './EnvTest';
 import AdminDashboard from './pages/AdminDashboard';
-import TestAdminDashboard from './pages/TestAdminDashboard';
-import Footer from './components/Footer';
+import Footer from './layouts/Footer';
 import heartbeatService from './utils/heartbeatService';
 
 // Import global styles
@@ -92,7 +90,9 @@ function AppContent({ socket }) {
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/recommendations" element={<RecommendationPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route 
             path="/dashboard" 
             element={
@@ -125,32 +125,12 @@ function AppContent({ socket }) {
               </ProtectedRoute>
             } 
           />
-          <Route 
-            path="/test-admin" 
-            element={
-              <ProtectedRoute requiredRole="admin">
-                <TestAdminDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/test-auth" 
-            element={
-              <ProtectedRoute>
-                <TestAuthPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="/test-axios" element={<TestAxiosPage />} />
-          <Route path="/env-test" element={<EnvTest />} />
-          <Route path="/placeholder-demo" element={<PlaceholderDemoPage />} />
         </Routes>
       </div>
       <Footer />
     </div>
   );
 }
-
 function App({ socket }) {
   return (
     <AuthProvider>

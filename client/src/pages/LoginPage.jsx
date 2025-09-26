@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import GoogleLoginButton from '../components/GoogleLoginButton';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import Navbar from '../components/Navbar';
+import Navbar from '../layouts/Navbar';
 import { motion } from 'framer-motion';
 
 const LoginPage = () => {
