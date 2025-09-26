@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Rating from './Rating';
 import BookmarkIcon from '../assets/icons/BookmarkIcon';
+import CoursePlaceholder from './CoursePlaceholder';
 
 const CourseCard = ({ course }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -28,15 +29,48 @@ const CourseCard = ({ course }) => {
   };
 
   const discountPercentage = calculateDiscount(course.originalPrice, course.price);
-
-  return (
-    <div className="bg-card-100 rounded-lg shadow-md overflow-hidden transition-all duration-200 ease-in-out hover:shadow-lg group">
-      <div className="relative overflow-hidden">
+  
+  // Use CoursePlaceholder for the image
+  const renderImage = () => {
+    // If course has a real thumbnail, use it
+    if (course.thumbnail && !course.thumbnail.includes('placehold.co')) {
+      return (
         <img 
           src={course.thumbnail} 
           alt={course.title} 
           className="w-full h-40 sm:h-48 object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+          onError={(e) => {
+            // Fallback to placeholder if the image fails to load
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'block';
+          }}
         />
+      );
+    }
+    
+    // Otherwise, use the CoursePlaceholder
+    return (
+      <div className="w-full h-40 sm:h-48">
+        <CoursePlaceholder 
+          courseTitle={course.title}
+          courseDescription={course.description}
+        />
+      </div>
+    );
+  };
+
+  return (
+    <div className="bg-card-100 rounded-lg shadow-md overflow-hidden transition-all duration-200 ease-in-out hover:shadow-lg group">
+      <div className="relative overflow-hidden">
+        {renderImage()}
+        {/* Fallback placeholder element (hidden by default) */}
+        <div className="w-full h-40 sm:h-48 hidden">
+          <CoursePlaceholder 
+            courseTitle={course.title}
+            courseDescription={course.description}
+          />
+        </div>
+        
         <motion.button
           onClick={toggleBookmark}
           whileHover={{ scale: 1.1 }}
@@ -64,10 +98,13 @@ const CourseCard = ({ course }) => {
           </h3>
         </div>
         
-        <p className="text-muted-500 text-xs sm:text-sm mb-2 sm:mb-3">{course.provider}</p>
+        {/* Use instructor name instead of provider if provider is not available */}
+        <p className="text-muted-500 text-xs sm:text-sm mb-2 sm:mb-3">
+          {course.provider || (course.instructor && course.instructor.name) || 'Course Provider'}
+        </p>
         
         <div className="mb-2 sm:mb-3">
-          <Rating rating={course.rating} ratingCount={course.ratingCount} />
+          <Rating rating={course.rating} ratingCount={course.reviewsCount || course.ratingCount} />
         </div>
         
         <div className="flex justify-between items-center mb-3 sm:mb-4">

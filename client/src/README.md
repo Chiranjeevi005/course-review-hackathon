@@ -132,14 +132,74 @@ Each component has been implemented with appropriate variants:
 - Loading states
 - Error states
 
-## Running the Application
+## Components
 
-```bash
-npm install
-npm run dev
+### CoursePlaceholder
+
+A reusable SVG-based placeholder image system for course cards. Generates professional, theme-oriented placeholders with category-specific icons while maintaining a consistent design theme.
+
+Features:
+- Unified styling with clean gradient backgrounds and abstract shapes
+- Dynamic icons per category (22 categories supported)
+- Responsive and optimized for fast loading
+- Consistent color palette matching the web app theme
+- Scalable for any number of courses
+
+Usage:
+```jsx
+import CoursePlaceholder from './components/CoursePlaceholder';
+
+// Basic usage
+<CoursePlaceholder category="Web Development" />
+
+// Custom size
+<CoursePlaceholder category="Data Science & Analytics" size={200} />
+
+// With additional styling
+<CoursePlaceholder category="UI/UX Design" className="w-full rounded-lg" />
 ```
 
-The application will be available at `http://localhost:5173`
+Supported categories:
+- Web Development
+- Mobile App Development
+- Data Science & Analytics
+- Artificial Intelligence & Machine Learning
+- Cloud Computing & DevOps
+- Cybersecurity & Ethical Hacking
+- Blockchain & Web3
+- UI/UX Design
+- Graphic Design & Multimedia
+- Business & Entrepreneurship
+- Marketing & Digital Marketing
+- Finance & Accounting
+- Leadership & Management
+- Health & Fitness
+- Language Learning
+- Music & Audio
+- Photography & Video
+- Writing & Content Creation
+- Career Development
+- Education & Teaching
+- Science & Engineering
+- Personal Development
+
+## Development
+
+To run the application in development mode:
+
+1. Start the backend server:
+   ```bash
+   cd server
+   npm run dev
+   ```
+   The backend server will be available at `http://localhost:3003`
+
+2. In a separate terminal, start the frontend development server:
+   ```bash
+   cd client
+   npm run dev
+   ```
+   The application will be available at `http://localhost:5173`
 
 ## Testing
 

@@ -7,10 +7,8 @@ export const authMiddleware = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Access denied. No token provided.' 
-      });
+      // No token provided, continue to next middleware for public routes
+      return next();
     }
     
     const token = authHeader.split(' ')[1];
@@ -22,35 +20,23 @@ export const authMiddleware = async (req, res, next) => {
     const user = await User.findById(decoded.userId).select('-passwordHash');
     
     if (!user) {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Invalid token. User not found.' 
-      });
+      // Invalid token, continue to next middleware for public routes
+      return next();
     }
     
     // Attach user to request object
     req.user = user;
     next();
   } catch (error) {
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Invalid token.' 
-      });
-    }
-    
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Token expired.' 
-      });
+    // If token is invalid or expired, continue to next middleware for public routes
+    // This allows public routes to work even when an invalid token is provided
+    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+      return next();
     }
     
     console.error('Authentication error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Internal server error during authentication.' 
-    });
+    // For other errors, continue to next middleware
+    next();
   }
 };
 

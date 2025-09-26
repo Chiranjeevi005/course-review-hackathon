@@ -1,21 +1,27 @@
 import axios from 'axios';
 
 // Create axios instance
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3003';
+console.log('Creating axios instance with baseURL:', baseURL);
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: baseURL,
   withCredentials: true
 });
+console.log('Axios instance created:', apiClient);
 
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
+    console.log('Axios request config:', config);
     const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    console.log('Axios request config after token:', config);
     return config;
   },
   (error) => {
+    console.error('Axios request error:', error);
     return Promise.reject(error);
   }
 );
@@ -23,10 +29,13 @@ apiClient.interceptors.request.use(
 // Response interceptor to handle token refresh
 apiClient.interceptors.response.use(
   (response) => {
+    console.log('Axios response:', response);
     return response;
   },
   async (error) => {
+    console.error('Axios response error:', error);
     const originalRequest = error.config;
+    console.error('Original request config:', originalRequest);
     
     // If error is 401 and we haven't retried yet
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -34,8 +43,8 @@ apiClient.interceptors.response.use(
       
       try {
         // Try to refresh the token
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/auth/refresh`,
+        const response = await apiClient.post(
+          `/auth/refresh`,
           {},
           { withCredentials: true }
         );

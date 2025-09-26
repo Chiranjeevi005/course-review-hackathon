@@ -76,21 +76,34 @@ This document describes the complete authentication and authorization system imp
 
 ## Environment Variables
 
-### Server (.env)
+Create a `.env` file in the server directory with the following variables:
+
 ```env
-MONGO_URI=mongodb://localhost:27017/coursefinder
-JWT_SECRET=your_jwt_secret_here
-JWT_EXPIRES_IN=15m
-REFRESH_TOKEN_SECRET=your_refresh_token_secret_here
+# Server Configuration
+# Backend server fixed at port 3003
+NODE_ENV=development
+PORT=3003
+
+# MongoDB Configuration
+MONGO_URI=mongodb://localhost:27017/course_review_db
+
+# JWT Configuration
+JWT_SECRET=course_review_jwt_secret
+JWT_EXPIRES_IN=7d
+
+# Refresh Token Configuration
+REFRESH_TOKEN_SECRET=course-review-refresh-token-secret-key
 REFRESH_TOKEN_EXPIRES_IN=7d
-GOOGLE_CLIENT_ID=your_google_client_id_here
-GOOGLE_CLIENT_SECRET=your_google_client_secret_here
-PORT=5000
+
+# Google OAuth Configuration
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
 
-### Client (.env)
+Create a `.env` file in the client directory with the following variables:
+
 ```env
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=http://localhost:3003
 VITE_GOOGLE_CLIENT_ID=your_google_client_id_here
 ```
 

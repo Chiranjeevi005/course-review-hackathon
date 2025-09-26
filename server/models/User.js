@@ -12,7 +12,13 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
-    lowercase: true
+    lowercase: true,
+    validate: {
+      validator: function(v) {
+        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+      },
+      message: props => `${props.value} is not a valid email address!`
+    }
   },
   passwordHash: {
     type: String,
@@ -34,6 +40,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     sparse: true
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true
@@ -62,21 +72,40 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.passwordHash);
 };
 
-// Ensure only one admin user exists
+// Ensure only one admin user exists with correct credentials
 userSchema.statics.ensureAdmin = async function() {
-  const adminExists = await this.findOne({ email: 'admin@coursefinder.com' });
-  if (!adminExists) {
-    // Hash the password before saving
-    const hashedPassword = await bcrypt.hash('admin123', 12);
-    
-    await this.create({
-      name: 'Admin User',
-      email: 'admin@coursefinder.com',
-      passwordHash: hashedPassword,
-      role: 'admin',
-      provider: 'local'
-    });
+  const adminEmail = 'admin@coursefinder.com';
+  const adminPassword = 'admin123';
+  
+  // Hash the password before saving
+  const hashedPassword = await bcrypt.hash(adminPassword, 12);
+  
+  const adminUser = {
+    name: 'Admin User',
+    email: adminEmail,
+    passwordHash: hashedPassword,
+    role: 'admin',
+    provider: 'local'
+  };
+  
+  // Try to find existing admin user
+  const existingAdmin = await this.findOne({ email: adminEmail });
+  
+  if (!existingAdmin) {
+    // Create admin user if it doesn't exist
+    await this.create(adminUser);
     console.log('✅ Admin user created with email: admin@coursefinder.com and password: admin123');
+  } else {
+    // Update existing admin user to ensure correct password and role
+    await this.findOneAndUpdate(
+      { email: adminEmail },
+      { 
+        ...adminUser,
+        passwordHash: hashedPassword // Ensure the password is updated
+      },
+      { new: true, runValidators: true }
+    );
+    console.log('✅ Admin user updated with email: admin@coursefinder.com and password: admin123');
   }
 };
 

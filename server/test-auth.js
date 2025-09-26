@@ -1,7 +1,8 @@
 // Test script for authentication routes
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000';
+// Fixed backend port
+const API_BASE_URL = 'http://localhost:3003';
 
 // Test user data
 const testUser = {

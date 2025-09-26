@@ -10,7 +10,8 @@ const categorySchema = new mongoose.Schema({
   slug: {
     type: String,
     unique: true,
-    trim: true
+    trim: true,
+    lowercase: true
   },
   description: {
     type: String,
@@ -63,7 +64,14 @@ const categorySchema = new mongoose.Schema({
 // Generate slug before saving
 categorySchema.pre('save', function(next) {
   if (this.isModified('name') || this.isNew) {
-    this.slug = this.name.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-');
+    // Generate slug from name, ensuring it's not null
+    this.slug = this.name ? this.name.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-') : 'category-' + Date.now();
+    // Remove leading/trailing hyphens
+    this.slug = this.slug.replace(/^-+|-+$/g, '');
+    // If slug is empty, generate a default one
+    if (!this.slug) {
+      this.slug = 'category-' + Date.now();
+    }
   }
   next();
 });

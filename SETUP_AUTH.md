@@ -98,21 +98,41 @@ npm run test:auth
 - `POST /auth/logout` - Logout user
 - `GET /auth/profile` - Get user profile (protected)
 
-## Environment Variables Explanation
+## Environment Variables
 
-### Server Variables
-- `MONGO_URI`: MongoDB connection string
-- `JWT_SECRET`: Secret key for signing JWT access tokens
-- `JWT_EXPIRES_IN`: Expiration time for access tokens (15 minutes)
-- `REFRESH_TOKEN_SECRET`: Secret key for signing refresh tokens
-- `REFRESH_TOKEN_EXPIRES_IN`: Expiration time for refresh tokens (7 days)
-- `GOOGLE_CLIENT_ID`: Google OAuth client ID
-- `GOOGLE_CLIENT_SECRET`: Google OAuth client secret
-- `PORT`: Server port (default: 5000)
+Create a `.env` file in the server directory with the following variables:
 
-### Client Variables
-- `VITE_API_URL`: Backend API URL
-- `VITE_GOOGLE_CLIENT_ID`: Google OAuth client ID (must match server)
+```
+# Server Configuration
+# Backend server fixed at port 3003
+NODE_ENV=development
+PORT=3003
+
+# MongoDB Configuration
+MONGO_URI=mongodb://localhost:27017/course_review_db
+
+# JWT Configuration
+JWT_SECRET=course_review_jwt_secret
+JWT_EXPIRES_IN=7d
+
+# Refresh Token Configuration
+REFRESH_TOKEN_SECRET=course-review-refresh-token-secret-key
+REFRESH_TOKEN_EXPIRES_IN=7d
+
+# Google OAuth Configuration
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
+
+Update the `.env` file in the client directory:
+
+```
+# Client Configuration
+# Frontend server fixed at port 5173
+VITE_API_BASE_URL=http://localhost:3003
+VITE_API_URL=http://localhost:3003
+NODE_ENV=development
+```
 
 ## Security Considerations
 

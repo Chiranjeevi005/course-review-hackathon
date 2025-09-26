@@ -45,11 +45,30 @@ const CategoriesPage = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
+        setError(null);
+        console.log('Fetching categories from:', axios.defaults.baseURL);
         const response = await axios.get('/api/categories');
-        setCategories(response.data.data);
+        console.log('Categories response:', response);
+        
+        // Check if response is valid
+        if (response && response.data && response.data.success) {
+          console.log('Categories data:', response.data.data);
+          setCategories(response.data.data);
+        } else {
+          setError('Invalid response format from server');
+        }
       } catch (err) {
         setError('Failed to fetch categories');
         console.error('Error fetching categories:', err);
+        if (err.response) {
+          console.error('Response data:', err.response.data);
+          console.error('Response status:', err.response.status);
+          console.error('Response headers:', err.response.headers);
+        } else if (err.request) {
+          console.error('Request data:', err.request);
+        } else {
+          console.error('Error message:', err.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -60,15 +79,33 @@ const CategoriesPage = () => {
 
   // Filter categories based on search query and selected filter
   const filteredCategories = useMemo(() => {
-    if (!categories) return [];
+    console.log('Categories data:', categories);
+    console.log('Search query:', searchQuery);
+    console.log('Selected filter:', selectedFilter);
     
+    if (!categories || !Array.isArray(categories) || categories.length === 0) {
+      console.log('No categories available');
+      return [];
+    }
+    
+    // Apply search and filter logic
     return categories.filter(category => {
+      // Basic validation - only check for name
+      if (!category.name) {
+        return false;
+      }
+      
+      // Search filter - check name and description if it exists
       const matchesSearch = category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           category.description.toLowerCase().includes(searchQuery.toLowerCase());
+                           (category.description && category.description.toLowerCase().includes(searchQuery.toLowerCase()));
       
-      const matchesFilter = selectedFilter === 'all' || category.filter === selectedFilter;
+      // Filter dropdown
+      const matchesFilter = selectedFilter === 'all' || 
+                           (category.filter && category.filter === selectedFilter);
       
-      return matchesSearch && matchesFilter;
+      const result = matchesSearch && matchesFilter;
+      console.log('Category:', category.name, 'matchesSearch:', matchesSearch, 'matchesFilter:', matchesFilter, 'result:', result);
+      return result;
     });
   }, [categories, searchQuery, selectedFilter]);
 

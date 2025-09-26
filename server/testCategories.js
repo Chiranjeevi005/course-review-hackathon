@@ -25,28 +25,22 @@ const connectDB = async () => {
   }
 };
 
-// Seed categories
-const seedCategories = async () => {
+const testCategories = async () => {
   try {
     await connectDB();
     
-    // Import unified categories data
-    const { unifiedCategories } = await import('../unifiedData.js');
-    
-    // Clear existing categories
-    await Category.deleteMany();
-    console.log('Cleared existing categories');
-    
-    // Insert new categories
-    const createdCategories = await Category.insertMany(unifiedCategories);
-    console.log(`Seeded ${createdCategories.length} categories`);
+    // Get all categories
+    const categories = await Category.find({}, 'name slug _id');
+    console.log('Categories:');
+    categories.forEach(cat => {
+      console.log(`  ${cat.name}: slug=${cat.slug || 'N/A'}, id=${cat._id}`);
+    });
     
     process.exit(0);
   } catch (error) {
-    console.error('Error seeding categories:', error);
+    console.error('Error testing categories:', error);
     process.exit(1);
   }
 };
 
-// Run the seed function
-seedCategories();
+testCategories();

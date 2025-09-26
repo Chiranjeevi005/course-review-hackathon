@@ -84,6 +84,14 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
                 visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } }
               }}
             >
+              <a href="/recommendations" className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-sm sm:text-base">Find Courses</a>
+            </motion.li>
+            <motion.li
+              variants={{
+                hidden: { opacity: 0, x: 20 },
+                visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } }
+              }}
+            >
               <a href="/reviews" className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-sm sm:text-base">Reviews</a>
             </motion.li>
             <motion.li

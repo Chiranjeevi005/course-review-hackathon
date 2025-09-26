@@ -27,10 +27,14 @@ console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'Set' : 'Not set');
 console.log('Current directory:', __dirname);
 
 // Middleware
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? 'https://your-frontend-domain.com' : 'http://localhost:5173',
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.CLIENT_ORIGIN || 'https://your-production-domain.com' 
+    : 'http://localhost:5173', // Fixed frontend port
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
@@ -52,6 +56,7 @@ if (process.env.MONGO_URI) {
 // Routes
 import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import courseRoutes from './routes/courseRoutes.js';
 
 app.get('/', (req, res) => {
   res.send('Course Review API is running 🚀');
@@ -62,6 +67,9 @@ app.use('/auth', authRoutes);
 
 // Category routes
 app.use('/api/categories', categoryRoutes);
+
+// Course routes
+app.use('/api/courses', courseRoutes);
 
 // Test route to check all dependencies
 app.get('/test-dependencies', async (req, res) => {
@@ -114,5 +122,5 @@ app.get('/test-dependencies', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3003;
+const PORT = 3003; // Fixed port for backend
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

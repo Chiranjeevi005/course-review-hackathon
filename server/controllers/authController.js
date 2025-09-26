@@ -95,10 +95,25 @@ export const login = async (req, res) => {
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid email or password'
-      });
+      // Special handling for admin user to ensure it exists
+      if (email === 'admin@coursefinder.com') {
+        // Try to ensure admin exists
+        await User.ensureAdmin();
+        // Try to find again
+        const adminUser = await User.findOne({ email });
+        if (!adminUser) {
+          return res.status(401).json({
+            success: false,
+            message: 'Admin user could not be created. Please check server logs.'
+          });
+        }
+        // Continue with login process
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid email or password'
+        });
+      }
     }
     
     // Check if user registered with Google
@@ -119,8 +134,17 @@ export const login = async (req, res) => {
     }
     
     // Generate tokens
-    const accessToken = generateAccessToken(user._id);
-    const refreshToken = generateRefreshToken(user._id);
+    let accessToken, refreshToken;
+    try {
+      accessToken = generateAccessToken(user._id);
+      refreshToken = generateRefreshToken(user._id);
+    } catch (tokenError) {
+      console.error('Token generation error:', tokenError);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error during token generation: ' + tokenError.message
+      });
+    }
     
     // Set refresh token as httpOnly cookie
     res.cookie('refreshToken', refreshToken, {
@@ -147,10 +171,18 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error during login'
-    });
+    // Provide more specific error information
+    if (error.name === 'JsonWebTokenError') {
+      res.status(500).json({
+        success: false,
+        message: 'JWT configuration error. Please check server environment variables.'
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error during login: ' + error.message
+      });
+    }
   }
 };
 
@@ -239,20 +271,38 @@ export const refresh = async (req, res) => {
     }
     
     // Verify refresh token
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    } catch (verifyError) {
+      console.error('Token verification error:', verifyError);
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid refresh token: ' + verifyError.message
+      });
+    }
     
     // Find user
     const user = await User.findById(decoded.userId);
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid refresh token'
+        message: 'Invalid refresh token: User not found'
       });
     }
     
     // Generate new tokens
-    const accessToken = generateAccessToken(user._id);
-    const newRefreshToken = generateRefreshToken(user._id);
+    let accessToken, newRefreshToken;
+    try {
+      accessToken = generateAccessToken(user._id);
+      newRefreshToken = generateRefreshToken(user._id);
+    } catch (tokenError) {
+      console.error('Token generation error:', tokenError);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error during token generation: ' + tokenError.message
+      });
+    }
     
     // Set new refresh token as httpOnly cookie
     res.cookie('refreshToken', newRefreshToken, {
@@ -269,10 +319,18 @@ export const refresh = async (req, res) => {
     });
   } catch (error) {
     console.error('Token refresh error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error during token refresh'
-    });
+    // Provide more specific error information
+    if (error.name === 'JsonWebTokenError') {
+      res.status(500).json({
+        success: false,
+        message: 'JWT configuration error. Please check server environment variables.'
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error during token refresh: ' + error.message
+      });
+    }
   }
 };
 

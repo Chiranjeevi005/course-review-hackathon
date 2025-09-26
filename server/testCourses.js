@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import Category from './models/Category.js';
+import Course from './models/Course.js';
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -25,28 +25,32 @@ const connectDB = async () => {
   }
 };
 
-// Seed categories
-const seedCategories = async () => {
+const testCourses = async () => {
   try {
     await connectDB();
     
-    // Import unified categories data
-    const { unifiedCategories } = await import('../unifiedData.js');
+    // Test with Web Development category ID
+    const categoryId = '68d6062a6477bdf3ca02082f';
+    console.log('Testing courses for category ID:', categoryId);
     
-    // Clear existing categories
-    await Category.deleteMany();
-    console.log('Cleared existing categories');
+    // Get courses for this category
+    const courses = await Course.find({ categoryId: categoryId, isActive: true });
+    console.log('Courses found:', courses.length);
     
-    // Insert new categories
-    const createdCategories = await Category.insertMany(unifiedCategories);
-    console.log(`Seeded ${createdCategories.length} categories`);
+    if (courses.length > 0) {
+      console.log('First course:', {
+        title: courses[0].title,
+        categoryId: courses[0].categoryId,
+        difficulty: courses[0].difficulty,
+        price: courses[0].price
+      });
+    }
     
     process.exit(0);
   } catch (error) {
-    console.error('Error seeding categories:', error);
+    console.error('Error testing courses:', error);
     process.exit(1);
   }
 };
 
-// Run the seed function
-seedCategories();
+testCourses();
