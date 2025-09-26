@@ -221,6 +221,12 @@ const CourseDetailsPage = () => {
                   <span className="px-2 py-1 sm:px-3 sm:py-1.5 bg-blue-100 text-blue-800 text-xs sm:text-sm font-medium rounded-full">
                     {course.level}
                   </span>
+                  <Link 
+                    to={`/courses/${courseId}/reviews`} 
+                    className="px-2 py-1 sm:px-3 sm:py-1.5 bg-yellow-100 text-yellow-800 text-xs sm:text-sm font-medium rounded-full hover:bg-yellow-200 transition-colors"
+                  >
+                    See Reviews
+                  </Link>
                 </div>
                 
                 <p className="text-gray-700 text-base sm:text-lg mb-5 sm:mb-6">

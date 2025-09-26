@@ -13,6 +13,7 @@ import RecommendationPage from './pages/RecommendationPage';
 import CoursesPage from './pages/CoursesPage';
 import CategoryCoursesPage from './pages/CategoryCoursesPage';
 import CourseDetailsPage from './pages/CourseDetailsPage';
+import ReviewsPage from './pages/ReviewsPage';
 import PlaceholderDemoPage from './pages/PlaceholderDemoPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import TestAxiosPage from './TestAxiosPage';
@@ -32,6 +33,7 @@ function App() {
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/category/:categoryId" element={<CategoryCoursesPage />} />
             <Route path="/courses/:courseId" element={<CourseDetailsPage />} />
+            <Route path="/courses/:courseId/reviews" element={<ReviewsPage />} />
             <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/recommendations" element={<RecommendationPage />} />
             <Route path="/login" element={<LoginPage />} />

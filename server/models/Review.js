@@ -19,12 +19,20 @@ const reviewSchema = new mongoose.Schema({
     min: 1,
     max: 5
   },
-  comment: {
+  text: {
     type: String,
     required: true,
     maxlength: 1000
   },
-  helpfulCount: {
+  tags: [{
+    type: String,
+    trim: true
+  }],
+  likes: {
+    type: Number,
+    default: 0
+  },
+  dislikes: {
     type: Number,
     default: 0
   }
@@ -36,7 +44,7 @@ const reviewSchema = new mongoose.Schema({
 reviewSchema.index({ userId: 1, courseId: 1 }, { unique: true });
 
 // Index for sorting by helpfulness and recency
-reviewSchema.index({ helpfulCount: -1, createdAt: -1 });
+reviewSchema.index({ likes: -1, createdAt: -1 });
 
 const Review = mongoose.model('Review', reviewSchema);
 
