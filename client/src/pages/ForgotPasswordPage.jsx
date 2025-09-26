@@ -30,7 +30,7 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-accent-50 flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <div className="flex items-center justify-center p-4 flex-grow">

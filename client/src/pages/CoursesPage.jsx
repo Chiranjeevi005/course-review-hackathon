@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import CourseCard from '../components/CourseCard';
 import SearchBox from '../components/SearchBox';
@@ -13,20 +13,28 @@ const CoursesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({});
   const [sortOption, setSortOption] = useState('popular');
-  const coursesPerPage = 8;
+  const [categories, setCategories] = useState([]);
+  const categoryScrollRef = useRef(null);
+  const coursesPerPage = 12; // Increased to show more courses per page
 
-  // Fetch courses from API
+  // Fetch all courses and categories from API
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('/api/courses');
+        
+        // Fetch categories
+        const categoriesResponse = await axios.get('/api/categories');
+        setCategories(categoriesResponse.data.data || []);
+        
+        // Fetch ALL courses (increased limit to get all 88 courses)
+        const response = await axios.get('/api/courses?limit=100'); // Get all courses
         // Transform courses to match expected format
         const transformedCourses = response.data.data.map(course => ({
           id: course._id,
           title: course.title,
           description: course.description,
-          provider: course.instructor.name,
+          provider: course.instructor?.name || 'Unknown Instructor',
           rating: course.rating,
           ratingCount: course.reviewsCount,
           price: course.price,
@@ -34,19 +42,19 @@ const CoursesPage = () => {
           duration: course.duration,
           category: course.categoryId,
           level: course.difficulty,
-          language: 'english',
+          language: course.language || 'english',
           thumbnail: course.thumbnail,
         }));
         setCourses(transformedCourses);
         setFilteredCourses(transformedCourses);
       } catch (error) {
-        console.error('Error fetching courses:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchCourses();
+    fetchData();
   }, []);
 
   // Handle search and filtering
@@ -56,13 +64,17 @@ const CoursesPage = () => {
     
     // Apply search query filter
     if (query) {
-      const lowerQuery = query.toLowerCase();
-      result = result.filter(course => 
-        course.title.toLowerCase().includes(lowerQuery) ||
-        course.provider.toLowerCase().includes(lowerQuery) ||
-        (course.category && typeof course.category === 'object' && course.category.name && course.category.name.toLowerCase().includes(lowerQuery)) ||
-        (typeof course.category === 'string' && course.category.toLowerCase().includes(lowerQuery))
-      );
+      const lowerQuery = query.toLowerCase().trim();
+      if (lowerQuery.length > 0) {
+        result = result.filter(course => 
+          course.title.toLowerCase().includes(lowerQuery) ||
+          course.provider.toLowerCase().includes(lowerQuery) ||
+          course.description.toLowerCase().includes(lowerQuery) ||
+          (course.category && typeof course.category === 'object' && course.category.name && course.category.name.toLowerCase().includes(lowerQuery)) ||
+          (typeof course.category === 'string' && course.category.toLowerCase().includes(lowerQuery)) ||
+          (course.level && course.level.toLowerCase().includes(lowerQuery))
+        );
+      }
     }
     
     // Apply category filter
@@ -77,12 +89,12 @@ const CoursesPage = () => {
     
     // Apply level filter
     if (filterParams.level) {
-      result = result.filter(course => course.level === filterParams.level);
+      result = result.filter(course => course.level && course.level.toLowerCase() === filterParams.level.toLowerCase());
     }
     
     // Apply language filter
     if (filterParams.language) {
-      result = result.filter(course => course.language === filterParams.language);
+      result = result.filter(course => course.language && course.language.toLowerCase() === filterParams.language.toLowerCase());
     }
     
     // Apply price range filters
@@ -107,16 +119,42 @@ const CoursesPage = () => {
     
     switch (option) {
       case 'popular':
-        sortedCourses.sort((a, b) => b.ratingCount - a.ratingCount);
+        sortedCourses.sort((a, b) => (b.ratingCount || 0) - (a.ratingCount || 0));
         break;
       case 'highest-rated':
-        sortedCourses.sort((a, b) => b.rating - a.rating);
+        sortedCourses.sort((a, b) => (b.rating || 0) - (a.rating || 0));
         break;
       case 'newest':
-        sortedCourses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        // Sort by ID creation time (MongoDB ObjectId contains timestamp)
+        sortedCourses.sort((a, b) => {
+          // Extract timestamp from MongoDB ObjectId
+          const timestampA = a.id ? a.id.substring(0, 8) : '';
+          const timestampB = b.id ? b.id.substring(0, 8) : '';
+          // Convert hex timestamp to decimal and compare
+          return parseInt(timestampB, 16) - parseInt(timestampA, 16);
+        });
         break;
       case 'trending':
-        sortedCourses.sort((a, b) => b.rating - a.rating || b.ratingCount - a.ratingCount);
+        sortedCourses.sort((a, b) => 
+          (b.rating || 0) - (a.rating || 0) || 
+          (b.ratingCount || 0) - (a.ratingCount || 0)
+        );
+        break;
+      case 'price-low':
+        sortedCourses.sort((a, b) => (a.price || 0) - (b.price || 0));
+        break;
+      case 'price-high':
+        sortedCourses.sort((a, b) => (b.price || 0) - (a.price || 0));
+        break;
+      case 'title-a-z':
+        sortedCourses.sort((a, b) => 
+          (a.title || '').localeCompare(b.title || '')
+        );
+        break;
+      case 'title-z-a':
+        sortedCourses.sort((a, b) => 
+          (b.title || '').localeCompare(a.title || '')
+        );
         break;
       default:
         break;
@@ -137,6 +175,42 @@ const CoursesPage = () => {
     window.scrollTo({ top: 400, behavior: 'smooth' });
   };
 
+  // Handle category filter with better UX
+  const handleCategoryFilter = (categoryId) => {
+    // If the same category is clicked again, clear the filter
+    const newFilters = categoryId === filters.category 
+      ? { ...filters, category: '' } 
+      : { ...filters, category: categoryId };
+    
+    setFilters(newFilters);
+    handleSearch('', newFilters); // Apply the category filter
+  };
+
+  // Scroll category section
+  const scrollCategories = (direction) => {
+    if (categoryScrollRef.current) {
+      const scrollAmount = 200;
+      const newScrollPosition = direction === 'left' 
+        ? categoryScrollRef.current.scrollLeft - scrollAmount
+        : categoryScrollRef.current.scrollLeft + scrollAmount;
+      
+      categoryScrollRef.current.scrollTo({
+        left: newScrollPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Calculate course counts per category
+  const getCategoryCourseCount = (categoryId) => {
+    return courses.filter(course => {
+      if (course.category && typeof course.category === 'object') {
+        return course.category._id === categoryId;
+      }
+      return course.category === categoryId;
+    }).length;
+  };
+
   // Animation variants
   const container = {
     hidden: { opacity: 0 },
@@ -153,15 +227,27 @@ const CoursesPage = () => {
     show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
+  // Hide scrollbar CSS
+  const hideScrollbarStyle = `
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  `;
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50">
+    <div className="min-h-screen">
+      <style>{hideScrollbarStyle}</style>
       <Navbar />
       
       {/* Hero Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-20 bg-gradient-to-r from-primary-700 to-indigo-700 text-white">
         <div className="container mx-auto px-4 text-center">
           <motion.h1 
-            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -169,7 +255,7 @@ const CoursesPage = () => {
             Discover Courses That Inspire Growth
           </motion.h1>
           <motion.p 
-            className="text-lg sm:text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-2xl sm:max-w-3xl mx-auto opacity-90"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -179,13 +265,77 @@ const CoursesPage = () => {
           
           {/* Search Box */}
           <motion.div
-            className="max-w-2xl mx-auto"
+            className="max-w-2xl sm:max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <SearchBox onSearch={handleSearch} initialFilters={filters} />
           </motion.div>
+        </div>
+      </section>
+
+      {/* Category Filter Section - ENHANCED */}
+      <section className="py-6 sm:py-8 bg-white shadow-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-3 sm:mb-4">
+            <h2 className="text-lg sm:text-xl font-bold text-text-900">Browse by Category</h2>
+            <div className="flex space-x-2">
+              <button 
+                onClick={() => scrollCategories('left')}
+                className="p-1.5 sm:p-2 rounded-full bg-muted-50 hover:bg-muted-500 hover:bg-opacity-20 text-text-900 transition-colors"
+                aria-label="Scroll left"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button 
+                onClick={() => scrollCategories('right')}
+                className="p-1.5 sm:p-2 rounded-full bg-muted-50 hover:bg-muted-500 hover:bg-opacity-20 text-text-900 transition-colors"
+                aria-label="Scroll right"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          <div 
+            ref={categoryScrollRef}
+            className="flex overflow-x-auto pb-2 -mx-2 px-2 hide-scrollbar"
+          >
+            <div className="flex space-x-2 sm:space-x-3 min-w-max">
+              <button
+                onClick={() => handleCategoryFilter('')}
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-sm sm:text-base font-medium transition-all whitespace-nowrap ${
+                  !filters.category 
+                    ? 'bg-primary-700 text-white shadow-md transform scale-105' 
+                    : 'bg-muted-50 text-text-900 hover:bg-muted-500 hover:bg-opacity-20'
+                }`}
+              >
+                All Courses
+              </button>
+              {categories.map((category) => (
+                <button
+                  key={category._id}
+                  onClick={() => handleCategoryFilter(category._id)}
+                  className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-sm sm:text-base font-medium transition-all whitespace-nowrap flex items-center ${
+                    filters.category === category._id
+                      ? 'bg-primary-700 text-white shadow-md transform scale-105' 
+                      : 'bg-muted-50 text-text-900 hover:bg-muted-500 hover:bg-opacity-20'
+                  }`}
+                >
+                  <span className="mr-2">{category.icon || '📚'}</span>
+                  <span className="mr-1">{category.name}</span>
+                  <span className="bg-primary-700 bg-opacity-20 text-primary-700 text-xs font-medium px-1.5 py-0.5 rounded-full">
+                    {getCategoryCourseCount(category._id)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -196,45 +346,109 @@ const CoursesPage = () => {
             {/* Filters Summary */}
             <div className="flex flex-wrap gap-2">
               {filters.category && (
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                  Category: {filters.category.replace('-', ' ')}
+                <span className="px-3 py-1 bg-muted-50 text-text-900 rounded-full text-sm font-medium flex items-center">
+                  <span className="mr-2">Category:</span>
+                  <span className="font-semibold">{categories.find(cat => cat._id === filters.category)?.name || filters.category.replace('-', ' ')}</span>
+                  <button 
+                    onClick={() => {
+                      const newFilters = { ...filters, category: '' };
+                      setFilters(newFilters);
+                      handleSearch('', newFilters);
+                    }}
+                    className="ml-2 text-text-900 hover:text-primary-700 focus:outline-none"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </span>
               )}
               {filters.level && (
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                  Level: {filters.level}
+                <span className="px-3 py-1 bg-muted-50 text-text-900 rounded-full text-sm font-medium flex items-center">
+                  <span className="mr-2">Level:</span>
+                  <span className="font-semibold">{filters.level}</span>
+                  <button 
+                    onClick={() => {
+                      const newFilters = { ...filters, level: '' };
+                      setFilters(newFilters);
+                      handleSearch('', newFilters);
+                    }}
+                    className="ml-2 text-text-900 hover:text-primary-700 focus:outline-none"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </span>
               )}
               {(filters.price_min || filters.price_max) && (
-                <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
-                  Price: ₹{filters.price_min || 0} - ₹{filters.price_max || '∞'}
+                <span className="px-3 py-1 bg-muted-50 text-text-900 rounded-full text-sm font-medium flex items-center">
+                  <span className="mr-2">Price:</span>
+                  <span className="font-semibold">₹{filters.price_min || 0} - ₹{filters.price_max || '∞'}</span>
+                  <button 
+                    onClick={() => {
+                      const newFilters = { ...filters, price_min: '', price_max: '' };
+                      setFilters(newFilters);
+                      handleSearch('', newFilters);
+                    }}
+                    className="ml-2 text-text-900 hover:text-primary-700 focus:outline-none"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </span>
               )}
-              {Object.keys(filters).length > 0 && (
+              {filters.language && (
+                <span className="px-3 py-1 bg-muted-50 text-text-900 rounded-full text-sm font-medium flex items-center">
+                  <span className="mr-2">Language:</span>
+                  <span className="font-semibold">{filters.language}</span>
+                  <button 
+                    onClick={() => {
+                      const newFilters = { ...filters, language: '' };
+                      setFilters(newFilters);
+                      handleSearch('', newFilters);
+                    }}
+                    className="ml-2 text-text-900 hover:text-primary-700 focus:outline-none"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </span>
+              )}
+              {Object.keys(filters).some(key => filters[key]) && (
                 <button 
                   onClick={() => {
                     setFilters({});
                     setFilteredCourses(courses);
                   }}
-                  className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors"
+                  className="px-3 py-1 bg-muted-50 text-text-900 rounded-full text-sm font-medium hover:bg-muted-500 hover:bg-opacity-20 transition-colors flex items-center"
                 >
-                  Clear All
+                  <span className="mr-1">Clear All</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               )}
             </div>
             
             {/* Sorting Dropdown */}
             <div className="flex items-center gap-2">
-              <span className="text-gray-600 font-medium">Sort by:</span>
+              <span className="text-text-900 font-medium">Sort by:</span>
               <select 
                 value={sortOption}
                 onChange={(e) => handleSort(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm sm:text-base"
+                className="px-3 py-2 border border-muted-500 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-accent-500 bg-white text-sm sm:text-base text-text-900"
               >
                 <option value="popular">Most Popular</option>
                 <option value="highest-rated">Highest Rated</option>
                 <option value="newest">Newest</option>
                 <option value="trending">Trending</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="title-a-z">Title: A to Z</option>
+                <option value="title-z-a">Title: Z to A</option>
               </select>
             </div>
           </div>
@@ -244,6 +458,17 @@ const CoursesPage = () => {
       {/* Course Grid Section */}
       <section className="py-10 sm:py-12">
         <div className="container mx-auto px-4">
+          {/* Results summary */}
+          <div className="mb-4 sm:mb-6">
+            <p className="text-muted-500">
+              Showing <span className="font-semibold text-text-900">{currentCourses.length}</span> of{' '}
+              <span className="font-semibold text-text-900">{filteredCourses.length}</span> courses
+              {filters.category && (
+                <span> in <span className="font-semibold text-text-900">{categories.find(cat => cat._id === filters.category)?.name || 'selected category'}</span></span>
+              )}
+            </p>
+          </div>
+          
           {isLoading ? (
             <motion.div 
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
@@ -251,7 +476,7 @@ const CoursesPage = () => {
               initial="hidden"
               animate="show"
             >
-              {[...Array(8)].map((_, index) => (
+              {[...Array(12)].map((_, index) => (
                 <motion.div key={index} variants={item}>
                   <SkeletonCard />
                 </motion.div>
@@ -297,8 +522,8 @@ const CoursesPage = () => {
                           disabled={currentPage === 1}
                           className={`px-4 py-2 rounded-lg ${
                             currentPage === 1 
-                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-                              : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
+                              ? 'bg-muted-50 text-muted-500 cursor-not-allowed' 
+                              : 'bg-white text-text-900 hover:bg-muted-50 shadow'
                           }`}
                         >
                           Previous
@@ -312,8 +537,8 @@ const CoursesPage = () => {
                               onClick={() => handlePageChange(pageNumber)}
                               className={`px-4 py-2 rounded-lg ${
                                 currentPage === pageNumber
-                                  ? 'bg-blue-600 text-white'
-                                  : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
+                                  ? 'bg-primary-700 text-white'
+                                  : 'bg-white text-text-900 hover:bg-muted-50 shadow'
                               }`}
                             >
                               {pageNumber}
@@ -326,8 +551,8 @@ const CoursesPage = () => {
                           disabled={currentPage === totalPages}
                           className={`px-4 py-2 rounded-lg ${
                             currentPage === totalPages 
-                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-                              : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
+                              ? 'bg-muted-50 text-muted-500 cursor-not-allowed' 
+                              : 'bg-white text-text-900 hover:bg-muted-50 shadow'
                           }`}
                         >
                           Next
@@ -342,14 +567,14 @@ const CoursesPage = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">No courses found</h3>
-                  <p className="text-gray-500 mb-4">Try adjusting your filters or search terms</p>
+                  <h3 className="text-xl font-semibold text-text-900 mb-2">No courses found</h3>
+                  <p className="text-muted-500 mb-4">Try adjusting your filters or search terms</p>
                   <button
                     onClick={() => {
                       setFilters({});
                       setFilteredCourses(courses);
                     }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 bg-primary-700 text-white rounded-lg hover:bg-opacity-90 transition-colors"
                   >
                     Clear Filters
                   </button>
@@ -361,7 +586,7 @@ const CoursesPage = () => {
       </section>
 
       {/* Recommendation CTA Section */}
-      <section className="py-12 sm:py-16 bg-gradient-to-r from-indigo-600 to-purple-700 text-white">
+      <section className="py-12 sm:py-16 bg-gradient-to-r from-primary-700 to-indigo-700 text-white">
         <div className="container mx-auto px-4 text-center">
           <motion.h2 
             className="text-2xl sm:text-3xl font-bold mb-4"
@@ -382,7 +607,7 @@ const CoursesPage = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 font-bold rounded-lg text-lg hover:opacity-90 transition-all duration-200 shadow-lg"
+            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-accent-500 to-orange-500 text-text-900 font-bold rounded-lg text-lg hover:opacity-90 transition-all duration-200 shadow-lg"
             onClick={() => window.location.href = '/recommendations'}
           >
             Get Personalized Recommendations →

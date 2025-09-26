@@ -6,11 +6,11 @@ import GoogleLoginButton from '../components/GoogleLoginButton';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 import Navbar from '../components/Navbar';
+import { motion } from 'framer-motion';
 
 const LoginPage = () => {
-  const [activeForm, setActiveForm] = useState('login'); 
   const [loading, setLoading] = useState(false);
-  const [localError, setLocalError] = useState('');
+  const [error, setError] = useState('');
 
   const { login, register, googleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -18,143 +18,97 @@ const LoginPage = () => {
   // Google login handler
   const handleGoogleLoginSuccess = async (response) => {
     setLoading(true);
-    setLocalError('');
+    setError('');
     
     try {
       const result = await googleLogin(response.access_token);
       if (result.success) {
         navigate('/');
       } else {
-        setLocalError(result.error);
+        setError(result.error);
       }
     } catch (err) {
-      setLocalError('Google login failed. Please try again.');
+      setError('Google login failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleLoginError = () => {
-    setLocalError('Google login failed. Please try again.');
+    setError('Google login failed. Please try again.');
   };
 
   // Form submit handler
-  const handleLoginSubmit = async (formData) => {
+  const handleLogin = async (formData) => {
     setLoading(true);
-    setLocalError('');
+    setError('');
     
     try {
       const result = await login(formData.email, formData.password);
       if (result.success) {
         navigate('/');
       } else {
-        setLocalError(result.error);
+        setError(result.error);
       }
     } catch (err) {
-      setLocalError('Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRegisterSubmit = async (formData) => {
-    setLoading(true);
-    setLocalError('');
-    
-    try {
-      const result = await register(formData.name, formData.email, formData.password);
-      if (result.success) {
-        navigate('/');
-      } else {
-        setLocalError(result.error);
-      }
-    } catch (err) {
-      setLocalError('Registration failed. Please try again.');
+      setError('Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-accent-50 flex flex-col">
-      <Navbar />
-      
-      <div className="flex items-center justify-center p-4 flex-grow">
-        <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8 space-y-5 sm:space-y-6">
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">
-              Account Access
-            </h1>
-            <p className="text-gray-600 text-sm sm:text-base">
-              Choose an option below to continue
-            </p>
-          </div>
-
-          {localError && (
-            <div className="bg-red-50 text-red-700 p-3 sm:p-4 rounded-lg text-xs sm:text-sm">
-              {localError}
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md sm:max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden"
+      >
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 sm:p-8 text-white text-center">
+          <motion.h1 
+            className="text-2xl sm:text-3xl font-bold mb-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            Welcome Back
+          </motion.h1>
+          <motion.p 
+            className="opacity-90 text-sm sm:text-base"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            Sign in to your CourseFinder account
+          </motion.p>
+        </div>
+        
+        <div className="p-6 sm:p-8">
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm sm:text-base">
+              {error}
             </div>
           )}
-
-          {/* Tab buttons for Sign In and Sign Up */}
-          <div className="flex border-b border-gray-200">
-            <button
-              className={`flex-1 py-2 sm:py-3 font-medium text-sm ${
-                activeForm === 'login'
-                  ? 'text-primary-700 border-b-2 border-primary-700'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
-              onClick={() => setActiveForm('login')}
-            >
-              Sign In
-            </button>
-            <button
-              className={`flex-1 py-2 sm:py-3 font-medium text-sm ${
-                activeForm === 'register'
-                  ? 'text-primary-700 border-b-2 border-primary-700'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
-              onClick={() => setActiveForm('register')}
-            >
-              Sign Up
-            </button>
-          </div>
-
-          {/* Show the active form */}
-          <div className="pt-4 sm:pt-5">
-            {activeForm === 'login' ? (
-              <LoginForm 
-                onSubmit={handleLoginSubmit}
-                loading={loading}
-                error={localError}
-              />
-            ) : (
-              <RegisterForm 
-                onSubmit={handleRegisterSubmit}
-                loading={loading}
-                error={localError}
-              />
-            )}
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-xs sm:text-sm">
-              <span className="px-2 bg-white text-gray-500">Or continue with</span>
-            </div>
-          </div>
-
-          <div>
-            <GoogleLoginButton
-              onSuccess={handleGoogleLoginSuccess}
-              onError={handleGoogleLoginError}
-              disabled={loading}
-            />
+          
+          <LoginForm onSubmit={handleLogin} loading={loading} />
+          
+          <div className="mt-6 sm:mt-8 text-center">
+            <p className="text-gray-600 text-sm sm:text-base">
+              Don't have an account?{' '}
+              <Link to="/register" className="text-blue-600 hover:text-blue-800 font-medium">
+                Sign up
+              </Link>
+            </p>
+            
+            <p className="mt-2 sm:mt-3 text-gray-600 text-sm sm:text-base">
+              <Link to="/forgot-password" className="text-blue-600 hover:text-blue-800 font-medium">
+                Forgot your password?
+              </Link>
+            </p>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

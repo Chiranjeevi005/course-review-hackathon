@@ -6,7 +6,7 @@ const EnvTest = () => {
   console.log('All env vars:', import.meta.env);
 
   return (
-    <div className="min-h-screen bg-muted-50 w-full flex items-center justify-center p-4">
+    <div className="min-h-screen w-full flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl w-full">
         <h1 className="text-2xl font-bold text-text-900 mb-4">Environment Variables Test</h1>
         

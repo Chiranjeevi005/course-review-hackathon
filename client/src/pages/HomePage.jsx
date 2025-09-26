@@ -4,10 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import CourseCard from '../components/CourseCard';
 import CategoryChip from '../components/CategoryChip';
 import SearchBox from '../components/SearchBox';
-import MobileMenu from '../components/MobileMenu';
 import HowItWorksStep from '../components/HowItWorksStep';
-// Carousel import removed as we're using grid layout for Personalized Recommendations
-import SkeletonCard from '../components/SkeletonCard';
 import Navbar from '../components/Navbar';
 import axios from '../utils/axiosConfig';
 
@@ -189,12 +186,54 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted-50 w-full">
+    <div className="min-h-screen w-full">
       <Navbar />
       
+      {/* Recommendation Header Section */}
+      <motion.section 
+        className="py-12 sm:py-16 md:py-20 lg:py-24 w-full relative overflow-hidden border-b border-gray-200"
+        initial="hidden"
+        animate="show"
+        variants={container}
+      >
+        {/* Abstract background elements */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-4 left-4 w-16 h-16 rounded-full bg-blue-500 sm:top-10 sm:left-10 sm:w-32 sm:h-32"></div>
+          <div className="absolute top-20 right-10 w-12 h-12 rounded-full bg-indigo-500 sm:top-40 sm:right-20 sm:w-24 sm:h-24"></div>
+          <div className="absolute bottom-10 left-1/4 w-8 h-8 rounded-full bg-blue-400 sm:bottom-20 sm:w-16 sm:h-16"></div>
+          <div className="absolute bottom-20 right-1/3 w-10 h-10 rounded-full bg-indigo-400 sm:bottom-40 sm:w-20 sm:h-20"></div>
+          <div className="absolute top-1/3 left-1/3 w-6 h-6 rounded-full bg-blue-300 sm:top-1/3 sm:w-12 sm:h-12"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <motion.h1 
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 max-w-2xl sm:max-w-3xl mx-auto"
+            variants={item}
+          >
+            Not sure where to start? Let us guide you to the perfect course for your future
+          </motion.h1>
+          
+          <motion.div
+            variants={item}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <button
+              onClick={() => window.location.href = '/recommendations'}
+              className="inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg text-base sm:text-lg shadow-lg hover:opacity-90 transition-all duration-300 transform hover:-translate-y-1 mt-6 sm:mt-8"
+            >
+              Find My Perfect Courses
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 sm:h-5 sm:w-5 sm:ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </motion.div>
+        </div>
+      </motion.section>
+
       {/* Hero Section */}
       <motion.section 
-        className="bg-gradient-to-r from-primary-700/8 to-indigo-700/6 py-12 sm:py-16 md:py-20 w-full"
+        className="bg-gradient-to-r from-primary-700/8 to-indigo-700/6 py-10 sm:py-12 md:py-16 lg:py-20 w-full"
         initial="hidden"
         animate="show"
         variants={container}
@@ -257,7 +296,7 @@ const HomePage = () => {
 
       {/* Top Rated Courses */}
       <motion.section 
-        className="py-8 sm:py-10 md:py-12 bg-card-100 w-full"
+        className="py-8 sm:py-10 md:py-12 w-full"
         initial="hidden"
         animate="show"
         variants={container}
@@ -351,7 +390,7 @@ const HomePage = () => {
 
       {/* How It Works */}
       <motion.section 
-        className="py-12 sm:py-14 md:py-16 bg-muted-50 w-full"
+        className="py-12 sm:py-14 md:py-16 w-full"
         initial="hidden"
         animate="show"
         variants={container}

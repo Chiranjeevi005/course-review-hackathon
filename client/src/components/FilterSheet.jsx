@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from '../utils/axiosConfig';
 
 const FilterSheet = ({ isOpen, onClose, onApplyFilters, initialFilters = {} }) => {
   const [filters, setFilters] = useState({
@@ -10,6 +11,23 @@ const FilterSheet = ({ isOpen, onClose, onApplyFilters, initialFilters = {} }) =
     language: '',
     ...initialFilters
   });
+  const [categories, setCategories] = useState([]);
+
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('/api/categories');
+        setCategories(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    if (isOpen) {
+      fetchCategories();
+    }
+  }, [isOpen]);
 
   // Update filters when initialFilters change
   useEffect(() => {
@@ -120,11 +138,11 @@ const FilterSheet = ({ isOpen, onClose, onApplyFilters, initialFilters = {} }) =
                     className="w-full p-2 sm:p-3 border border-muted-500 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-accent-500 bg-white transition-all duration-200 ease-in-out text-sm sm:text-base"
                   >
                     <option value="">All Categories</option>
-                    <option value="web-development">Web Development</option>
-                    <option value="data-science">Data Science</option>
-                    <option value="ai">Artificial Intelligence</option>
-                    <option value="design">Design</option>
-                    <option value="business">Business</option>
+                    {categories.map((category) => (
+                      <option key={category._id} value={category._id}>
+                        {category.name}
+                      </option>
+                    ))}
                   </select>
                 </motion.div>
                 

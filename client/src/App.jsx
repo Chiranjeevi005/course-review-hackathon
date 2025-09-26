@@ -17,15 +17,19 @@ import ProtectedRoute from './components/ProtectedRoute';
 import TestAxiosPage from './TestAxiosPage';
 import EnvTest from './EnvTest';
 
+// Import global styles
+import './App.css';
+import './index.css';
+
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="App">
+        <div className="App min-h-screen">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/courses" element={<CoursesPage />} />
-            <Route path="/courses/:categoryId" element={<CategoryCoursesPage />} />
+            <Route path="/courses/category/:categoryId" element={<CategoryCoursesPage />} />
             <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/recommendations" element={<RecommendationPage />} />
             <Route path="/login" element={<LoginPage />} />

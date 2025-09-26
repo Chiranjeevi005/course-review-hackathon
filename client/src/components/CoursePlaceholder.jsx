@@ -1,10 +1,6 @@
 import React from 'react';
 
-const CoursePlaceholder = ({ 
-  courseTitle = '', 
-  courseDescription = '',
-  className = '' 
-}) => {
+const CoursePlaceholder = ({ courseTitle, courseDescription, className = "" }) => {
   // Truncate course title for display
   const displayTitle = courseTitle 
     ? courseTitle.length > 60 
@@ -19,47 +15,29 @@ const CoursePlaceholder = ({
       : courseDescription
     : 'Learn valuable skills with this comprehensive course designed for beginners to advanced learners.';
   
-  // Get initials for course title
-  const getTitleInitials = (title) => {
-    if (!title) return 'CT';
-    const words = title.split(' ');
-    if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
-    return (words[0][0] + (words[1] ? words[1][0] : '')).toUpperCase();
-  };
-  
-  const initials = getTitleInitials(courseTitle);
+  // Use a consistent color scheme based on the design system
+  const gradient = 'from-primary-700 to-indigo-700';
 
   return (
-    <div className={`relative overflow-hidden rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 ${className}`} style={{ width: '100%', height: '100%' }}>
-      {/* Background pattern */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
-        <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-        
-        {/* Decorative elements */}
-        <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white bg-opacity-5"></div>
-        <div className="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-white bg-opacity-5"></div>
-        
-        {/* Course initials badge */}
-        <div className="absolute top-4 left-4 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg px-3 py-2 z-10">
-          <span className="text-white text-lg font-bold">{initials}</span>
-        </div>
-        
-        {/* Content container */}
-        <div className="relative z-10 w-full max-w-xs">
-          {/* Course title */}
-          <h3 className="text-white text-lg font-bold mb-2 leading-tight">
-            {displayTitle}
-          </h3>
-          
-          {/* Course description */}
-          <p className="text-white/90 text-sm leading-relaxed">
-            {displayDescription}
-          </p>
-        </div>
-        
-        {/* Decorative bottom element */}
-        <div className="absolute bottom-4 right-4 w-8 h-8 rounded-lg bg-white bg-opacity-10"></div>
+    <div className={`relative overflow-hidden rounded-lg bg-gradient-to-br ${gradient} ${className}`} style={{ width: '100%', height: '100%' }}>
+      {/* Simplified background pattern for professionalism */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-white sm:top-3 sm:left-3 sm:w-3 sm:h-3"></div>
+        <div className="absolute bottom-2 right-2 w-2 h-2 rounded-full bg-white sm:bottom-3 sm:right-3 sm:w-3 sm:h-3"></div>
       </div>
+      
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center p-2 text-center sm:p-3 md:p-4">
+        <div className="text-white text-xs font-semibold leading-tight break-words max-h-full overflow-hidden sm:text-sm md:text-base">
+          {displayTitle}
+        </div>
+        <div className="text-white text-opacity-80 text-[0.6rem] sm:text-xs mt-1 sm:mt-2 leading-tight break-words max-h-full overflow-hidden">
+          {displayDescription}
+        </div>
+      </div>
+      
+      {/* Subtle border effect */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-10"></div>
     </div>
   );
 };

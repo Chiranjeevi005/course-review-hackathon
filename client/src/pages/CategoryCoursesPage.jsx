@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import CourseCard from '../components/CourseCard';
 import Navbar from '../components/Navbar';
 import axios from '../utils/axiosConfig';
+import SkeletonCard from '../components/SkeletonCard';
 
 const CategoryCoursesPage = () => {
   const { categoryId } = useParams();
@@ -15,6 +16,8 @@ const CategoryCoursesPage = () => {
   const [activeFilters, setActiveFilters] = useState([]);
   const [category, setCategory] = useState(null);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const coursesPerPage = 12;
 
   // Initialize courses and category
   useEffect(() => {
@@ -74,7 +77,9 @@ const CategoryCoursesPage = () => {
             ratingCount: course.reviewsCount,
             level: course.difficulty,
             category: course.categoryId,
-            description: course.description
+            description: course.description,
+            provider: course.instructor?.name || 'Unknown Instructor',
+            language: course.language || 'english'
           }));
           setCourses(transformedCourses);
           setFilteredCourses(transformedCourses); // Set filteredCourses as well
@@ -145,6 +150,7 @@ const CategoryCoursesPage = () => {
     }
     
     setFilteredCourses(sortedCourses);
+    setCurrentPage(1); // Reset to first page when sorting changes
   };
 
   // Handle filtering
@@ -191,6 +197,7 @@ const CategoryCoursesPage = () => {
     
     console.log('Filtered courses result:', result.length);
     setFilteredCourses(result);
+    setCurrentPage(1); // Reset to first page when filters change
   };
 
   // Clear filters button handler
@@ -198,6 +205,18 @@ const CategoryCoursesPage = () => {
     console.log('Clearing filters');
     setActiveFilters([]);
     setFilteredCourses(courses);
+  };
+
+  // Pagination
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
+  const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    // Scroll to top of courses section
+    window.scrollTo({ top: 400, behavior: 'smooth' });
   };
 
   // Animation variants
@@ -218,7 +237,7 @@ const CategoryCoursesPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <div className="min-h-screen">
         <Navbar />
         <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
@@ -230,7 +249,7 @@ const CategoryCoursesPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <div className="min-h-screen">
         <Navbar />
         <div className="container mx-auto px-4 py-12">
           <div className="text-center py-12">
@@ -250,7 +269,7 @@ const CategoryCoursesPage = () => {
 
   if (!category) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <div className="min-h-screen">
         <Navbar />
         <div className="container mx-auto px-4 py-12">
           <div className="text-center py-12">
@@ -269,151 +288,224 @@ const CategoryCoursesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen">
       <Navbar />
       
       {/* Hero Section */}
-      <section className={`py-12 sm:py-16 md:py-20 bg-gradient-to-r from-primary-700 to-indigo-700 text-white`}>
+      <section className="py-10 sm:py-12 md:py-16 lg:py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-3xl mx-auto text-center"
+            className="max-w-4xl mx-auto text-center"
           >
-            <div className="text-4xl sm:text-5xl mb-4">
-              {category.icon || '📚'}
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-              {category.name}
-            </h1>
-            <p className="text-lg sm:text-xl md:text-2xl mb-6 opacity-90">
-              {category.description || 'Explore courses in this category'}
-            </p>
+            <motion.h1 
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4"
+            >
+              {category?.name || 'Courses'}
+            </motion.h1>
+            <motion.p 
+              className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-2xl mx-auto opacity-90"
+            >
+              {category?.description || 'Discover courses in this category'}
+            </motion.p>
           </motion.div>
         </div>
       </section>
 
-      {/* Sorting & Filtering Section */}
-      <section className="py-6 sm:py-8 bg-white shadow-sm sticky top-0 z-10">
+      {/* Filters Section */}
+      <section className="py-4 sm:py-6 bg-white shadow-sm">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex flex-wrap gap-2 mb-4">
+            {['beginner', 'intermediate', 'advanced'].map(level => (
+              <button
+                key={level}
+                onClick={() => toggleFilter(level)}
+                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                  activeFilters.includes(level)
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {level.charAt(0).toUpperCase() + level.slice(1)}
+              </button>
+            ))}
+            <button
+              onClick={() => toggleFilter('free')}
+              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                activeFilters.includes('free')
+                  ? 'bg-green-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Free
+            </button>
+            <button
+              onClick={() => toggleFilter('paid')}
+              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                activeFilters.includes('paid')
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Paid
+            </button>
+            {activeFilters.length > 0 && (
+              <button
+                onClick={clearFilters}
+                className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors"
+              >
+                Clear Filters
+              </button>
+            )}
+          </div>
+          
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            {/* Results summary */}
+            <div>
+              <p className="text-gray-600">
+                Showing <span className="font-semibold">{currentCourses.length}</span> of{' '}
+                <span className="font-semibold">{filteredCourses.length}</span> courses
+              </p>
+            </div>
+            
             {/* Sorting Dropdown */}
             <div className="flex items-center gap-2">
-              <span className="text-gray-600 font-medium">Sort by:</span>
+              <span className="text-gray-600 font-medium text-sm sm:text-base">Sort by:</span>
               <select 
                 value={sortOption}
                 onChange={(e) => handleSort(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm sm:text-base"
+                className="px-2 py-1 sm:px-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-xs sm:text-sm"
               >
-                <option value="popularity">Popularity</option>
-                <option value="rating">Rating</option>
+                <option value="popularity">Most Popular</option>
+                <option value="rating">Highest Rated</option>
                 <option value="newest">Newest</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
               </select>
-            </div>
-            
-            {/* Filter Chips */}
-            <div className="flex flex-wrap gap-2">
-              {['beginner', 'intermediate', 'advanced'].map(level => (
-                <button
-                  key={level}
-                  onClick={() => toggleFilter(level)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                    activeFilters.includes(level)
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  {level.charAt(0).toUpperCase() + level.slice(1)}
-                </button>
-              ))}
-              
-              <button
-                onClick={() => toggleFilter('free')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                  activeFilters.includes('free')
-                    ? 'bg-green-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                Free
-              </button>
-              
-              <button
-                onClick={() => toggleFilter('paid')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                  activeFilters.includes('paid')
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                Paid
-              </button>
-              
-              {activeFilters.length > 0 && (
-                <button 
-                  onClick={clearFilters}
-                  className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors"
-                >
-                  Clear All
-                </button>
-              )}
             </div>
           </div>
         </div>
       </section>
 
       {/* Course Grid Section */}
-      <section className="py-10 sm:py-12">
+      <section className="py-8 sm:py-10 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
           {isLoading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading courses...</p>
-            </div>
+            <motion.div 
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+              variants={container}
+              initial="hidden"
+              animate="show"
+            >
+              {[...Array(12)].map((_, index) => (
+                <motion.div key={index} variants={item}>
+                  <SkeletonCard />
+                </motion.div>
+              ))}
+            </motion.div>
           ) : (
             <>
-              {console.log('Rendering courses - filteredCourses.length:', filteredCourses.length, 'filteredCourses:', filteredCourses)}
-              {filteredCourses.length > 0 ? (
-                <motion.div 
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                  variants={container}
-                  initial="hidden"
-                  animate="show"
-                >
-                  {filteredCourses.map((course, index) => (
-                    <motion.div
-                      key={course.id || course._id}
-                      variants={item}
-                      whileHover={{ 
-                        scale: 1.03, 
-                        y: -5,
-                        boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-                      }}
-                      transition={{ duration: 0.2, ease: "easeInOut" }}
+              {currentCourses.length > 0 ? (
+                <>
+                  <motion.div 
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-10"
+                    variants={container}
+                    initial="hidden"
+                    animate="show"
+                  >
+                    {currentCourses.map((course, index) => (
+                      <motion.div
+                        key={course.id}
+                        variants={item}
+                        whileHover={{ 
+                          scale: 1.03, 
+                          y: -5,
+                          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+                        }}
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                      >
+                        <CourseCard course={course} />
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                  
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <motion.div 
+                      className="flex justify-center mt-6 sm:mt-8"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
                     >
-                      <CourseCard course={course} />
+                      <div className="flex space-x-1 sm:space-x-2">
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base ${
+                            currentPage === 1 
+                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                              : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
+                          }`}
+                        >
+                          Previous
+                        </button>
+                        
+                        {[...Array(totalPages)].map((_, index) => {
+                          const pageNumber = index + 1;
+                          // Only show first, last, current, and nearby pages
+                          if (pageNumber === 1 || pageNumber === totalPages || 
+                              (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)) {
+                            return (
+                              <button
+                                key={pageNumber}
+                                onClick={() => handlePageChange(pageNumber)}
+                                className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base ${
+                                  currentPage === pageNumber
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
+                                }`}
+                              >
+                                {pageNumber}
+                              </button>
+                            );
+                          } else if (pageNumber === currentPage - 2 || pageNumber === currentPage + 2) {
+                            return (
+                              <span key={pageNumber} className="px-2 py-2 text-gray-500">
+                                ...
+                              </span>
+                            );
+                          }
+                          return null;
+                        })}
+                        
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base ${
+                            currentPage === totalPages 
+                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                              : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
+                          }`}
+                        >
+                          Next
+                        </button>
+                      </div>
                     </motion.div>
-                  ))}
-                </motion.div>
+                  )}
+                </>
               ) : (
                 <motion.div 
-                  className="text-center py-12"
+                  className="text-center py-10 sm:py-12"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">No courses found</h3>
-                  <p className="text-gray-500 mb-4">Try adjusting your filters</p>
-                  <div className="mb-4">
-                    <p className="text-sm text-gray-400">Courses array length: {courses.length}</p>
-                    <p className="text-sm text-gray-400">Filtered courses array length: {filteredCourses.length}</p>
-                    <p className="text-sm text-gray-400">Active filters: {activeFilters.join(', ') || 'None'}</p>
-                  </div>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">No courses found</h3>
+                  <p className="text-gray-500 mb-4">Try adjusting your filters or search terms</p>
                   <button
                     onClick={clearFilters}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
                   >
                     Clear Filters
                   </button>
@@ -421,36 +513,6 @@ const CategoryCoursesPage = () => {
               )}
             </>
           )}
-        </div>
-      </section>
-
-      {/* Recommendation CTA Section */}
-      <section className="py-12 sm:py-16 bg-gradient-to-r from-primary-700 to-indigo-700 text-white w-full">
-        <div className="container mx-auto px-4 text-center">
-          <motion.h2 
-            className="text-2xl sm:text-h2 font-extrabold mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            Not sure where to start?
-          </motion.h2>
-          <motion.p 
-            className="text-base sm:text-lg mb-6 sm:mb-8 max-w-xl sm:max-w-2xl mx-auto leading-relaxed"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            Try our Recommendation Engine to discover personalized courses based on your interests and goals.
-          </motion.p>
-          <motion.button 
-            className="bg-accent-500 text-text-900 font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl hover:bg-opacity-90 transition-all duration-200 ease-in-out shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-sm sm:text-base"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/recommendations')}
-          >
-            Find My Perfect Courses →
-          </motion.button>
         </div>
       </section>
     </div>
