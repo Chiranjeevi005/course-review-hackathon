@@ -111,11 +111,11 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
             transition={{ duration: 0.3, delay: 0.5 }}
           >
             {user ? (
-              <>
+              <div className="space-y-3">
                 <motion.button 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-primary-600 text-white py-2.5 sm:py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 ease-in-out font-semibold mb-3 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm sm:text-base"
+                  className="w-full bg-primary-600 text-white py-2.5 sm:py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm sm:text-base"
                   onClick={() => {
                     onClose();
                     window.location.href = '/dashboard';
@@ -126,18 +126,21 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
                 <motion.button 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-accent-500 text-text-900 py-2.5 sm:py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold mb-3 focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm sm:text-base"
-                  onClick={logout}
+                  className="w-full bg-accent-500 text-text-900 py-2.5 sm:py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm sm:text-base"
+                  onClick={() => {
+                    onClose();
+                    logout();
+                  }}
                 >
                   Logout
                 </motion.button>
-              </>
+              </div>
             ) : (
-              <>
+              <div className="space-y-3">
                 <motion.button 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-accent-500 text-text-900 py-2.5 sm:py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold mb-3 focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm sm:text-base"
+                  className="w-full bg-accent-500 text-text-900 py-2.5 sm:py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm sm:text-base"
                   onClick={() => {
                     onClose();
                     window.location.href = '/login';
@@ -148,7 +151,7 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
                 <motion.button 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-primary-600 text-white py-2.5 sm:py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 ease-in-out font-semibold mb-3 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm sm:text-base"
+                  className="w-full bg-primary-600 text-white py-2.5 sm:py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm sm:text-base"
                   onClick={() => {
                     onClose();
                     window.location.href = '/login';
@@ -156,12 +159,12 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
                 >
                   Sign Up
                 </motion.button>
-              </>
+              </div>
             )}
             <motion.button 
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full border border-muted-500 text-text-900 py-2.5 sm:py-3 rounded-lg hover:bg-muted-50 transition-colors duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm sm:text-base"
+              className="w-full mt-3 border border-muted-500 text-text-900 py-2.5 sm:py-3 rounded-lg hover:bg-muted-50 transition-colors duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm sm:text-base"
             >
               Get Curated Picks
             </motion.button>

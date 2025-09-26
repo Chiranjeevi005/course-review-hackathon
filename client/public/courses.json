@@ -1,0 +1,742 @@
+[
+  {
+    "courseId": "WD101",
+    "title": "Full-Stack Web Development Bootcamp: Zero to Hero",
+    "description": "Learn modern web development by building real projects with HTML, CSS, JavaScript, React, Node.js, and MongoDB. Perfect for beginners aiming for a tech career.",
+    "category": "Web Development",
+    "instructor": "Angela Yu",
+    "platform": "Udemy",
+    "duration": "12 weeks (Self-paced)",
+    "level": "Beginner to Intermediate",
+    "price": "Free",
+    "rating": 4.8,
+    "enrollmentCount": 15200,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Basic computer knowledge",
+    "syllabus": [
+      "HTML, CSS, and responsive design fundamentals",
+      "JavaScript basics and DOM manipulation",
+      "Frontend development with React",
+      "Backend APIs with Node.js & Express",
+      "Databases with MongoDB & deployment"
+    ],
+    "learningOutcomes": [
+      "Build and deploy full-stack web applications",
+      "Develop responsive and interactive user interfaces",
+      "Understand the complete web development lifecycle"
+    ],
+    "tags": ["Web Development", "Full Stack", "React", "Node"],
+    "image": "/images/placeholders/web-development.png"
+  },
+  {
+    "courseId": "WD102",
+    "title": "Advanced React and State Management Masterclass",
+    "description": "Master advanced React concepts including hooks, context, reducers, and state management libraries like Redux and Zustand for building scalable applications.",
+    "category": "Web Development",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy",
+    "duration": "10 weeks (Self-paced)",
+    "level": "Intermediate to Advanced",
+    "price": "Free",
+    "rating": 4.7,
+    "enrollmentCount": 12400,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Intermediate JavaScript and basic React knowledge",
+    "syllabus": [
+      "Advanced React hooks and custom hooks",
+      "State management with Context API",
+      "Redux Toolkit and best practices",
+      "Performance optimization techniques",
+      "Testing React components with Jest and React Testing Library"
+    ],
+    "learningOutcomes": [
+      "Build complex, scalable React applications",
+      "Implement efficient state management solutions",
+      "Optimize React application performance"
+    ],
+    "tags": ["React", "JavaScript", "State Management", "Redux"],
+    "image": "/images/placeholders/web-development.png"
+  },
+  {
+    "courseId": "WD103",
+    "title": "Vue.js 3 Complete Developer Guide",
+    "description": "Learn Vue.js 3 from fundamentals to advanced concepts including Composition API, Vue Router, Vuex, and building real-world applications.",
+    "category": "Web Development",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy",
+    "duration": "14 weeks (Self-paced)",
+    "level": "Beginner to Intermediate",
+    "price": "Free",
+    "rating": 4.6,
+    "enrollmentCount": 9800,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Basic HTML, CSS, and JavaScript knowledge",
+    "syllabus": [
+      "Vue.js fundamentals and core concepts",
+      "Components, props, and component communication",
+      "Composition API and reactivity fundamentals",
+      "Vue Router for single-page applications",
+      "State management with Vuex",
+      "Building a complete project with Vue.js"
+    ],
+    "learningOutcomes": [
+      "Develop modern web applications with Vue.js",
+      "Create reusable and maintainable components",
+      "Build single-page applications with Vue Router"
+    ],
+    "tags": ["Vue.js", "JavaScript", "Frontend", "SPA"],
+    "image": "/images/placeholders/web-development.png"
+  },
+  {
+    "courseId": "WD104",
+    "title": "Progressive Web Apps Development",
+    "description": "Learn to build Progressive Web Apps that work offline, load instantly, and provide a native app-like experience across all devices.",
+    "category": "Web Development",
+    "instructor": "Stephen Grider",
+    "platform": "Udemy",
+    "duration": "8 weeks (Self-paced)",
+    "level": "Intermediate",
+    "price": "Free",
+    "rating": 4.5,
+    "enrollmentCount": 7600,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Intermediate JavaScript, HTML, and CSS knowledge",
+    "syllabus": [
+      "PWA fundamentals and core concepts",
+      "Service workers and caching strategies",
+      "Web app manifest and installation",
+      "Offline functionality and data synchronization",
+      "Push notifications and background sync",
+      "Performance optimization for PWAs"
+    ],
+    "learningOutcomes": [
+      "Build web applications that work offline",
+      "Implement native app-like user experiences",
+      "Optimize web applications for performance"
+    ],
+    "tags": ["PWA", "Web Development", "Service Workers", "Offline"],
+    "image": "/images/placeholders/web-development.png"
+  },
+  {
+    "courseId": "MD101",
+    "title": "iOS App Development with Swift",
+    "description": "Learn to build beautiful iOS applications using Swift programming language and Xcode. From basics to App Store deployment.",
+    "category": "Mobile Development",
+    "instructor": "Angela Yu",
+    "platform": "Udemy",
+    "duration": "16 weeks (Self-paced)",
+    "level": "Beginner to Intermediate",
+    "price": "Free",
+    "rating": 4.8,
+    "enrollmentCount": 18900,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Basic programming knowledge",
+    "syllabus": [
+      "Swift programming fundamentals",
+      "Xcode interface and debugging",
+      "UI development with Storyboards and SwiftUI",
+      "Navigation and data passing between screens",
+      "Working with APIs and networking",
+      "App Store deployment process"
+    ],
+    "learningOutcomes": [
+      "Build and deploy iOS applications to the App Store",
+      "Master Swift programming language",
+      "Create intuitive user interfaces for iOS"
+    ],
+    "tags": ["iOS", "Swift", "Mobile Development", "Xcode"],
+    "image": "/images/placeholders/mobile-development.png"
+  },
+  {
+    "courseId": "MD102",
+    "title": "Android Kotlin Developer Masterclass",
+    "description": "Become a professional Android developer using Kotlin. Learn to build real apps with modern Android development practices.",
+    "category": "Mobile Development",
+    "instructor": "Tim Buchalka",
+    "platform": "Udemy",
+    "duration": "14 weeks (Self-paced)",
+    "level": "Beginner to Intermediate",
+    "price": "Free",
+    "rating": 4.7,
+    "enrollmentCount": 15600,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Basic programming knowledge",
+    "syllabus": [
+      "Kotlin programming for Android",
+      "Android Studio and development environment setup",
+      "UI design with XML and Jetpack Compose",
+      "Activities, Fragments, and Intents",
+      "Data persistence with Room database",
+      "Publishing apps to Google Play Store"
+    ],
+    "learningOutcomes": [
+      "Build and publish Android applications",
+      "Master Kotlin programming for Android",
+      "Implement modern Android development practices"
+    ],
+    "tags": ["Android", "Kotlin", "Mobile Development", "Jetpack Compose"],
+    "image": "/images/placeholders/mobile-development.png"
+  },
+  {
+    "courseId": "MD103",
+    "title": "Cross-Platform Mobile Development with Flutter",
+    "description": "Learn to build beautiful native mobile apps for iOS and Android using Flutter and Dart. One codebase for both platforms.",
+    "category": "Mobile Development",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy",
+    "duration": "12 weeks (Self-paced)",
+    "level": "Beginner to Intermediate",
+    "price": "Free",
+    "rating": 4.9,
+    "enrollmentCount": 22400,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Basic programming knowledge",
+    "syllabus": [
+      "Dart programming language fundamentals",
+      "Flutter widgets and UI components",
+      "State management in Flutter apps",
+      "Navigation and routing",
+      "Working with APIs and Firebase integration",
+      "App deployment for iOS and Android"
+    ],
+    "learningOutcomes": [
+      "Build native mobile apps for iOS and Android",
+      "Master Flutter framework and Dart programming",
+      "Create beautiful, responsive user interfaces"
+    ],
+    "tags": ["Flutter", "Dart", "Cross-Platform", "Mobile Development"],
+    "image": "/images/placeholders/mobile-development.png"
+  },
+  {
+    "courseId": "MD104",
+    "title": "React Native - The Practical Guide",
+    "description": "Learn to build native mobile apps for iOS and Android with React Native. Create real apps with reusable components and native features.",
+    "category": "Mobile Development",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy",
+    "duration": "10 weeks (Self-paced)",
+    "level": "Intermediate",
+    "price": "Free",
+    "rating": 4.6,
+    "enrollmentCount": 13800,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Intermediate JavaScript and React knowledge",
+    "syllabus": [
+      "React Native fundamentals and setup",
+      "Core components and styling",
+      "Navigation with React Navigation",
+      "State management solutions",
+      "Native device features integration",
+      "App store deployment for iOS and Android"
+    ],
+    "learningOutcomes": [
+      "Build native mobile applications for both platforms",
+      "Integrate native device features in mobile apps",
+      "Deploy React Native apps to app stores"
+    ],
+    "tags": ["React Native", "JavaScript", "Cross-Platform", "Mobile"],
+    "image": "/images/placeholders/mobile-development.png"
+  },
+  {
+    "courseId": "DS101",
+    "title": "Data Science Professional Certificate",
+    "description": "Launch your career in data science with Python, SQL, and machine learning fundamentals. Hands-on projects and real datasets.",
+    "category": "Data Science",
+    "instructor": "IBM",
+    "platform": "Coursera",
+    "duration": "12 weeks (Self-paced)",
+    "level": "Beginner",
+    "price": "Free",
+    "rating": 4.7,
+    "enrollmentCount": 35600,
+    "language": "English",
+    "certification": "Yes - IBM Certificate",
+    "prerequisites": "Basic computer knowledge",
+    "syllabus": [
+      "Data Science fundamentals and methodology",
+      "Python for Data Science and AI",
+      "SQL and database management for data analysis",
+      "Data visualization with Python",
+      "Machine Learning with Python",
+      "Applied Data Science capstone project"
+    ],
+    "learningOutcomes": [
+      "Analyze and visualize data using Python",
+      "Build machine learning models for predictions",
+      "Apply data science methodologies to solve business problems"
+    ],
+    "tags": ["Data Science", "Python", "SQL", "Machine Learning", "Statistics"],
+    "image": "/images/placeholders/data-science.png"
+  },
+  {
+    "courseId": "DS102",
+    "title": "Advanced Data Analysis with R",
+    "description": "Perform sophisticated statistical analysis and data visualization with R programming. Master data manipulation and advanced analytics.",
+    "category": "Data Science",
+    "instructor": "Roger Peng",
+    "platform": "edX",
+    "duration": "10 weeks (Self-paced)",
+    "level": "Intermediate",
+    "price": "Free",
+    "rating": 4.6,
+    "enrollmentCount": 18700,
+    "language": "English",
+    "certification": "Yes - edX Certificate",
+    "prerequisites": "Intermediate statistics and basic R knowledge",
+    "syllabus": [
+      "R programming fundamentals and data structures",
+      "Data wrangling and cleaning with dplyr and tidyr",
+      "Statistical modeling and inference",
+      "Advanced data visualization with ggplot2",
+      "Reproducible research and reporting with R Markdown",
+      "Time series analysis and forecasting"
+    ],
+    "learningOutcomes": [
+      "Manipulate and clean complex datasets with R",
+      "Create compelling data visualizations",
+      "Perform advanced statistical analysis"
+    ],
+    "tags": ["R Programming", "Statistical Analysis", "Data Visualization", "Data Mining", "Statistics"],
+    "image": "/images/placeholders/data-science.png"
+  },
+  {
+    "courseId": "DS103",
+    "title": "Big Data and Hadoop Ecosystem",
+    "description": "Process and analyze massive datasets using Hadoop, Spark, and distributed computing frameworks. Learn industry-standard big data tools.",
+    "category": "Data Science",
+    "instructor": "Frank Kane",
+    "platform": "Udemy",
+    "duration": "14 weeks (Self-paced)",
+    "level": "Advanced",
+    "price": "Free",
+    "rating": 4.5,
+    "enrollmentCount": 14200,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Advanced programming and data analysis experience",
+    "syllabus": [
+      "Big Data fundamentals and challenges",
+      "Hadoop architecture and ecosystem components",
+      "MapReduce programming model",
+      "Apache Spark and streaming analytics",
+      "NoSQL databases and data warehousing",
+      "Real-time data processing with Kafka"
+    ],
+    "learningOutcomes": [
+      "Process and analyze large-scale datasets",
+      "Implement distributed computing solutions",
+      "Design big data architectures"
+    ],
+    "tags": ["Big Data", "Hadoop", "Spark", "Distributed Computing", "Data Engineering"],
+    "image": "/images/placeholders/data-science.png"
+  },
+  {
+    "courseId": "DS104",
+    "title": "Data Visualization and Storytelling",
+    "description": "Transform complex data into compelling visual narratives using Tableau and Power BI. Master the art of data storytelling.",
+    "category": "Data Science",
+    "instructor": "Cole Nussbaumer Knaflic",
+    "platform": "LinkedIn Learning",
+    "duration": "6 weeks (Self-paced)",
+    "level": "Beginner",
+    "price": "Free",
+    "rating": 4.8,
+    "enrollmentCount": 22400,
+    "language": "English",
+    "certification": "Yes - LinkedIn Certificate",
+    "prerequisites": "Basic data analysis knowledge",
+    "syllabus": [
+      "Principles of effective data visualization",
+      "Tableau fundamentals and dashboard creation",
+      "Power BI for business analytics",
+      "Interactive visualization design",
+      "Data storytelling and communication",
+      "Best practices for presenting data insights"
+    ],
+    "learningOutcomes": [
+      "Create compelling data visualizations",
+      "Communicate insights through data storytelling",
+      "Build interactive dashboards with industry tools"
+    ],
+    "tags": ["Data Visualization", "Tableau", "Power BI", "Storytelling", "Business Intelligence"],
+    "image": "/images/placeholders/data-science.png"
+  },
+  {
+    "courseId": "AI101",
+    "title": "Deep Learning Specialization",
+    "description": "Master deep learning fundamentals and build neural networks from scratch with hands-on projects in computer vision and NLP.",
+    "category": "Artificial Intelligence",
+    "instructor": "Andrew Ng",
+    "platform": "Coursera",
+    "duration": "16 weeks (Self-paced)",
+    "level": "Intermediate",
+    "price": "Free",
+    "rating": 4.9,
+    "enrollmentCount": 42000,
+    "language": "English",
+    "certification": "Yes - DeepLearning.AI Certificate",
+    "prerequisites": "Intermediate Python and machine learning knowledge",
+    "syllabus": [
+      "Neural networks and deep learning fundamentals",
+      "Improving deep neural networks and regularization",
+      "Structuring machine learning projects",
+      "Convolutional neural networks for computer vision",
+      "Sequence models and natural language processing"
+    ],
+    "learningOutcomes": [
+      "Build and train deep neural networks",
+      "Apply CNNs to computer vision problems",
+      "Implement sequence models for NLP tasks"
+    ],
+    "tags": ["Deep Learning", "Neural Networks", "TensorFlow", "Python", "AI"],
+    "image": "/images/placeholders/artificial-intelligence.png"
+  },
+  {
+    "courseId": "AI102",
+    "title": "Machine Learning with Python",
+    "description": "Learn essential machine learning algorithms and techniques to solve real-world problems with Python and scikit-learn.",
+    "category": "Artificial Intelligence",
+    "instructor": "IBM",
+    "platform": "Coursera",
+    "duration": "12 weeks (Self-paced)",
+    "level": "Beginner",
+    "price": "Free",
+    "rating": 4.7,
+    "enrollmentCount": 28500,
+    "language": "English",
+    "certification": "Yes - IBM Certificate",
+    "prerequisites": "Basic Python knowledge",
+    "syllabus": [
+      "Introduction to machine learning concepts",
+      "Data preprocessing and feature engineering",
+      "Supervised learning algorithms",
+      "Unsupervised learning techniques",
+      "Model evaluation and validation",
+      "Real-world ML project implementation"
+    ],
+    "learningOutcomes": [
+      "Implement machine learning algorithms with Python",
+      "Preprocess and analyze datasets for ML",
+      "Evaluate and optimize ML models"
+    ],
+    "tags": ["Machine Learning", "Python", "Data Science", "Algorithms", "Scikit-learn"],
+    "image": "/images/placeholders/artificial-intelligence.png"
+  },
+  {
+    "courseId": "AI103",
+    "title": "Natural Language Processing",
+    "description": "Build systems that understand human language using advanced NLP techniques and transformer models like BERT and GPT.",
+    "category": "Artificial Intelligence",
+    "instructor": "DeepLearning.AI",
+    "platform": "Coursera",
+    "duration": "14 weeks (Self-paced)",
+    "level": "Advanced",
+    "price": "Free",
+    "rating": 4.8,
+    "enrollmentCount": 15600,
+    "language": "English",
+    "certification": "Yes - DeepLearning.AI Certificate",
+    "prerequisites": "Advanced Python and deep learning knowledge",
+    "syllabus": [
+      "Text preprocessing and tokenization",
+      "Word embeddings and Word2Vec",
+      "Sequence models and RNNs",
+      "Attention mechanisms and transformers",
+      "BERT and advanced NLP applications",
+      "Text generation and language modeling"
+    ],
+    "learningOutcomes": [
+      "Build NLP systems that understand human language",
+      "Implement transformer models for text processing",
+      "Apply advanced NLP techniques to real problems"
+    ],
+    "tags": ["NLP", "Transformers", "BERT", "Text Analysis", "Language Models"],
+    "image": "/images/placeholders/artificial-intelligence.png"
+  },
+  {
+    "courseId": "AI104",
+    "title": "Computer Vision Fundamentals",
+    "description": "Learn to build image recognition systems and process visual data with modern computer vision techniques and deep learning.",
+    "category": "Artificial Intelligence",
+    "instructor": "Andrew Ng",
+    "platform": "Coursera",
+    "duration": "10 weeks (Self-paced)",
+    "level": "Intermediate",
+    "price": "Free",
+    "rating": 4.6,
+    "enrollmentCount": 19800,
+    "language": "English",
+    "certification": "Yes - DeepLearning.AI Certificate",
+    "prerequisites": "Intermediate Python and machine learning knowledge",
+    "syllabus": [
+      "Image processing basics and OpenCV",
+      "Feature detection and matching",
+      "Convolutional neural networks for images",
+      "Object detection and recognition",
+      "Image segmentation techniques",
+      "Advanced computer vision applications"
+    ],
+    "learningOutcomes": [
+      "Build image recognition systems",
+      "Implement computer vision algorithms",
+      "Apply CNNs to visual data processing"
+    ],
+    "tags": ["Computer Vision", "OpenCV", "Image Processing", "CNN", "AI"],
+    "image": "/images/placeholders/artificial-intelligence.png"
+  },
+  {
+    "courseId": "CC101",
+    "title": "Cloud Computing Fundamentals",
+    "description": "Master cloud computing concepts and services across major platforms including AWS, Azure, and Google Cloud.",
+    "category": "Cloud Computing",
+    "instructor": "Google Cloud",
+    "platform": "Coursera",
+    "duration": "8 weeks (Self-paced)",
+    "level": "Beginner",
+    "price": "Free",
+    "rating": 4.5,
+    "enrollmentCount": 25600,
+    "language": "English",
+    "certification": "Yes - Google Cloud Certificate",
+    "prerequisites": "Basic IT knowledge",
+    "syllabus": [
+      "Cloud computing fundamentals and service models",
+      "Infrastructure as a Service (IaaS) overview",
+      "Platform as a Service (PaaS) concepts",
+      "Software as a Service (SaaS) applications",
+      "Cloud deployment and migration strategies",
+      "Security and compliance in the cloud"
+    ],
+    "learningOutcomes": [
+      "Understand cloud computing service models",
+      "Deploy applications to cloud platforms",
+      "Implement cloud security best practices"
+    ],
+    "tags": ["Cloud Computing", "AWS", "Azure", "Google Cloud", "DevOps"],
+    "image": "/images/placeholders/cloud-computing.png"
+  },
+  {
+    "courseId": "CC102",
+    "title": "AWS Certified Solutions Architect",
+    "description": "Prepare for the AWS Certified Solutions Architect Associate exam. Learn to design and deploy scalable cloud solutions on AWS.",
+    "category": "Cloud Computing",
+    "instructor": "A Cloud Guru",
+    "platform": "Udemy",
+    "duration": "12 weeks (Self-paced)",
+    "level": "Intermediate",
+    "price": "Free",
+    "rating": 4.7,
+    "enrollmentCount": 32400,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Intermediate IT and networking knowledge",
+    "syllabus": [
+      "AWS core services and global infrastructure",
+      "Compute services: EC2, Lambda, ECS, EKS",
+      "Storage services: S3, EBS, EFS, Glacier",
+      "Database services: RDS, DynamoDB, Redshift",
+      "Networking: VPC, Direct Connect, Route 53",
+      "Security and monitoring services"
+    ],
+    "learningOutcomes": [
+      "Design scalable AWS architectures",
+      "Deploy and manage AWS services",
+      "Pass the AWS Certified Solutions Architect exam"
+    ],
+    "tags": ["AWS", "Cloud Architecture", "Certification", "Solutions Architect"],
+    "image": "/images/placeholders/cloud-computing.png"
+  },
+  {
+    "courseId": "CC103",
+    "title": "Microsoft Azure Fundamentals",
+    "description": "Learn Microsoft Azure core services and solutions. Prepare for the AZ-900 certification exam with hands-on labs.",
+    "category": "Cloud Computing",
+    "instructor": "Microsoft",
+    "platform": "edX",
+    "duration": "10 weeks (Self-paced)",
+    "level": "Beginner",
+    "price": "Free",
+    "rating": 4.6,
+    "enrollmentCount": 18900,
+    "language": "English",
+    "certification": "Yes - Microsoft Certificate",
+    "prerequisites": "Basic IT knowledge",
+    "syllabus": [
+      "Azure core services and architecture",
+      "Azure compute services: Virtual Machines, App Services",
+      "Azure storage solutions and databases",
+      "Azure networking and security services",
+      "Azure governance and compliance",
+      "Azure cost management and pricing"
+    ],
+    "learningOutcomes": [
+      "Deploy and manage Azure services",
+      "Implement Azure security and compliance",
+      "Prepare for the AZ-900 certification exam"
+    ],
+    "tags": ["Azure", "Microsoft", "Cloud Computing", "Certification"],
+    "image": "/images/placeholders/cloud-computing.png"
+  },
+  {
+    "courseId": "CC104",
+    "title": "Google Cloud Professional Architect",
+    "description": "Master Google Cloud Platform architecture and design principles. Prepare for the Professional Cloud Architect certification.",
+    "category": "Cloud Computing",
+    "instructor": "Google Cloud",
+    "platform": "Coursera",
+    "duration": "14 weeks (Self-paced)",
+    "level": "Advanced",
+    "price": "Free",
+    "rating": 4.8,
+    "enrollmentCount": 12400,
+    "language": "English",
+    "certification": "Yes - Google Cloud Certificate",
+    "prerequisites": "Advanced cloud computing knowledge",
+    "syllabus": [
+      "Google Cloud architecture and design principles",
+      "Compute Engine and Kubernetes Engine",
+      "Cloud Storage and database solutions",
+      "Networking and security in GCP",
+      "Data analytics and machine learning services",
+      "Migration and hybrid cloud strategies"
+    ],
+    "learningOutcomes": [
+      "Design scalable Google Cloud solutions",
+      "Implement advanced GCP architectures",
+      "Pass the Professional Cloud Architect exam"
+    ],
+    "tags": ["Google Cloud", "GCP", "Cloud Architecture", "Certification"],
+    "image": "/images/placeholders/cloud-computing.png"
+  },
+  {
+    "courseId": "CY101",
+    "title": "Cybersecurity Fundamentals",
+    "description": "Protect systems and data with essential cybersecurity principles and threat mitigation strategies for modern organizations.",
+    "category": "Cybersecurity",
+    "instructor": "Kevin Mitnick",
+    "platform": "Coursera",
+    "duration": "10 weeks (Self-paced)",
+    "level": "Beginner",
+    "price": "Free",
+    "rating": 4.7,
+    "enrollmentCount": 28500,
+    "language": "English",
+    "certification": "Yes - IBM Certificate",
+    "prerequisites": "Basic computer knowledge",
+    "syllabus": [
+      "Introduction to cybersecurity and threat landscape",
+      "Network security fundamentals and protocols",
+      "Cryptography and encryption techniques",
+      "Threat analysis and risk assessment",
+      "Incident response and recovery procedures",
+      "Security awareness and best practices"
+    ],
+    "learningOutcomes": [
+      "Identify and mitigate cybersecurity threats",
+      "Implement network security measures",
+      "Conduct risk assessments and security audits"
+    ],
+    "tags": ["Cybersecurity", "Network Security", "Threat Analysis", "Information Security", "Risk Management"],
+    "image": "/images/placeholders/cybersecurity.png"
+  },
+  {
+    "courseId": "CY102",
+    "title": "Ethical Hacking and Penetration Testing",
+    "description": "Learn to identify vulnerabilities and secure systems through authorized penetration testing techniques and tools.",
+    "category": "Cybersecurity",
+    "instructor": "Chris Hadnagy",
+    "platform": "Udemy",
+    "duration": "12 weeks (Self-paced)",
+    "level": "Intermediate",
+    "price": "Free",
+    "rating": 4.8,
+    "enrollmentCount": 21000,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Intermediate networking and security knowledge",
+    "syllabus": [
+      "Ethical hacking fundamentals and methodology",
+      "Reconnaissance and information gathering",
+      "Vulnerability scanning and analysis",
+      "Exploitation techniques and tools",
+      "Post-exploitation and maintaining access",
+      "Reporting and remediation strategies"
+    ],
+    "learningOutcomes": [
+      "Conduct authorized penetration testing",
+      "Identify system vulnerabilities and weaknesses",
+      "Develop security remediation plans"
+    ],
+    "tags": ["Ethical Hacking", "Penetration Testing", "Vulnerability Assessment", "Security Tools", "Cybersecurity"],
+    "image": "/images/placeholders/cybersecurity.png"
+  },
+  {
+    "courseId": "CY103",
+    "title": "Network Security and Cryptography",
+    "description": "Master encryption techniques and secure network architectures to protect enterprise data and communications.",
+    "category": "Cybersecurity",
+    "instructor": "Bruce Schneier",
+    "platform": "edX",
+    "duration": "14 weeks (Self-paced)",
+    "level": "Advanced",
+    "price": "Free",
+    "rating": 4.9,
+    "enrollmentCount": 16800,
+    "language": "English",
+    "certification": "Yes - edX Certificate",
+    "prerequisites": "Advanced networking and security knowledge",
+    "syllabus": [
+      "Advanced cryptographic techniques and algorithms",
+      "Network protocols and security mechanisms",
+      "Firewalls and intrusion detection systems",
+      "Secure network design and implementation",
+      "Public key infrastructure and certificates",
+      "Compliance and security auditing"
+    ],
+    "learningOutcomes": [
+      "Implement advanced cryptographic solutions",
+      "Design secure network architectures",
+      "Conduct security compliance audits"
+    ],
+    "tags": ["Network Security", "Cryptography", "Encryption", "Security Protocols", "Enterprise Security"],
+    "image": "/images/placeholders/cybersecurity.png"
+  },
+  {
+    "courseId": "CY104",
+    "title": "Incident Response and Forensics",
+    "description": "Develop skills to respond to security breaches and conduct digital forensics investigations for enterprise environments.",
+    "category": "Cybersecurity",
+    "instructor": "SANS Institute",
+    "platform": "Udacity",
+    "duration": "10 weeks (Self-paced)",
+    "level": "Intermediate",
+    "price": "Free",
+    "rating": 4.6,
+    "enrollmentCount": 13200,
+    "language": "English",
+    "certification": "Yes - Udacity Certificate",
+    "prerequisites": "Intermediate cybersecurity knowledge",
+    "syllabus": [
+      "Incident response fundamentals and frameworks",
+      "Digital forensics techniques and tools",
+      "Malware analysis and reverse engineering",
+      "Log analysis and threat hunting",
+      "Legal and ethical considerations in forensics"
+    ],
+    "learningOutcomes": [
+      "Respond to security incidents effectively",
+      "Conduct digital forensics investigations",
+      "Analyze malware and security threats"
+    ],
+    "tags": ["Cybersecurity", "Digital Forensics", "Incident Response", "Security Operations"],
+    "image": "/images/placeholders/cybersecurity.png"
+  }
+]

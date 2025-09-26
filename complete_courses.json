@@ -1,0 +1,124 @@
+[
+  {
+    "courseId": "WD101",
+    "title": "Full-Stack Web Development Bootcamp: Zero to Hero",
+    "description": "Learn modern web development by building real projects with HTML, CSS, JavaScript, React, Node.js, and MongoDB. Perfect for beginners aiming for a tech career.",
+    "category": "Web Development",
+    "instructor": "Angela Yu",
+    "platform": "Udemy",
+    "duration": "12 weeks (Self-paced)",
+    "level": "Beginner to Intermediate",
+    "price": "Free",
+    "rating": 4.8,
+    "enrollmentCount": 15200,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Basic computer knowledge",
+    "syllabus": [
+      "HTML, CSS, and responsive design fundamentals",
+      "JavaScript basics and DOM manipulation",
+      "Frontend development with React",
+      "Backend APIs with Node.js & Express",
+      "Databases with MongoDB & deployment"
+    ],
+    "learningOutcomes": [
+      "Build and deploy full-stack web applications",
+      "Develop responsive and interactive user interfaces",
+      "Understand the complete web development lifecycle"
+    ],
+    "tags": ["Web Development", "Full Stack", "React", "Node"],
+    "image": "/images/placeholders/web-development.png"
+  },
+  {
+    "courseId": "WD102",
+    "title": "Advanced React and State Management Masterclass",
+    "description": "Master advanced React concepts including hooks, context, reducers, and state management libraries like Redux and Zustand for building scalable applications.",
+    "category": "Web Development",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy",
+    "duration": "10 weeks (Self-paced)",
+    "level": "Intermediate to Advanced",
+    "price": "Free",
+    "rating": 4.7,
+    "enrollmentCount": 12400,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Intermediate JavaScript and basic React knowledge",
+    "syllabus": [
+      "Advanced React hooks and custom hooks",
+      "State management with Context API",
+      "Redux Toolkit and best practices",
+      "Performance optimization techniques",
+      "Testing React components with Jest and React Testing Library"
+    ],
+    "learningOutcomes": [
+      "Build complex, scalable React applications",
+      "Implement efficient state management solutions",
+      "Optimize React application performance"
+    ],
+    "tags": ["React", "JavaScript", "State Management", "Redux"],
+    "image": "/images/placeholders/web-development.png"
+  },
+  {
+    "courseId": "WD103",
+    "title": "Vue.js 3 Complete Developer Guide",
+    "description": "Learn Vue.js 3 from fundamentals to advanced concepts including Composition API, Vue Router, Vuex, and building real-world applications.",
+    "category": "Web Development",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy",
+    "duration": "14 weeks (Self-paced)",
+    "level": "Beginner to Intermediate",
+    "price": "Free",
+    "rating": 4.6,
+    "enrollmentCount": 9800,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Basic HTML, CSS, and JavaScript knowledge",
+    "syllabus": [
+      "Vue.js fundamentals and core concepts",
+      "Components, props, and component communication",
+      "Composition API and reactivity fundamentals",
+      "Vue Router for single-page applications",
+      "State management with Vuex",
+      "Building a complete project with Vue.js"
+    ],
+    "learningOutcomes": [
+      "Develop modern web applications with Vue.js",
+      "Create reusable and maintainable components",
+      "Build single-page applications with Vue Router"
+    ],
+    "tags": ["Vue.js", "JavaScript", "Frontend", "SPA"],
+    "image": "/images/placeholders/web-development.png"
+  },
+  {
+    "courseId": "WD104",
+    "title": "Progressive Web Apps Development",
+    "description": "Learn to build Progressive Web Apps that work offline, load instantly, and provide a native app-like experience across all devices.",
+    "category": "Web Development",
+    "instructor": "Stephen Grider",
+    "platform": "Udemy",
+    "duration": "8 weeks (Self-paced)",
+    "level": "Intermediate",
+    "price": "Free",
+    "rating": 4.5,
+    "enrollmentCount": 7600,
+    "language": "English",
+    "certification": "Yes - Udemy Certificate",
+    "prerequisites": "Intermediate JavaScript, HTML, and CSS knowledge",
+    "syllabus": [
+      "PWA fundamentals and core concepts",
+      "Service workers and caching strategies",
+      "Web app manifest and installation",
+      "Offline functionality and data synchronization",
+      "Push notifications and background sync",
+      "Performance optimization for PWAs"
+    ],
+    "learningOutcomes": [
+      "Build web applications that work offline",
+      "Implement native app-like user experiences",
+      "Optimize web applications for performance"
+    ],
+    "tags": ["PWA", "Web Development", "Service Workers", "Offline"],
+    "image": "/images/placeholders/web-development.png"
+  }
+]
