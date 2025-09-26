@@ -14,6 +14,7 @@ const CoursesPage = () => {
   const [filters, setFilters] = useState({});
   const [sortOption, setSortOption] = useState('popular');
   const [categories, setCategories] = useState([]);
+  const [categoriesWithCourses, setCategoriesWithCourses] = useState([]);
   const categoryScrollRef = useRef(null);
   const coursesPerPage = 12; // Increased to show more courses per page
 
@@ -25,7 +26,8 @@ const CoursesPage = () => {
         
         // Fetch categories
         const categoriesResponse = await axios.get('/api/categories');
-        setCategories(categoriesResponse.data.data || []);
+        const allCategories = categoriesResponse.data.data || [];
+        setCategories(allCategories);
         
         // Fetch ALL courses (increased limit to get all 88 courses)
         const response = await axios.get('/api/courses?limit=100'); // Get all courses
@@ -40,13 +42,25 @@ const CoursesPage = () => {
           price: course.price,
           originalPrice: course.originalPrice,
           duration: course.duration,
-          category: course.categoryId,
+          category: course.categoryId, // Keep the entire categoryId object
           level: course.difficulty,
           language: course.language || 'english',
           thumbnail: course.thumbnail,
+          courseId: course._id // Add this for consistency with CourseCard
         }));
         setCourses(transformedCourses);
         setFilteredCourses(transformedCourses);
+        
+        // Filter categories to only show those with courses
+        const courseCategoryIds = [...new Set(transformedCourses.map(course => 
+          course.category && typeof course.category === 'object' ? course.category._id : course.category
+        ))].filter(Boolean);
+        
+        const categoriesWithCourses = allCategories.filter(category => 
+          courseCategoryIds.includes(category._id)
+        );
+        
+        setCategoriesWithCourses(categoriesWithCourses);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -80,9 +94,11 @@ const CoursesPage = () => {
     // Apply category filter
     if (filterParams.category) {
       result = result.filter(course => {
-        if (course.category && typeof course.category === 'object') {
+        // If course.category is an object, compare with its _id
+        if (course.category && typeof course.category === 'object' && course.category._id) {
           return course.category._id === filterParams.category;
         }
+        // If course.category is a string, compare directly
         return course.category === filterParams.category;
       });
     }
@@ -204,9 +220,11 @@ const CoursesPage = () => {
   // Calculate course counts per category
   const getCategoryCourseCount = (categoryId) => {
     return courses.filter(course => {
-      if (course.category && typeof course.category === 'object') {
+      // If course.category is an object, compare with its _id
+      if (course.category && typeof course.category === 'object' && course.category._id) {
         return course.category._id === categoryId;
       }
+      // If course.category is a string, compare directly
       return course.category === categoryId;
     }).length;
   };
@@ -317,7 +335,7 @@ const CoursesPage = () => {
               >
                 All Courses
               </button>
-              {categories.map((category) => (
+              {categoriesWithCourses.map((category) => (
                 <button
                   key={category._id}
                   onClick={() => handleCategoryFilter(category._id)}

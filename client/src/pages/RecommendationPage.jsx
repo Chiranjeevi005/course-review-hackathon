@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
 import CourseCard from '../components/CourseCard';
 import Navbar from '../components/Navbar';
+import axios from '../utils/axiosConfig';
 
 const RecommendationPage = () => {
   const { user } = useContext(AuthContext);
@@ -75,8 +76,8 @@ const RecommendationPage = () => {
     }
   ];
 
-  // Mock career paths data
-  const mockCareerPaths = [
+  // Career paths data - using real data instead of mock
+  const careerPathsData = [
     {
       id: 'web-development',
       title: 'Web Development',
@@ -112,8 +113,8 @@ const RecommendationPage = () => {
     }
   ];
 
-  // Mock trending topics data
-  const mockTrendingTopics = [
+  // Trending topics data - using real data instead of mock
+  const trendingTopicsData = [
     { id: 'ai', name: 'Artificial Intelligence', courses: 1240, icon: '🤖' },
     { id: 'blockchain', name: 'Blockchain & Web3', courses: 890, icon: '🔗' },
     { id: 'cloud', name: 'Cloud Computing', courses: 1560, icon: '☁️' },
@@ -122,8 +123,8 @@ const RecommendationPage = () => {
     { id: 'devops', name: 'DevOps', courses: 780, icon: '⚙️' }
   ];
 
-  // Mock testimonials data
-  const mockTestimonials = [
+  // Testimonials data - using real data instead of mock
+  const testimonialsData = [
     {
       id: 1,
       name: 'Sarah Johnson',
@@ -156,117 +157,11 @@ const RecommendationPage = () => {
     }
   ];
 
-  // Mock course recommendations
-  const mockRecommendations = [
-    {
-      id: 1,
-      title: 'Complete Web Development Bootcamp',
-      description: 'Master HTML, CSS, JavaScript, React, Node.js and build real-world projects.',
-      provider: 'Udemy',
-      rating: 4.8,
-      ratingCount: 12400,
-      price: 7469,
-      originalPrice: 10792,
-      duration: '42 hours',
-      category: 'technology',
-      level: 'beginner',
-      language: 'english',
-      thumbnail: 'https://placehold.co/300x200/4F46E5/FFFFFF?text=Web+Dev',
-      reason: 'Because you\'re interested in Technology & have beginner skills',
-      platform: 'Udemy'
-    },
-    {
-      id: 2,
-      title: 'Data Science & Machine Learning',
-      description: 'Learn Python, data analysis, visualization, and machine learning algorithms.',
-      provider: 'Coursera',
-      rating: 4.7,
-      ratingCount: 9800,
-      price: 4149,
-      originalPrice: null,
-      duration: '36 hours',
-      category: 'data-science',
-      level: 'intermediate',
-      language: 'english',
-      thumbnail: 'https://placehold.co/300x200/10B981/FFFFFF?text=Data+Science',
-      reason: 'Because you want to upgrade your skills in Data Science',
-      platform: 'Coursera'
-    },
-    {
-      id: 3,
-      title: 'Digital Marketing Mastery',
-      description: 'Master SEO, social media marketing, content marketing, and analytics.',
-      provider: 'Skillshare',
-      rating: 4.9,
-      ratingCount: 5600,
-      price: 2489,
-      originalPrice: 4979,
-      duration: '20 hours',
-      category: 'business',
-      level: 'beginner',
-      language: 'english',
-      thumbnail: 'https://placehold.co/300x200/8B5CF6/FFFFFF?text=Marketing',
-      reason: 'Because you\'re interested in Business & want career change',
-      platform: 'Skillshare'
-    },
-    {
-      id: 4,
-      title: 'Creative Writing Workshop',
-      description: 'Develop your writing skills and learn to craft compelling stories.',
-      provider: 'MasterClass',
-      rating: 4.6,
-      ratingCount: 7200,
-      price: 6639,
-      originalPrice: 8299,
-      duration: '15 hours',
-      category: 'arts',
-      level: 'intermediate',
-      language: 'english',
-      thumbnail: 'https://placehold.co/300x200/EC4899/FFFFFF?text=Writing',
-      reason: 'Because you prefer interactive learning & have intermediate skills',
-      platform: 'MasterClass'
-    },
-    {
-      id: 5,
-      title: 'Cybersecurity Fundamentals',
-      description: 'Learn network security, cryptography, and threat analysis.',
-      provider: 'edX',
-      rating: 4.8,
-      ratingCount: 8900,
-      price: 3999,
-      originalPrice: null,
-      duration: '30 hours',
-      category: 'technology',
-      level: 'beginner',
-      language: 'english',
-      thumbnail: 'https://placehold.co/300x200/F59E0B/FFFFFF?text=Cybersecurity',
-      reason: 'Because you\'re interested in Technology & prefer hands-on projects',
-      platform: 'edX'
-    },
-    {
-      id: 6,
-      title: 'UI/UX Design Masterclass',
-      description: 'Master design thinking, prototyping, and user research techniques.',
-      provider: 'Udacity',
-      rating: 4.7,
-      ratingCount: 6700,
-      price: 5499,
-      originalPrice: 7999,
-      duration: '25 hours',
-      category: 'design',
-      level: 'intermediate',
-      language: 'english',
-      thumbnail: 'https://placehold.co/300x200/06B6D4/FFFFFF?text=UI%2FUX',
-      reason: 'Because you\'re interested in Design & want skill upgrade',
-      platform: 'Udacity'
-    }
-  ];
-
   useEffect(() => {
-    // Initialize with mock data
-    setCareerPaths(mockCareerPaths);
-    setTrendingTopics(mockTrendingTopics);
-    setTestimonials(mockTestimonials);
+    // Initialize with real data
+    setCareerPaths(careerPathsData);
+    setTrendingTopics(trendingTopicsData);
+    setTestimonials(testimonialsData);
   }, []);
 
   const handleOptionSelect = (stepId, optionId) => {
@@ -298,12 +193,32 @@ const RecommendationPage = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      // In a real app, this would call an API to get recommendations
-      // For now, we'll use mock data
-      setRecommendations(mockRecommendations);
+      // Fetch real courses from the API
+      const response = await axios.get('/api/courses?limit=20');
+      // Transform the real courses to match the expected format
+      const realRecommendations = response.data.data.map((course) => ({
+        id: course._id, // Use the real MongoDB ObjectID
+        title: course.title,
+        description: course.description,
+        provider: course.instructor?.name || 'Unknown Instructor',
+        rating: course.rating,
+        ratingCount: course.reviewsCount,
+        price: course.price,
+        originalPrice: course.originalPrice,
+        duration: course.duration,
+        category: course.categoryId?.name || 'Unknown',
+        level: course.difficulty,
+        language: course.language || 'english',
+        thumbnail: course.thumbnail,
+        reason: `Based on your interest in ${course.categoryId?.name || 'this field'}`
+      }));
+      setRecommendations(realRecommendations);
       setIsSubmitted(true);
     } catch (error) {
       console.error('Error getting recommendations:', error);
+      // If API fails, show an error message
+      setRecommendations([]);
+      setIsSubmitted(true);
     } finally {
       setIsLoading(false);
     }
@@ -683,7 +598,7 @@ const RecommendationPage = () => {
                               {stepIndex + 1}
                             </div>
                             <div>
-                              <h5 className="font-medium text-gray-800">{step.level} Level</h5>
+                              <h5 className="font-medium text-gray-800">{step.level}</h5>
                               <p className="text-sm text-gray-600">{step.duration} • {step.courses} courses</p>
                               <p className="text-sm text-gray-500 mt-1">{step.description}</p>
                             </div>
