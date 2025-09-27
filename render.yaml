@@ -1,9 +1,7 @@
 services:
   - type: web
     name: course-review-api
-    env: node
-    plan: free
-    region: ohio
+    runtime: node
     rootDir: server
     buildCommand: npm install
     startCommand: node server.js
