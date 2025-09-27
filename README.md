@@ -18,7 +18,7 @@ A comprehensive web application that allows users to discover, review, and get r
 - **Backend**: Node.js + Express.js + MongoDB
 - **Authentication**: JWT + bcrypt
 - **Real-time Communication**: Socket.IO
-- **Caching**: Redis
+- **Caching**: Redis (with mock fallback for production)
 - **Deployment**: Vercel (client) / Render (server)
 
 ## 📁 Project Structure
@@ -56,7 +56,7 @@ course-review-project/
 
 - Node.js (v14 or higher)
 - MongoDB (local or cloud instance)
-- Redis Server (for real-time features)
+- Redis Server (for real-time features - optional in development)
 
 ### Installation
 
@@ -117,7 +117,7 @@ VITE_API_URL=http://localhost:3003
 
 1. Start MongoDB on your system
 
-2. Start Redis server
+2. Start Redis server (optional for development)
 
 3. Run the backend server:
    ```bash
@@ -217,7 +217,7 @@ npm run test:realtime
 
 ## 🚀 Deployment
 
-For detailed deployment instructions, please refer to our [Deployment Guide](DEPLOYMENT_GUIDE.md).
+For detailed deployment instructions, please refer to our [Deployment Guide](DEPLOYMENT_GUIDE.md) and [Deployment Instructions](DEPLOYMENT_INSTRUCTIONS.md).
 
 ### Quick Deployment Overview
 
