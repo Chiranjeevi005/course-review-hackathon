@@ -60,9 +60,11 @@ npm run test:db
 4. Add these environment variables:
    - MONGO_URI: your MongoDB connection string
    - JWT_SECRET: a strong secret key
+   - JWT_EXPIRES_IN: 1h
    - REFRESH_TOKEN_SECRET: a strong secret key
-   - GOOGLE_CLIENT_ID: your Google OAuth client ID
-   - GOOGLE_CLIENT_SECRET: your Google OAuth client secret
+   - REFRESH_TOKEN_EXPIRES_IN: 7d
+   - GOOGLE_CLIENT_ID: your Google OAuth client ID (optional)
+   - GOOGLE_CLIENT_SECRET: your Google OAuth client secret (optional)
    - CLIENT_ORIGIN: your Vercel frontend URL
 
 ### In Vercel (Frontend):
@@ -85,6 +87,7 @@ npm run test:db
 4. For database connection issues, verify your MONGO_URI
 5. If you see "Connection Refused" errors, it means your frontend is trying to connect to localhost instead of your deployed backend
 6. If no data is displayed, make sure you've seeded the database with `npm run seed:data`
+7. If login fails with JWT errors, make sure JWT_EXPIRES_IN and REFRESH_TOKEN_EXPIRES_IN are set
 
 ## Important Notes
 - Never commit actual credentials to your repository
