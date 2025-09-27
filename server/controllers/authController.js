@@ -1,9 +1,7 @@
 import User from '../models/User.js';
 import { generateAccessToken, generateRefreshToken } from '../utils/jwtUtils.js';
 import bcrypt from 'bcryptjs';
-import { OAuth2Client } from 'google-auth-library';
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
   try {
@@ -116,11 +114,11 @@ export const login = async (req, res) => {
       }
     }
     
-    // Check if user registered with Google
+    // Check if user registered with Google (should not happen now, but keep for safety)
     if (user.provider !== 'local') {
       return res.status(400).json({
         success: false,
-        message: 'Please use Google login for this account'
+        message: 'Please use the standard login for this account'
       });
     }
     
@@ -183,79 +181,6 @@ export const login = async (req, res) => {
         message: 'Internal server error during login: ' + error.message
       });
     }
-  }
-};
-
-export const googleLogin = async (req, res) => {
-  try {
-    const { credential } = req.body;
-    
-    // Verify Google token
-    const ticket = await client.verifyIdToken({
-      idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID
-    });
-    
-    const payload = ticket.getPayload();
-    const { sub: googleId, email, name, picture } = payload;
-    
-    // Check if user already exists
-    let user = await User.findOne({ email });
-    
-    if (user) {
-      // If user exists but with different provider, update provider
-      if (user.provider !== 'google') {
-        user.provider = 'google';
-        user.googleId = googleId;
-        await user.save();
-      }
-    } else {
-      // Create new user
-      user = new User({
-        name,
-        email,
-        googleId,
-        provider: 'google',
-        role: email === 'admin@coursefinder.com' ? 'admin' : 'user'
-      });
-      
-      await user.save();
-    }
-    
-    // Generate tokens
-    const accessToken = generateAccessToken(user._id);
-    const refreshToken = generateRefreshToken(user._id);
-    
-    // Set refresh token as httpOnly cookie
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
-    
-    // Return user data and access token
-    const userResponse = {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      provider: user.provider,
-      picture
-    };
-    
-    res.json({
-      success: true,
-      message: 'Google login successful',
-      accessToken,
-      user: userResponse
-    });
-  } catch (error) {
-    console.error('Google login error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error during Google login'
-    });
   }
 };
 

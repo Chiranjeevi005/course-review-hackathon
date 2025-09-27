@@ -60,6 +60,10 @@ const courseSchema = new mongoose.Schema({
     default: 0,
     min: 0
   },
+  language: {
+    type: String,
+    default: 'english'
+  },
   isActive: {
     type: Boolean,
     default: true

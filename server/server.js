@@ -155,6 +155,7 @@ import courseRoutes from './routes/courseRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import analyticsRoutes from './routes/analyticsRoutes.js';
+import homePageReviewRoutes from './routes/homePageReviewRoutes.js';
 
 app.get('/', (req, res) => {
   res.send('Course Review API is running 🚀');
@@ -177,6 +178,9 @@ app.use('/api/admin', adminRoutes);
 
 // Analytics routes
 app.use('/api/analytics', analyticsRoutes);
+
+// Home page review routes
+app.use('/api/homepage-reviews', homePageReviewRoutes);
 
 // Test route to check all dependencies
 app.get('/test-dependencies', async (req, res) => {

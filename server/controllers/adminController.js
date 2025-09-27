@@ -5,7 +5,8 @@ import UserTrackingService from '../services/userTrackingService.js';
 
 export const getAdminStats = async (req, res) => {
   try {
-    const activeUserCount = await UserTrackingService.getActiveUserCount();
+    // Count all active registered users (users who haven't deactivated their accounts)
+    const activeUserCount = await User.countDocuments({ isActive: true });
     const totalCourses = await Course.countDocuments();
     const reviewsToday = await Review.countDocuments({
       createdAt: {

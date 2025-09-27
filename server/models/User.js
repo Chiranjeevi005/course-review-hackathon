@@ -22,9 +22,7 @@ const userSchema = new mongoose.Schema({
   },
   passwordHash: {
     type: String,
-    required: function() {
-      return this.provider === 'local';
-    }
+    required: true
   },
   role: {
     type: String,
@@ -33,13 +31,8 @@ const userSchema = new mongoose.Schema({
   },
   provider: {
     type: String,
-    enum: ['local', 'google'],
+    enum: ['local'],
     default: 'local'
-  },
-  googleId: {
-    type: String,
-    unique: true,
-    sparse: true
   },
   isActive: {
     type: Boolean,
@@ -60,8 +53,8 @@ const userSchema = new mongoose.Schema({
 
 // Pre-save hook to hash password
 userSchema.pre('save', async function(next) {
-  // Only hash the password if it's modified and the user is using local authentication
-  if (this.isModified('passwordHash') && this.provider === 'local') {
+  // Only hash the password if it's modified
+  if (this.isModified('passwordHash')) {
     this.passwordHash = await bcrypt.hash(this.passwordHash, 12);
   }
   
@@ -75,9 +68,6 @@ userSchema.pre('save', async function(next) {
 
 // Method to compare password
 userSchema.methods.comparePassword = async function(candidatePassword) {
-  if (this.provider !== 'local') {
-    throw new Error('This user did not sign up with a password');
-  }
   return bcrypt.compare(candidatePassword, this.passwordHash);
 };
 

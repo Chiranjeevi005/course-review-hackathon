@@ -5,8 +5,10 @@ dotenv.config();
 
 // Create Redis client
 const redisClient = redis.createClient({
-  host: process.env.REDIS_HOST || '127.0.0.1',
-  port: process.env.REDIS_PORT || 6379,
+  socket: {
+    host: process.env.REDIS_HOST || '127.0.0.1',
+    port: process.env.REDIS_PORT || 6379,
+  }
   // Add password if needed
   // password: process.env.REDIS_PASSWORD
 });
