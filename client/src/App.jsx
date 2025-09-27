@@ -89,10 +89,12 @@ function AppContent({ socket }) {
           <Route path="/courses/:courseId/reviews" element={<ReviewsPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/recommendations" element={<RecommendationPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/contact" element={<ContactPage />} />
           <Route 
             path="/dashboard" 
             element={

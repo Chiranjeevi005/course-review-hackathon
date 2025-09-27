@@ -29,18 +29,43 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#0a3a66] text-white w-full">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-10 md:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12">
+    <footer className="bg-gradient-to-r from-gray-900 to-gray-800 text-white w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-12 md:py-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
+          {/* Branding Section */}
+          <div className="lg:col-span-1">
+            <h2 className="text-2xl font-bold mb-4 flex items-center">
+              <span className="bg-gradient-to-r from-blue-400 to-indigo-500 text-transparent bg-clip-text">Course</span>
+              <span className="text-white">Finder</span>
+            </h2>
+            <p className="text-gray-300 text-sm leading-relaxed mb-5 max-w-xs">
+              Empowering learners worldwide with quality education and career development resources.
+            </p>
+            <div className="flex space-x-4">
+              {socialLinks.map((social, index) => (
+                <a 
+                  key={index}
+                  href={social.url}
+                  className="text-gray-400 hover:text-white transition-colors duration-300 hover:bg-white/10 p-2 rounded-full"
+                  aria-label={social.name}
+                >
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d={social.icon} />
+                  </svg>
+                </a>
+              ))}
+            </div>
+          </div>
+
           {/* Navigation Section */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 sm:mb-6">Navigation</h3>
-            <ul className="space-y-2 sm:space-y-3">
+          <div className="lg:col-span-1">
+            <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-700">Quick Links</h3>
+            <ul className="space-y-3">
               {navItems.map((item, index) => (
                 <li key={index}>
                   <Link 
                     to={item.path}
-                    className="text-[#e0e0e0] hover:text-white transition-all duration-300 hover:underline hover:decoration-2 hover:underline-offset-4 text-sm sm:text-base"
+                    className="text-gray-300 hover:text-white transition-all duration-300 hover:underline hover:decoration-2 hover:underline-offset-4 text-sm"
                   >
                     {item.name}
                   </Link>
@@ -49,71 +74,72 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Branding Section */}
-          <div className="pb-6 border-b border-white/10 sm:pb-8">
-            <h2 className="text-xl sm:text-2xl font-bold mb-3">CourseFinder</h2>
-            <p className="text-[#e0e0e0] text-sm leading-relaxed max-w-xs">
-              Empowering learners to find the perfect course for their future.
-            </p>
+          {/* Contact Section */}
+          <div className="lg:col-span-1">
+            <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-700">Contact Us</h3>
+            <ul className="space-y-3 text-gray-300 text-sm">
+              <li className="flex items-start">
+                <svg className="h-5 w-5 mr-3 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span>+1 (555) 123-4567</span>
+              </li>
+              <li className="flex items-start">
+                <svg className="h-5 w-5 mr-3 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span>support@coursefinder.com</span>
+              </li>
+              <li className="flex items-start">
+                <svg className="h-5 w-5 mr-3 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>123 Education Street, Learning City, LC 10001</span>
+              </li>
+            </ul>
           </div>
 
-          {/* Social Proof & Newsletter Section */}
-          <div className="space-y-6 sm:space-y-8">
-            {/* Social Media Links */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3 sm:mb-4 text-center">Connect With Us</h3>
-              <div className="flex justify-center space-x-3 sm:space-x-4">
-                {socialLinks.map((social, index) => (
-                  <a 
-                    key={index}
-                    href={social.url}
-                    className="text-[#e0e0e0] hover:text-white transition-colors duration-300 hover:bg-white/10 p-2 rounded-full"
-                    aria-label={social.name}
-                  >
-                    <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d={social.icon} />
-                    </svg>
-                  </a>
-                ))}
+          {/* Newsletter Section */}
+          <div className="lg:col-span-1">
+            <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-700">Stay Updated</h3>
+            <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+              Subscribe to our newsletter for the latest courses and learning resources.
+            </p>
+            <form onSubmit={handleSubscribe} className="flex flex-col gap-3">
+              <div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your email address"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
+                  required
+                />
               </div>
-            </div>
-
-            {/* Newsletter Subscription */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3 sm:mb-4 text-center">Stay Updated</h3>
-              <p className="text-[#e0e0e0] text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed text-center">
-                Stay updated with the latest courses & career insights
-              </p>
-              <form onSubmit={handleSubscribe} className="flex flex-col gap-2 sm:gap-3 max-w-md mx-auto">
-                <div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="w-full px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-[#0f4c81]/80 border border-white/20 text-white placeholder-[#b0b0b0] focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all duration-300 text-sm"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="px-3 py-2 sm:px-4 sm:py-2.5 bg-white text-[#0f4c81] font-medium rounded-lg hover:bg-[#e0e0e0] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30 whitespace-nowrap shadow-md hover:shadow-lg text-sm sm:text-base"
-                >
-                  Subscribe
-                </button>
-              </form>
-            </div>
+              <button
+                type="submit"
+                className="px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 whitespace-nowrap shadow-lg hover:shadow-xl text-sm"
+              >
+                Subscribe Now
+              </button>
+            </form>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/20 mt-8 sm:mt-10 md:mt-12 pt-4 sm:pt-6 flex flex-col items-center gap-2 sm:gap-3">
-          <p className="text-[#e0e0e0] text-xs sm:text-sm text-center">
+        <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-400 text-sm text-center md:text-left">
             Copyright © 2025 CourseFinder. All rights reserved.
           </p>
-          <p className="text-[#e0e0e0] text-xs italic text-center">
-            Empowering learners worldwide
-          </p>
+          <div className="flex space-x-6">
+            <Link to="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors duration-300">
+              Privacy Policy
+            </Link>
+            <Link to="/terms" className="text-gray-400 hover:text-white text-sm transition-colors duration-300">
+              Terms of Service
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

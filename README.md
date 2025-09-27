@@ -217,7 +217,7 @@ npm run test:realtime
 
 ## 🚀 Deployment
 
-For detailed deployment instructions, please refer to our [Deployment Guide](DEPLOYMENT_GUIDE.md) and [Deployment Instructions](DEPLOYMENT_INSTRUCTIONS.md).
+For detailed deployment instructions, please refer to our [Deployment Guide](DEPLOYMENT_GUIDE.md).
 
 ### Quick Deployment Overview
 
@@ -243,6 +243,12 @@ For detailed deployment instructions, please refer to our [Deployment Guide](DEP
 6. Add environment variables in the Vercel dashboard:
    - `VITE_API_URL`: your Render backend URL
    - `VITE_CLIENT_ORIGIN`: your Vercel frontend URL
+
+#### Data Seeding
+After deployment, seed your database with realistic data:
+1. Update your local `.env` with your production MongoDB URI
+2. Run `cd server && node seedAllData.js`
+3. Verify with `cd server && node verifyAllData.js`
 
 ## 🤝 Contributing
 
