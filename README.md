@@ -221,8 +221,8 @@ For detailed deployment instructions, please refer to our [Deployment Guide](DEP
 1. Create a new Web Service on Render
 2. Connect your GitHub repository
 3. Set build command: `npm install`
-4. Set start command: `npm start`
-5. Set the root directory to `/server`
+4. Set start command: `node server.js`
+5. The root directory will be automatically set to `/server` via render.yaml
 6. Add environment variables in the Render dashboard:
    - `NODE_ENV`: production
    - `PORT`: 3003

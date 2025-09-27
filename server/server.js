@@ -17,8 +17,14 @@ import UserTrackingService from './services/userTrackingService.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load environment variables with explicit path
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+// Load environment variables
+// First try to load from specific path, then fallback to default loading
+try {
+  dotenv.config({ path: path.resolve(__dirname, '.env') });
+} catch (error) {
+  console.log('Could not load .env from specific path, using default loading');
+  dotenv.config();
+}
 
 const app = express();
 
@@ -256,4 +262,8 @@ app.get('/test-dependencies', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3003; // Use PORT from environment or default to 3003
-server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+
+// For Render deployment, bind to all interfaces
+const HOST = process.env.HOST || '0.0.0.0';
+
+server.listen(PORT, HOST, () => console.log(`✅ Server running on ${HOST}:${PORT}`));

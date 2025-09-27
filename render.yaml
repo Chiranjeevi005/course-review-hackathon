@@ -2,8 +2,9 @@ services:
   - type: web
     name: course-review-api
     env: node
+    rootDir: server
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
