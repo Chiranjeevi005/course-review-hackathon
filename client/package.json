@@ -10,7 +10,12 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "keywords": ["react", "vite", "tailwindcss", "course-review"],
+  "keywords": [
+    "react",
+    "vite",
+    "tailwindcss",
+    "course-review"
+  ],
   "author": "Chiranjeevi PK",
   "license": "MIT",
   "engines": {
@@ -27,7 +32,8 @@
     "react-places-autocomplete": "^7.3.0",
     "react-router-dom": "^7.9.2",
     "react-select": "^5.10.2",
-    "recharts": "^3.2.1"
+    "recharts": "^3.2.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
