@@ -45,6 +45,216 @@ html {
   }
 }
 
+/* Responsive utility classes for better mobile-first design */
+/* Text size scaling */
+.text-responsive-xs {
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+}
+
+.text-responsive-sm {
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+}
+
+.text-responsive-base {
+  font-size: clamp(1rem, 3vw, 1.125rem);
+}
+
+.text-responsive-lg {
+  font-size: clamp(1.125rem, 3.5vw, 1.25rem);
+}
+
+.text-responsive-xl {
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+}
+
+.text-responsive-2xl {
+  font-size: clamp(1.5rem, 5vw, 1.875rem);
+}
+
+.text-responsive-3xl {
+  font-size: clamp(1.875rem, 6vw, 2.25rem);
+}
+
+.text-responsive-4xl {
+  font-size: clamp(2.25rem, 7vw, 3rem);
+}
+
+/* Padding utilities for responsive spacing */
+.py-responsive-1 {
+  padding-top: clamp(0.25rem, 2vh, 0.5rem);
+  padding-bottom: clamp(0.25rem, 2vh, 0.5rem);
+}
+
+.py-responsive-2 {
+  padding-top: clamp(0.5rem, 3vh, 1rem);
+  padding-bottom: clamp(0.5rem, 3vh, 1rem);
+}
+
+.py-responsive-3 {
+  padding-top: clamp(0.75rem, 4vh, 1.5rem);
+  padding-bottom: clamp(0.75rem, 4vh, 1.5rem);
+}
+
+.py-responsive-4 {
+  padding-top: clamp(1rem, 5vh, 2rem);
+  padding-bottom: clamp(1rem, 5vh, 2rem);
+}
+
+.py-responsive-5 {
+  padding-top: clamp(1.5rem, 6vh, 3rem);
+  padding-bottom: clamp(1.5rem, 6vh, 3rem);
+}
+
+.py-responsive-6 {
+  padding-top: clamp(2rem, 7vh, 4rem);
+  padding-bottom: clamp(2rem, 7vh, 4rem);
+}
+
+.px-responsive-1 {
+  padding-left: clamp(0.25rem, 2vw, 0.5rem);
+  padding-right: clamp(0.25rem, 2vw, 0.5rem);
+}
+
+.px-responsive-2 {
+  padding-left: clamp(0.5rem, 3vw, 1rem);
+  padding-right: clamp(0.5rem, 3vw, 1rem);
+}
+
+.px-responsive-3 {
+  padding-left: clamp(0.75rem, 4vw, 1.5rem);
+  padding-right: clamp(0.75rem, 4vw, 1.5rem);
+}
+
+.px-responsive-4 {
+  padding-left: clamp(1rem, 5vw, 2rem);
+  padding-right: clamp(1rem, 5vw, 2rem);
+}
+
+.px-responsive-5 {
+  padding-left: clamp(1.5rem, 6vw, 3rem);
+  padding-right: clamp(1.5rem, 6vw, 3rem);
+}
+
+.px-responsive-6 {
+  padding-left: clamp(2rem, 7vw, 4rem);
+  padding-right: clamp(2rem, 7vw, 4rem);
+}
+
+/* Margin utilities for responsive spacing */
+.my-responsive-1 {
+  margin-top: clamp(0.25rem, 2vh, 0.5rem);
+  margin-bottom: clamp(0.25rem, 2vh, 0.5rem);
+}
+
+.my-responsive-2 {
+  margin-top: clamp(0.5rem, 3vh, 1rem);
+  margin-bottom: clamp(0.5rem, 3vh, 1rem);
+}
+
+.my-responsive-3 {
+  margin-top: clamp(0.75rem, 4vh, 1.5rem);
+  margin-bottom: clamp(0.75rem, 4vh, 1.5rem);
+}
+
+.my-responsive-4 {
+  margin-top: clamp(1rem, 5vh, 2rem);
+  margin-bottom: clamp(1rem, 5vh, 2rem);
+}
+
+.my-responsive-5 {
+  margin-top: clamp(1.5rem, 6vh, 3rem);
+  margin-bottom: clamp(1.5rem, 6vh, 3rem);
+}
+
+.my-responsive-6 {
+  margin-top: clamp(2rem, 7vh, 4rem);
+  margin-bottom: clamp(2rem, 7vh, 4rem);
+}
+
+.mx-responsive-1 {
+  margin-left: clamp(0.25rem, 2vw, 0.5rem);
+  margin-right: clamp(0.25rem, 2vw, 0.5rem);
+}
+
+.mx-responsive-2 {
+  margin-left: clamp(0.5rem, 3vw, 1rem);
+  margin-right: clamp(0.5rem, 3vw, 1rem);
+}
+
+.mx-responsive-3 {
+  margin-left: clamp(0.75rem, 4vw, 1.5rem);
+  margin-right: clamp(0.75rem, 4vw, 1.5rem);
+}
+
+.mx-responsive-4 {
+  margin-left: clamp(1rem, 5vw, 2rem);
+  margin-right: clamp(1rem, 5vw, 2rem);
+}
+
+.mx-responsive-5 {
+  margin-left: clamp(1.5rem, 6vw, 3rem);
+  margin-right: clamp(1.5rem, 6vw, 3rem);
+}
+
+.mx-responsive-6 {
+  margin-left: clamp(2rem, 7vw, 4rem);
+  margin-right: clamp(2rem, 7vw, 4rem);
+}
+
+/* Gap utilities for responsive spacing in flex/grid */
+.gap-responsive-1 {
+  gap: clamp(0.25rem, 2vmax, 0.5rem);
+}
+
+.gap-responsive-2 {
+  gap: clamp(0.5rem, 3vmax, 1rem);
+}
+
+.gap-responsive-3 {
+  gap: clamp(0.75rem, 4vmax, 1.5rem);
+}
+
+.gap-responsive-4 {
+  gap: clamp(1rem, 5vmax, 2rem);
+}
+
+.gap-responsive-5 {
+  gap: clamp(1.5rem, 6vmax, 3rem);
+}
+
+.gap-responsive-6 {
+  gap: clamp(2rem, 7vmax, 4rem);
+}
+
+/* Width utilities for responsive sizing */
+.w-responsive-full {
+  width: min(100%, calc(100vw - 2rem));
+}
+
+.w-responsive-full-sm {
+  width: min(100%, calc(100vw - 3rem));
+}
+
+.w-responsive-full-md {
+  width: min(100%, calc(100vw - 4rem));
+}
+
+/* Height utilities for responsive sizing */
+.h-responsive-screen {
+  height: 100vh;
+  height: 100dvh;
+}
+
+.h-responsive-screen-50 {
+  height: 50vh;
+  height: 50dvh;
+}
+
+.h-responsive-screen-75 {
+  height: 75vh;
+  height: 75dvh;
+}
+
 /* Custom utility classes */
 .hero-height {
   min-height: 420px;

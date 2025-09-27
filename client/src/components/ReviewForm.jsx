@@ -88,7 +88,7 @@ const ReviewForm = ({ courseId, onReviewSubmit }) => {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Write a Review</h3>
         <p className="text-gray-600 mb-4">
-          Please <a href="/login" className="text-blue-600 hover:underline">log in</a> to write a review.
+          Please <a href="/login" className="text-primary-600 hover:text-primary-800 hover:underline font-medium">log in</a> to write a review.
         </p>
       </div>
     );
@@ -138,7 +138,7 @@ const ReviewForm = ({ courseId, onReviewSubmit }) => {
           <textarea
             id="review"
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             placeholder="Share your experience with this course..."
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
@@ -161,8 +161,8 @@ const ReviewForm = ({ courseId, onReviewSubmit }) => {
                 onClick={() => handleTagToggle(tag)}
                 className={`px-3 py-1 text-sm rounded-full ${
                   selectedTags.includes(tag)
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-primary-600 text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-700 hover:bg-primary-100 hover:text-primary-700'
                 }`}
               >
                 {tag}
@@ -175,8 +175,8 @@ const ReviewForm = ({ courseId, onReviewSubmit }) => {
         {submitStatus && (
           <div className={`mb-4 p-3 rounded-lg ${
             submitStatus.type === 'success' 
-              ? 'bg-green-100 text-green-800' 
-              : 'bg-red-100 text-red-800'
+              ? 'bg-green-100 text-green-800 border border-green-200' 
+              : 'bg-red-100 text-red-800 border border-red-200'
           }`}>
             {submitStatus.message}
           </div>
@@ -188,9 +188,9 @@ const ReviewForm = ({ courseId, onReviewSubmit }) => {
           disabled={isSubmitting}
           className={`w-full py-2.5 px-4 rounded-lg font-medium text-white ${
             isSubmitting
-              ? 'bg-blue-400 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-700'
-          } transition-colors`}
+              ? 'bg-primary-400 cursor-not-allowed'
+              : 'bg-primary-600 hover:bg-primary-700 shadow-sm hover:shadow'
+          } transition-all duration-200`}
         >
           {isSubmitting ? 'Submitting...' : 'Submit Review'}
         </button>

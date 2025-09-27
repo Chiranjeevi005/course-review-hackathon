@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
-const MobileMenu = ({ isOpen, onClose, user, logout }) => {
+const MobileMenu = ({ isOpen, onClose, user, onLogout, navItems }) => {
   if (!isOpen) return null;
 
   return (
@@ -25,7 +26,7 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
       >
         <div className="p-4 border-b border-muted-500 flex justify-between items-center">
-          <h2 className="text-lg sm:text-xl font-extrabold text-primary-700">CourseFinder</h2>
+          <h2 className="text-lg font-extrabold text-primary-700">CourseFinder</h2>
           <motion.button 
             onClick={onClose}
             whileHover={{ scale: 1.1 }}
@@ -33,7 +34,7 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
             className="text-muted-500 hover:text-text-900 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent-500 rounded-full"
             aria-label="Close menu"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </motion.button>
@@ -41,7 +42,7 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
         
         <nav className="p-4">
           <motion.ul 
-            className="space-y-3 sm:space-y-4"
+            className="space-y-3"
             initial="hidden"
             animate="visible"
             variants={{
@@ -54,51 +55,27 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
               }
             }}
           >
-            <motion.li
-              variants={{
-                hidden: { opacity: 0, x: 20 },
-                visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } }
-              }}
-            >
-              <a href="/" className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-sm sm:text-base">Home</a>
-            </motion.li>
-            <motion.li
-              variants={{
-                hidden: { opacity: 0, x: 20 },
-                visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } }
-              }}
-            >
-              <a href="/courses" className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-sm sm:text-base">Courses</a>
-            </motion.li>
-            <motion.li
-              variants={{
-                hidden: { opacity: 0, x: 20 },
-                visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } }
-              }}
-            >
-              <a href="/categories" className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-sm sm:text-base">Categories</a>
-            </motion.li>
-            {/* Removed 'Find Courses' option as per user request */}
-            <motion.li
-              variants={{
-                hidden: { opacity: 0, x: 20 },
-                visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } }
-              }}
-            >
-              <a href="/reviews" className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-sm sm:text-base">Reviews</a>
-            </motion.li>
-            <motion.li
-              variants={{
-                hidden: { opacity: 0, x: 20 },
-                visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } }
-              }}
-            >
-              <a href="/about" className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-sm sm:text-base">About</a>
-            </motion.li>
+            {navItems.map((item, index) => (
+              <motion.li
+                key={item.path}
+                variants={{
+                  hidden: { opacity: 0, x: 20 },
+                  visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } }
+                }}
+              >
+                <Link 
+                  to={item.path} 
+                  className="block py-2 text-text-900 hover:text-primary-700 font-medium transition-colors duration-200 ease-in-out text-base"
+                  onClick={onClose}
+                >
+                  {item.name}
+                </Link>
+              </motion.li>
+            ))}
           </motion.ul>
           
           <motion.div 
-            className="mt-6 sm:mt-8 pt-4 border-t border-muted-500"
+            className="mt-6 pt-4 border-t border-muted-500"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.5 }}
@@ -109,7 +86,7 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
                 {user && user.role === 'admin' && (
                   <motion.a
                     href="/admin-dashboard"
-                    className="block w-full text-left bg-primary-100 text-primary-700 py-2.5 sm:py-3 rounded-lg hover:bg-primary-200 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm sm:text-base"
+                    className="block w-full text-left bg-primary-100 text-primary-700 py-3 rounded-lg hover:bg-primary-200 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500 text-base"
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={onClose}
@@ -125,10 +102,10 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
                 <motion.button 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-accent-500 text-text-900 py-2.5 sm:py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm sm:text-base"
+                  className="w-full bg-accent-500 text-text-900 py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 text-base"
                   onClick={() => {
                     onClose();
-                    logout();
+                    onLogout();
                   }}
                 >
                   Logout
@@ -139,7 +116,7 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
                 <motion.button 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-accent-500 text-text-900 py-2.5 sm:py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm sm:text-base"
+                  className="w-full bg-accent-500 text-text-900 py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 text-base"
                   onClick={() => {
                     onClose();
                     window.location.href = '/login';
@@ -150,23 +127,16 @@ const MobileMenu = ({ isOpen, onClose, user, logout }) => {
                 <motion.button 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-primary-600 text-white py-2.5 sm:py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm sm:text-base"
+                  className="w-full bg-primary-600 text-white py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500 text-base"
                   onClick={() => {
                     onClose();
-                    window.location.href = '/login';
+                    window.location.href = '/register';
                   }}
                 >
                   Sign Up
                 </motion.button>
               </div>
             )}
-            <motion.button 
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full mt-3 border border-muted-500 text-text-900 py-2.5 sm:py-3 rounded-lg hover:bg-muted-50 transition-colors duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm sm:text-base"
-            >
-              Get Curated Picks
-            </motion.button>
           </motion.div>
         </nav>
       </motion.div>

@@ -474,11 +474,11 @@ const CoursesPage = () => {
       </section>
 
       {/* Course Grid Section */}
-      <section className="py-10 sm:py-12">
+      <section className="py-8 sm:py-10 md:py-12">
         <div className="px-4 sm:px-6 lg:px-8">
           {/* Results summary */}
           <div className="mb-4 sm:mb-6">
-            <p className="text-muted-500">
+            <p className="text-muted-500 text-sm sm:text-base">
               Showing <span className="font-semibold text-text-900">{currentCourses.length}</span> of{' '}
               <span className="font-semibold text-text-900">{filteredCourses.length}</span> courses
               {filters.category && (
@@ -489,7 +489,7 @@ const CoursesPage = () => {
           
           {isLoading ? (
             <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
               variants={container}
               initial="hidden"
               animate="show"
@@ -505,7 +505,7 @@ const CoursesPage = () => {
               {currentCourses.length > 0 ? (
                 <>
                   <motion.div 
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-10"
                     variants={container}
                     initial="hidden"
                     animate="show"
@@ -529,16 +529,16 @@ const CoursesPage = () => {
                   {/* Pagination */}
                   {totalPages > 1 && (
                     <motion.div 
-                      className="flex justify-center mt-8"
+                      className="flex justify-center mt-6 sm:mt-8"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <div className="flex space-x-2">
+                      <div className="flex flex-wrap justify-center gap-1 sm:gap-2">
                         <button
                           onClick={() => handlePageChange(currentPage - 1)}
                           disabled={currentPage === 1}
-                          className={`px-4 py-2 rounded-lg ${
+                          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base ${
                             currentPage === 1 
                               ? 'bg-muted-50 text-muted-500 cursor-not-allowed' 
                               : 'bg-white text-text-900 hover:bg-muted-50 shadow'
@@ -547,13 +547,42 @@ const CoursesPage = () => {
                           Previous
                         </button>
                         
-                        {[...Array(totalPages)].map((_, index) => {
-                          const pageNumber = index + 1;
+                        {/* Show first page */}
+                        {currentPage > 2 && (
+                          <>
+                            <button
+                              onClick={() => handlePageChange(1)}
+                              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white text-text-900 hover:bg-muted-50 shadow text-sm sm:text-base"
+                            >
+                              1
+                            </button>
+                            {currentPage > 3 && (
+                              <span className="px-3 py-1.5 sm:px-4 sm:py-2 text-text-900 text-sm sm:text-base">...</span>
+                            )}
+                          </>
+                        )}
+                        
+                        {/* Show pages around current page */}
+                        {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
+                          let pageNumber;
+                          if (totalPages <= 3) {
+                            pageNumber = i + 1;
+                          } else if (currentPage === 1) {
+                            pageNumber = i + 1;
+                          } else if (currentPage === totalPages) {
+                            pageNumber = totalPages - 2 + i;
+                          } else {
+                            pageNumber = currentPage - 1 + i;
+                          }
+                          
+                          // Ensure page number is within valid range
+                          if (pageNumber < 1 || pageNumber > totalPages) return null;
+                          
                           return (
                             <button
                               key={pageNumber}
                               onClick={() => handlePageChange(pageNumber)}
-                              className={`px-4 py-2 rounded-lg ${
+                              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base ${
                                 currentPage === pageNumber
                                   ? 'bg-primary-700 text-white'
                                   : 'bg-white text-text-900 hover:bg-muted-50 shadow'
@@ -564,10 +593,25 @@ const CoursesPage = () => {
                           );
                         })}
                         
+                        {/* Show last page */}
+                        {currentPage < totalPages - 1 && (
+                          <>
+                            {currentPage < totalPages - 2 && (
+                              <span className="px-3 py-1.5 sm:px-4 sm:py-2 text-text-900 text-sm sm:text-base">...</span>
+                            )}
+                            <button
+                              onClick={() => handlePageChange(totalPages)}
+                              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white text-text-900 hover:bg-muted-50 shadow text-sm sm:text-base"
+                            >
+                              {totalPages}
+                            </button>
+                          </>
+                        )}
+                        
                         <button
                           onClick={() => handlePageChange(currentPage + 1)}
                           disabled={currentPage === totalPages}
-                          className={`px-4 py-2 rounded-lg ${
+                          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base ${
                             currentPage === totalPages 
                               ? 'bg-muted-50 text-muted-500 cursor-not-allowed' 
                               : 'bg-white text-text-900 hover:bg-muted-50 shadow'
@@ -604,10 +648,10 @@ const CoursesPage = () => {
       </section>
 
       {/* Recommendation CTA Section */}
-      <section className="py-12 sm:py-16 bg-gradient-to-r from-primary-700 to-indigo-700 text-white">
+      <section className="py-10 sm:py-14 md:py-16 bg-[#0f4c81] text-white">
         <div className="px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2 
-            className="text-2xl sm:text-3xl font-bold mb-4"
+            className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -615,7 +659,7 @@ const CoursesPage = () => {
             Not sure which course to choose?
           </motion.h2>
           <motion.p 
-            className="text-lg sm:text-xl mb-8 max-w-2xl mx-auto opacity-90"
+            className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto opacity-90"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -625,7 +669,7 @@ const CoursesPage = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-accent-500 to-orange-500 text-text-900 font-bold rounded-lg text-lg hover:opacity-90 transition-all duration-200 shadow-lg"
+            className="px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-[#0f4c81] font-bold rounded-lg text-base sm:text-lg hover:bg-[#e0e0e0] transition-all duration-200 shadow-md"
             onClick={() => window.location.href = '/recommendations'}
           >
             Get Personalized Recommendations →

@@ -19,31 +19,8 @@ const HomePage = () => {
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
   const [allCourses, setAllCourses] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [recentReviews] = useState([
-    {
-      id: 1,
-      userName: 'Veer Mahadev',
-      courseTitle: 'Advanced JavaScript Concepts',
-      rating: 5,
-      comment: 'This course completely transformed my understanding of JavaScript. The instructor explains complex topics in a very accessible way.',
-      upvotes: 24,
-    },
-    {
-      id: 2,
-      userName: 'Sarah Williams',
-      courseTitle: 'Data Visualization with D3.js',
-      rating: 4,
-      comment: 'Excellent content and well-structured modules. The hands-on projects really helped solidify my learning.',
-      upvotes: 18,
-    }, {
-      id: 3,
-      userName: 'Nicole Smith',
-      courseTitle: 'Cloud Architecture Fundamentals',
-      rating: 5,
-      comment: 'As a DevOps engineer, this course gave me the foundational knowledge I needed to advance my career. Highly recommended!',
-      upvotes: 32,
-    },
-  ]);
+  const [recentReviews, setRecentReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
 
   // How It Works steps
   const howItWorksSteps = [
@@ -63,6 +40,76 @@ const HomePage = () => {
       description: 'Enroll in the perfect course and advance your career.'
     }
   ];
+
+  // Fetch homepage reviews from API
+  useEffect(() => {
+    const fetchHomePageReviews = async () => {
+      try {
+        setLoadingReviews(true);
+        const response = await axios.get('/api/homepage-reviews');
+        setRecentReviews(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching home page reviews:', error);
+        // Fallback to static data if API fails
+        setRecentReviews([
+          {
+            reviewId: 1,
+            userName: 'Veer Mahadev',
+            courseTitle: 'Advanced JavaScript Concepts',
+            rating: 5,
+            comment: 'This course completely transformed my understanding of JavaScript. The instructor explains complex topics in a very accessible way.',
+            upvotes: 24,
+          },
+          {
+            reviewId: 2,
+            userName: 'Sarah Williams',
+            courseTitle: 'Data Visualization with D3.js',
+            rating: 4,
+            comment: 'Excellent content and well-structured modules. The hands-on projects really helped solidify my learning.',
+            upvotes: 18,
+          }, {
+            reviewId: 3,
+            userName: 'Nicole Smith',
+            courseTitle: 'Cloud Architecture Fundamentals',
+            rating: 5,
+            comment: 'As a DevOps engineer, this course gave me the foundational knowledge I needed to advance my career. Highly recommended!',
+            upvotes: 32,
+          },
+        ]);
+      } finally {
+        setLoadingReviews(false);
+      }
+    };
+
+    fetchHomePageReviews();
+  }, []);
+
+  // Function to handle upvoting a review
+  const handleUpvote = async (reviewId) => {
+    try {
+      const response = await axios.patch(`/api/homepage-reviews/${reviewId}/upvote`);
+      if (response.data.success) {
+        // Update the review in state with the new upvote count
+        setRecentReviews(prevReviews => 
+          prevReviews.map(review => 
+            review.reviewId === reviewId 
+              ? { ...review, upvotes: response.data.data.upvotes } 
+              : review
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error upvoting review:', error);
+      // Fallback to local state update if API fails
+      setRecentReviews(prevReviews => 
+        prevReviews.map(review => 
+          review.reviewId === reviewId 
+            ? { ...review, upvotes: review.upvotes + 1 } 
+            : review
+        )
+      );
+    }
+  };
 
   // Fetch data from API
   useEffect(() => {
@@ -435,42 +482,94 @@ const HomePage = () => {
             What Our Users Say
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {recentReviews.map((review, index) => (
-              <motion.div
-                key={review.id}
-                variants={item}
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              >
-                <div className="bg-card-100 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+            {loadingReviews ? (
+              // Loading skeleton
+              [...Array(3)].map((_, index) => (
+                <motion.div
+                  key={index}
+                  variants={item}
+                  className="bg-card-100 rounded-xl p-6 shadow-sm"
+                >
                   <div className="flex items-center mb-4">
-                    <div className="bg-accent-500 rounded-full w-10 h-10 flex items-center justify-center text-text-900 font-bold">
-                      {review.userName.charAt(0)}
-                    </div>
+                    <div className="bg-gray-200 rounded-full w-10 h-10 animate-pulse"></div>
                     <div className="ml-3">
-                      <h3 className="font-semibold text-text-900">{review.userName}</h3>
+                      <div className="h-4 bg-gray-200 rounded w-24 mb-2 animate-pulse"></div>
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
-                          <svg 
-                            key={i} 
-                            className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400' : 'text-muted-500'}`} 
-                            fill="currentColor" 
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
+                          <div key={i} className="w-4 h-4 bg-gray-200 rounded mr-1 animate-pulse"></div>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <h4 className="font-bold text-text-900 mb-2">{review.courseTitle}</h4>
-                  <p className="text-muted-500 text-sm mb-4">{review.comment}</p>
+                  <div className="h-4 bg-gray-200 rounded w-full mb-2 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-4 animate-pulse"></div>
                   <div className="flex items-center justify-between">
-                    <span className="text-accent-500 text-sm font-medium">{review.upvotes} upvotes</span>
+                    <div className="h-6 bg-gray-200 rounded-full w-20 animate-pulse"></div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))
+            ) : (
+              recentReviews.map((review, index) => (
+                <motion.div
+                  key={review.reviewId}
+                  variants={item}
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <div className="bg-card-100 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div className="flex items-center mb-4">
+                      <div className="bg-accent-500 rounded-full w-10 h-10 flex items-center justify-center text-text-900 font-bold">
+                        {review.userName.charAt(0)}
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="font-semibold text-text-900">{review.userName}</h3>
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <svg 
+                              key={i} 
+                              className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400' : 'text-muted-500'}`} 
+                              fill="currentColor" 
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <h4 className="font-bold text-text-900 mb-2">{review.courseTitle}</h4>
+                    <p className="text-muted-500 text-sm mb-4">{review.comment}</p>
+                    <div className="flex items-center justify-between">
+                      <motion.button 
+                        onClick={() => handleUpvote(review.reviewId)}
+                        className="text-accent-500 text-sm font-medium hover:text-accent-600 flex items-center bg-accent-50 hover:bg-accent-100 rounded-full px-3 py-1 transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                      >
+                        <motion.svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          className="h-4 w-4 mr-1"
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                          whileHover={{ rotate: 10 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                        </motion.svg>
+                        <motion.span
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {review.upvotes} upvotes
+                        </motion.span>
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
       </motion.section>

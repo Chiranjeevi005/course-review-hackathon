@@ -1,28 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
   // Navigation items (same as navbar)
   const navItems = [
-    { name: 'Home', path: '/' },
     { name: 'Courses', path: '/courses' },
     { name: 'Categories', path: '/categories' },
-    { name: 'About', path: '/about' },
+    { name: 'Recommendations', path: '/recommendations' },
     { name: 'Contact', path: '/contact' }
-  ];
-
-  // Quick action items
-  const quickActions = [
-    { name: 'Become a Reviewer', path: '/reviews' },
-    { name: 'Find Courses', path: '/recommendations' }
-  ];
-
-  // Support & Legal items
-  const supportLegalItems = [
-    { name: 'Help Center', path: '#' },
-    { name: 'Contact Us', path: '/contact' },
-    { name: 'Privacy Policy', path: '#' },
-    { name: 'Terms of Service', path: '#' }
   ];
 
   // Social media links
@@ -33,43 +18,29 @@ const Footer = () => {
     { name: 'GitHub', icon: 'M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z', url: '#' }
   ];
 
-  return (
-    <footer className="bg-gray-900 text-gray-300 w-full">
-      <div className="w-full px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Branding & About Column */}
-          <div className="space-y-4">
-            <div className="flex items-center">
-              <h2 className="text-2xl font-bold text-white">CourseFinder</h2>
-            </div>
-            <p className="text-gray-400 text-sm">
-              Empowering learners to find the perfect course for their future.
-            </p>
-            <div className="flex space-x-4">
-              {socialLinks.map((social, index) => (
-                <a 
-                  key={index}
-                  href={social.url}
-                  className="text-gray-400 hover:text-white transition-colors duration-300"
-                  aria-label={social.name}
-                >
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d={social.icon} />
-                  </svg>
-                </a>
-              ))}
-            </div>
-          </div>
+  const [email, setEmail] = useState('');
 
-          {/* Quick Navigation Column */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Navigation</h3>
-            <ul className="space-y-2">
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    // Handle newsletter subscription
+    console.log('Subscribed with email:', email);
+    setEmail('');
+    alert('Thank you for subscribing to our newsletter!');
+  };
+
+  return (
+    <footer className="bg-[#0a3a66] text-white w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-10 md:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12">
+          {/* Navigation Section */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 sm:mb-6">Navigation</h3>
+            <ul className="space-y-2 sm:space-y-3">
               {navItems.map((item, index) => (
                 <li key={index}>
                   <Link 
                     to={item.path}
-                    className="text-gray-400 hover:text-white transition-colors duration-300 hover:underline"
+                    className="text-[#e0e0e0] hover:text-white transition-all duration-300 hover:underline hover:decoration-2 hover:underline-offset-4 text-sm sm:text-base"
                   >
                     {item.name}
                   </Link>
@@ -78,60 +49,71 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Quick Actions Column */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Quick Actions</h3>
-            <ul className="space-y-2">
-              {quickActions.map((action, index) => (
-                <li key={index}>
-                  <Link 
-                    to={action.path}
-                    className="text-gray-400 hover:text-white transition-colors duration-300 hover:underline"
-                  >
-                    {action.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Branding Section */}
+          <div className="pb-6 border-b border-white/10 sm:pb-8">
+            <h2 className="text-xl sm:text-2xl font-bold mb-3">CourseFinder</h2>
+            <p className="text-[#e0e0e0] text-sm leading-relaxed max-w-xs">
+              Empowering learners to find the perfect course for their future.
+            </p>
           </div>
 
-          {/* Support & Legal Column */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Support & Legal</h3>
-            <ul className="space-y-2">
-              {supportLegalItems.map((item, index) => (
-                <li key={index}>
+          {/* Social Proof & Newsletter Section */}
+          <div className="space-y-6 sm:space-y-8">
+            {/* Social Media Links */}
+            <div>
+              <h3 className="text-lg font-semibold mb-3 sm:mb-4 text-center">Connect With Us</h3>
+              <div className="flex justify-center space-x-3 sm:space-x-4">
+                {socialLinks.map((social, index) => (
                   <a 
-                    href={item.path}
-                    className="text-gray-400 hover:text-white transition-colors duration-300 hover:underline"
+                    key={index}
+                    href={social.url}
+                    className="text-[#e0e0e0] hover:text-white transition-colors duration-300 hover:bg-white/10 p-2 rounded-full"
+                    aria-label={social.name}
                   >
-                    {item.name}
+                    <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d={social.icon} />
+                    </svg>
                   </a>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            </div>
+
+            {/* Newsletter Subscription */}
+            <div>
+              <h3 className="text-lg font-semibold mb-3 sm:mb-4 text-center">Stay Updated</h3>
+              <p className="text-[#e0e0e0] text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed text-center">
+                Stay updated with the latest courses & career insights
+              </p>
+              <form onSubmit={handleSubscribe} className="flex flex-col gap-2 sm:gap-3 max-w-md mx-auto">
+                <div>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-[#0f4c81]/80 border border-white/20 text-white placeholder-[#b0b0b0] focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all duration-300 text-sm"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-3 py-2 sm:px-4 sm:py-2.5 bg-white text-[#0f4c81] font-medium rounded-lg hover:bg-[#e0e0e0] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30 whitespace-nowrap shadow-md hover:shadow-lg text-sm sm:text-base"
+                >
+                  Subscribe
+                </button>
+              </form>
+            </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm">
+        <div className="border-t border-white/20 mt-8 sm:mt-10 md:mt-12 pt-4 sm:pt-6 flex flex-col items-center gap-2 sm:gap-3">
+          <p className="text-[#e0e0e0] text-xs sm:text-sm text-center">
             Copyright © 2025 CourseFinder. All rights reserved.
           </p>
-          <div className="mt-4 md:mt-0">
-            <ul className="flex space-x-6">
-              <li>
-                <a href="#" className="text-gray-500 hover:text-gray-300 text-sm transition-colors duration-300">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-500 hover:text-gray-300 text-sm transition-colors duration-300">
-                  Terms of Service
-                </a>
-              </li>
-            </ul>
-          </div>
+          <p className="text-[#e0e0e0] text-xs italic text-center">
+            Empowering learners worldwide
+          </p>
         </div>
       </div>
     </footer>

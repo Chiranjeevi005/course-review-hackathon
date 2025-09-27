@@ -82,30 +82,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Google login function
-  const googleLogin = async (credential) => {
-    try {
-      setError(null);
-      const response = await axios.post('/auth/google', { credential });
-      
-      const { accessToken, user } = response.data;
-      
-      // Store token and set axios defaults
-      localStorage.setItem('accessToken', accessToken);
-      setAccessToken(accessToken);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-      
-      // Set user
-      setUser(user);
-      
-      return { success: true };
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Google login failed';
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    }
-  };
-
   // Register function
   const register = async (name, email, password) => {
     try {
@@ -177,7 +153,6 @@ export const AuthProvider = ({ children }) => {
     loading,
     error,
     login,
-    googleLogin,
     register,
     logout,
     refreshToken,

@@ -42,12 +42,11 @@ const CourseCard = ({ course }) => {
   // Always use CoursePlaceholder for the image - this ensures consistency
   const renderImage = () => {
     return (
-      <div className="w-full h-32 sm:h-40 md:h-48">
+      <div className="w-full h-32 sm:h-40 md:h-44 lg:h-48">
         <CoursePlaceholder 
-          category={getCategoryName()}
           courseTitle={course.title}
           courseDescription={course.description}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-t-lg"
         />
       </div>
     );
@@ -60,8 +59,8 @@ const CourseCard = ({ course }) => {
   };
 
   return (
-    <div className="bg-card-100 rounded-lg shadow-soft overflow-hidden transition-all duration-200 ease-in-out hover:shadow-soft-lg group border border-muted-500">
-      <div className="relative overflow-hidden">
+    <div className="bg-card-100 rounded-lg shadow-soft overflow-hidden transition-all duration-200 ease-in-out hover:shadow-soft-lg group border border-muted-500 h-full flex flex-col">
+      <div className="relative overflow-hidden flex-shrink-0">
         {renderImage()}
         
         <motion.button
@@ -79,8 +78,8 @@ const CourseCard = ({ course }) => {
         </motion.button>
       </div>
       
-      <div className="p-3 sm:p-4 md:p-5">
-        <div className="flex justify-between items-start mb-1.5 sm:mb-2">
+      <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-grow">
+        <div className="flex justify-between items-start mb-1.5 sm:mb-2 flex-grow">
           <h3 className="font-bold text-text-900 text-sm sm:text-base md:text-lg leading-tight group-hover:text-primary-700 transition-colors duration-200">
             {course.title}
           </h3>
@@ -109,7 +108,7 @@ const CourseCard = ({ course }) => {
           <Rating rating={course.rating} ratingCount={course.reviewsCount || course.ratingCount} />
         </div>
         
-        <div className="flex justify-between items-center mb-3 sm:mb-4">
+        <div className="flex justify-between items-center mb-3 sm:mb-4 mt-auto">
           <span className="text-muted-500 text-xs sm:text-sm">{course.duration}</span>
         </div>
         
@@ -120,7 +119,7 @@ const CourseCard = ({ course }) => {
         >
           <Link 
             to={`/courses/${getCourseId()}`}
-            className="block w-full bg-primary-700 text-white py-2 sm:py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-700 focus:ring-opacity-50 text-center text-xs sm:text-sm md:text-base"
+            className="block w-full bg-primary-700 text-white py-2 sm:py-2.5 md:py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-700 focus:ring-opacity-50 text-center text-xs sm:text-sm md:text-base"
           >
             View Details
           </Link>

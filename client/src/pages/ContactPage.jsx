@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '../layouts/Navbar';
-import Footer from '../layouts/Footer';
 import Select from 'react-select';
 
 const ContactPage = () => {
@@ -401,7 +400,6 @@ const ContactPage = () => {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 };

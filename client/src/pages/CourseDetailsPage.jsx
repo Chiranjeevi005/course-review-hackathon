@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from '../layouts/Navbar';
 import Rating from '../components/Rating';
+import CoursePlaceholder from '../components/CoursePlaceholder';
 import axios from '../services/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 import tracking from '../utils/tracking';
@@ -36,17 +37,6 @@ const getCategoryColors = (category) => {
   return colors[category] || { bg: "from-gray-500 to-gray-600", text: "text-white" };
 };
 
-// Function to generate enhanced placeholder SVG
-const generatePlaceholderSVG = (category, width, height, isBanner = false) => {
-  const colors = getCategoryColors(category);
-  const encodedCategory = encodeURIComponent(category);
-  const titleText = isBanner ? `${category} Course` : category;
-  const encodedTitle = encodeURIComponent(titleText);
-  
-  // Create a more sophisticated SVG with gradient background, icon, and text
-  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}' viewBox='0 0 ${width} ${height}'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233b82f6;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%238b5cf6;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ccircle cx='${width/4}' cy='${height/3}' r='30' fill='rgba(255,255,255,0.2)'/%3E%3Ccircle cx='${3*width/4}' cy='${2*height/3}' r='50' fill='rgba(255,255,255,0.1)'/%3E%3Crect x='${width/6}' y='${height/2}' width='${2*width/3}' height='40' rx='20' fill='rgba(255,255,255,0.15)'/%3E%3Ctext x='50%25' y='${isBanner ? '40%25' : '50%25'}' font-family='Arial, sans-serif' font-size='${isBanner ? '24' : '18'}' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3E${encodedTitle}%3C/text%3E%3C/svg%3E`;
-};
-
 const CourseDetailsPage = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -54,6 +44,7 @@ const CourseDetailsPage = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showImage, setShowImage] = useState(true);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -244,23 +235,13 @@ const CourseDetailsPage = () => {
                 
                 {/* Course Banner Image */}
                 <div className="mb-6 sm:mb-8 rounded-xl overflow-hidden shadow-lg">
-                  {course.image ? (
-                    <img 
-                      src={course.image} 
-                      alt={course.title}
-                      className="w-full h-48 sm:h-56 md:h-64 object-cover"
-                      onError={(e) => {
-                        // Fallback to category-based placeholder if image fails to load
-                        e.target.src = generatePlaceholderSVG(course.category, 800, 400, true);
-                      }}
-                    />
-                  ) : (
-                    <div className={`w-full h-48 sm:h-56 md:h-64 bg-gradient-to-r ${categoryColors.bg} flex items-center justify-center`}>
-                      <span className={`${categoryColors.text} text-lg sm:text-xl md:text-2xl font-bold text-center px-3 sm:px-4`}>
-                        {course.category} Course
-                      </span>
-                    </div>
-                  )}
+                  <CoursePlaceholder 
+                    courseTitle={course.title}
+                    courseDescription={course.description}
+                    width={800}
+                    height={400}
+                    className="w-full h-48 sm:h-56 md:h-64 object-cover"
+                  />
                 </div>
                 
                 {/* Instructor */}
@@ -332,23 +313,13 @@ const CourseDetailsPage = () => {
                 <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                   {/* Course Image */}
                   <div className="w-full h-40 sm:h-48 md:h-52 overflow-hidden">
-                    {course.image ? (
-                      <img 
-                        src={course.image} 
-                        alt={course.title}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          // Fallback to category-based placeholder if image fails to load
-                          e.target.src = generatePlaceholderSVG(course.category, 600, 400);
-                        }}
-                      />
-                    ) : (
-                      <div className={`w-full h-full bg-gradient-to-r ${categoryColors.bg} flex items-center justify-center`}>
-                        <span className={`${categoryColors.text} text-base sm:text-lg font-bold text-center px-3`}>
-                          {course.category}
-                        </span>
-                      </div>
-                    )}
+                    <CoursePlaceholder 
+                      courseTitle={course.title}
+                      courseDescription={course.description}
+                      width={600}
+                      height={400}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   
                   <div className="p-4 sm:p-5 md:p-6">

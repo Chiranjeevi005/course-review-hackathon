@@ -1,10 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useGoogleLogin } from '@react-oauth/google';
 import { AuthContext } from '../context/AuthContext';
-import GoogleLoginButton from '../components/GoogleLoginButton';
 import LoginForm from '../components/LoginForm';
-import RegisterForm from '../components/RegisterForm';
 import Navbar from '../layouts/Navbar';
 import { motion } from 'framer-motion';
 
@@ -12,31 +9,8 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { login, register, googleLogin } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  // Google login handler
-  const handleGoogleLoginSuccess = async (response) => {
-    setLoading(true);
-    setError('');
-    
-    try {
-      const result = await googleLogin(response.access_token);
-      if (result.success) {
-        navigate('/');
-      } else {
-        setError(result.error);
-      }
-    } catch (err) {
-      setError('Google login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleLoginError = () => {
-    setError('Google login failed. Please try again.');
-  };
 
   // Form submit handler
   const handleLogin = async (formData) => {

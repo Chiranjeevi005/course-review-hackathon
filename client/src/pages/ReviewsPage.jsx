@@ -130,15 +130,15 @@ const ReviewsPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gray-50">
         <Navbar />
         <div className="px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center py-12">
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">Error Loading Reviews</h3>
-            <p className="text-gray-500 mb-4">{error}</p>
+          <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Reviews</h3>
+            <p className="text-gray-600 mb-4">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm"
             >
               Try Again
             </button>
@@ -150,15 +150,15 @@ const ReviewsPage = () => {
 
   if (!course && !loading) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gray-50">
         <Navbar />
         <div className="px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center py-12">
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">Course Not Found</h3>
-            <p className="text-gray-500 mb-4">The requested course could not be found.</p>
+          <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">Course Not Found</h3>
+            <p className="text-gray-600 mb-4">The requested course could not be found.</p>
             <button
               onClick={() => navigate('/courses')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm"
             >
               Browse All Courses
             </button>
@@ -169,23 +169,23 @@ const ReviewsPage = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
       
       {/* Breadcrumb */}
-      <div className="bg-gray-50 py-3">
+      <div className="bg-white border-b border-gray-200 py-3">
         <div className="px-4 sm:px-6 lg:px-8">
           <nav className="text-sm">
             <button 
               onClick={() => navigate('/')} 
-              className="text-blue-600 hover:underline"
+              className="text-primary-600 hover:text-primary-800 hover:underline"
             >
               Home
             </button>
             <span className="mx-2 text-gray-400">/</span>
             <button 
               onClick={() => navigate('/courses')} 
-              className="text-blue-600 hover:underline"
+              className="text-primary-600 hover:text-primary-800 hover:underline"
             >
               Courses
             </button>
@@ -194,14 +194,14 @@ const ReviewsPage = () => {
                 <span className="mx-2 text-gray-400">/</span>
                 <button 
                   onClick={() => navigate(`/courses/category/${course.categoryId?._id || course.category}`)} 
-                  className="text-blue-600 hover:underline"
+                  className="text-primary-600 hover:text-primary-800 hover:underline"
                 >
                   {course.categoryId?.name || course.category}
                 </button>
                 <span className="mx-2 text-gray-400">/</span>
                 <button 
                   onClick={() => navigate(`/courses/${courseId}`)} 
-                  className="text-blue-600 hover:underline"
+                  className="text-primary-600 hover:text-primary-800 hover:underline"
                 >
                   {course.title}
                 </button>
@@ -238,11 +238,11 @@ const ReviewsPage = () => {
                         </svg>
                       ))}
                     </div>
-                    <span className="ml-2 text-gray-600">
+                    <span className="ml-2 text-gray-700">
                       {course.rating} ({course.reviewsCount} reviews)
                     </span>
                   </div>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                  <span className="px-2 py-1 bg-primary-100 text-primary-800 text-sm font-medium rounded-full">
                     {course.categoryId?.name || course.category}
                   </span>
                   <span className="px-2 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
@@ -252,7 +252,7 @@ const ReviewsPage = () => {
               </div>
               <button
                 onClick={() => navigate(`/courses/${courseId}`)}
-                className="mt-4 md:mt-0 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                className="mt-4 md:mt-0 px-4 py-2 bg-primary-50 text-primary-700 rounded-lg hover:bg-primary-100 transition-colors font-medium border border-primary-200"
               >
                 View Course Details
               </button>
@@ -276,7 +276,7 @@ const ReviewsPage = () => {
                       onClick={() => handleFilterChange('rating', filters.rating === rating ? '' : rating)}
                       className={`flex items-center w-full text-left px-3 py-2 rounded-lg ${
                         filters.rating === rating
-                          ? 'bg-blue-50 text-blue-700'
+                          ? 'bg-primary-50 text-primary-700 border border-primary-200'
                           : 'hover:bg-gray-50'
                       }`}
                     >
@@ -306,12 +306,12 @@ const ReviewsPage = () => {
                     onClick={() => handleSortChange('createdAt')}
                     className={`flex items-center w-full text-left px-3 py-2 rounded-lg ${
                       filters.sortBy === 'createdAt'
-                        ? 'bg-blue-50 text-blue-700'
+                        ? 'bg-primary-50 text-primary-700 border border-primary-200'
                         : 'hover:bg-gray-50'
                     }`}
                   >
                     <svg
-                      className="w-4 h-4 mr-2"
+                      className="w-4 h-4 mr-2 text-gray-500"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -329,12 +329,12 @@ const ReviewsPage = () => {
                     onClick={() => handleSortChange('rating')}
                     className={`flex items-center w-full text-left px-3 py-2 rounded-lg ${
                       filters.sortBy === 'rating'
-                        ? 'bg-blue-50 text-blue-700'
+                        ? 'bg-primary-50 text-primary-700 border border-primary-200'
                         : 'hover:bg-gray-50'
                     }`}
                   >
                     <svg
-                      className="w-4 h-4 mr-2"
+                      className="w-4 h-4 mr-2 text-gray-500"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -352,12 +352,12 @@ const ReviewsPage = () => {
                     onClick={() => handleSortChange('helpful')}
                     className={`flex items-center w-full text-left px-3 py-2 rounded-lg ${
                       filters.sortBy === 'helpful'
-                        ? 'bg-blue-50 text-blue-700'
+                        ? 'bg-primary-50 text-primary-700 border border-primary-200'
                         : 'hover:bg-gray-50'
                     }`}
                   >
                     <svg
-                      className="w-4 h-4 mr-2"
+                      className="w-4 h-4 mr-2 text-gray-500"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -388,7 +388,7 @@ const ReviewsPage = () => {
                       page: 1
                     }));
                   }}
-                  className="mt-4 w-full py-2 text-sm text-gray-600 hover:text-gray-900"
+                  className="mt-4 w-full py-2 text-sm text-primary-600 hover:text-primary-800 font-medium"
                 >
                   Clear all filters
                 </button>
@@ -410,8 +410,8 @@ const ReviewsPage = () => {
             
             {/* Reviews List */}
             {loading ? (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-200">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
                 <p className="mt-4 text-gray-600">Loading reviews...</p>
               </div>
             ) : reviews.length === 0 ? (
@@ -430,7 +430,7 @@ const ReviewsPage = () => {
                   />
                 </svg>
                 <h3 className="mt-4 text-lg font-medium text-gray-900">No reviews yet</h3>
-                <p className="mt-2 text-gray-500">
+                <p className="mt-2 text-gray-600">
                   Be the first to review this course!
                 </p>
               </div>
@@ -478,7 +478,7 @@ const ReviewsPage = () => {
                             onClick={() => handlePageChange(pageNum)}
                             className={`px-3 py-2 rounded-md ${
                               pagination.page === pageNum
-                                ? 'bg-blue-600 text-white'
+                                ? 'bg-primary-600 text-white'
                                 : 'text-gray-700 hover:bg-gray-100'
                             }`}
                           >

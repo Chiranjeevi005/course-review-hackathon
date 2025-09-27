@@ -63,11 +63,11 @@ const ReviewCard = ({ review, onHelpfulnessChange }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-4"
+      className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-4 hover:shadow-md transition-shadow duration-200"
     >
       <div className="flex justify-between items-start">
         <div className="flex items-center">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold mr-3">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary-500 to-primary-700 flex items-center justify-center text-white font-bold mr-3">
             {review.userId?.name?.charAt(0) || 'U'}
           </div>
           <div>
@@ -98,7 +98,7 @@ const ReviewCard = ({ review, onHelpfulnessChange }) => {
           {isLongReview && (
             <button
               onClick={toggleExpand}
-              className="ml-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
+              className="ml-1 text-primary-600 hover:text-primary-800 text-sm font-medium"
             >
               {isExpanded ? 'Show less' : 'Read more'}
             </button>
@@ -112,7 +112,7 @@ const ReviewCard = ({ review, onHelpfulnessChange }) => {
           {review.tags.map((tag, index) => (
             <span
               key={index}
-              className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full"
+              className="px-2 py-1 bg-primary-100 text-primary-800 text-xs font-medium rounded-full"
             >
               {tag}
             </span>
@@ -122,14 +122,14 @@ const ReviewCard = ({ review, onHelpfulnessChange }) => {
 
       {/* Helpful buttons */}
       <div className="mt-4 flex items-center">
-        <span className="text-sm text-gray-500 mr-3">Helpful?</span>
+        <span className="text-sm text-gray-600 mr-3">Helpful?</span>
         <button
           onClick={() => handleHelpfulVote('like')}
           disabled={hasVoted}
           className={`flex items-center text-sm px-3 py-1 rounded-full ${
             hasVoted
               ? 'bg-gray-100 text-gray-500'
-              : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              : 'bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700'
           }`}
         >
           <svg
@@ -153,7 +153,7 @@ const ReviewCard = ({ review, onHelpfulnessChange }) => {
           className={`flex items-center text-sm ml-2 px-3 py-1 rounded-full ${
             hasVoted
               ? 'bg-gray-100 text-gray-500'
-              : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              : 'bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700'
           }`}
         >
           <svg
