@@ -20,6 +20,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminDashboard from './pages/AdminDashboard';
 import Footer from './layouts/Footer';
 import heartbeatService from './utils/heartbeatService';
+import PrivacyPage from './pages/PrivacyPage.jsx';
+import TermsPage from './pages/TermsPage.jsx';
 
 // Import global styles
 import './App.css';
