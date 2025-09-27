@@ -98,8 +98,12 @@ REFRESH_TOKEN_SECRET=your_refresh_token_secret_here
 REFRESH_TOKEN_EXPIRES_IN=7d
 
 # Redis Configuration
+# For local development:
 REDIS_HOST=localhost
 REDIS_PORT=6379
+# For production (to disable Redis and use mock client):
+# REDIS_HOST=
+# REDIS_PORT=
 ```
 
 #### Frontend (.env in client directory)

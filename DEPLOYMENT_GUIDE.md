@@ -134,6 +134,10 @@ After both deployments are complete, you'll need to update the environment varia
 
 1. In Render dashboard, update `CLIENT_ORIGIN` with your actual Vercel URL
 2. In Vercel dashboard, ensure `VITE_API_URL` points to your actual Render URL
+3. For Redis configuration in Render:
+   - The application will automatically use a mock Redis client when `REDIS_HOST` is empty
+   - This is the default configuration in the render.yaml file
+   - If you want to use a real Redis instance, update `REDIS_HOST` and `REDIS_PORT` with your Redis server details
 
 ## 🔄 CI/CD Setup
 
@@ -173,6 +177,11 @@ To set up custom deployment branches:
 4. **Environment Variables Not Loading**:
    - In Vercel, ensure variables are not prefixed with `REACT_APP_` (this is Vite, not Create React App)
    - In Render, check that variables are not set as "Preview" instead of "Production"
+
+5. **Redis Connection Issues**:
+   - The application uses a mock Redis client in production by default
+   - If you see repeated Redis connection errors, check that `REDIS_HOST` is either set to a valid Redis server or left empty to use the mock client
+   - Active user tracking features will work with the mock client but won't persist across server restarts
 
 ### Useful Commands for Debugging
 
