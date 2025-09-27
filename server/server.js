@@ -44,7 +44,7 @@ const io = new Server(server, {
 // Debug: Log environment variables
 console.log('Environment variables:');
 console.log('PORT:', process.env.PORT);
-console.log('MONGO_URI:', process.env.MONGO_URI);
+console.log('MONGO_URI:', process.env.MONGO_URI ? 'Set' : 'Not set');
 console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'Set' : 'Not set');
 console.log('Current directory:', __dirname);
 
@@ -62,14 +62,19 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 // MongoDB Connection
+let dbConnected = false;
 if (process.env.MONGO_URI) {
   mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(async () => {
       console.log('✅ MongoDB Connected');
+      dbConnected = true;
       // Ensure admin user exists
       await User.ensureAdmin();
     })
-    .catch(err => console.error('❌ MongoDB Error:', err));
+    .catch(err => {
+      console.error('❌ MongoDB Error:', err);
+      dbConnected = false;
+    });
 } else {
   console.log('⚠️  MONGO_URI not found in environment variables. Running in mock mode.');
   // Mock mode - no database connection
@@ -174,7 +179,11 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     memoryUsage: process.memoryUsage(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    database: {
+      connected: dbConnected,
+      uri: process.env.MONGO_URI ? 'Set' : 'Not set'
+    }
   };
   
   // Check MongoDB connection if it exists
@@ -189,26 +198,23 @@ app.get('/health', (req, res) => {
   res.status(200).json(healthStatus);
 });
 
-// Auth routes
-app.use('/auth', authRoutes);
-
-// Category routes
-app.use('/api/categories', categoryRoutes);
-
-// Course routes
-app.use('/api/courses', courseRoutes);
-
-// Review routes
-app.use('/api/courses/:courseId/reviews', reviewRoutes);
-
-// Admin routes
-app.use('/api/admin', adminRoutes);
-
-// Analytics routes
-app.use('/api/analytics', analyticsRoutes);
-
-// Home page review routes
-app.use('/api/homepage-reviews', homePageReviewRoutes);
+// Database status endpoint
+app.get('/db-status', (req, res) => {
+  const dbStatus = {
+    connected: dbConnected,
+    mongooseState: mongoose.connection ? mongoose.connection.readyState : 'No connection',
+    mongooseStates: {
+      0: 'disconnected',
+      1: 'connected',
+      2: 'connecting',
+      3: 'disconnecting'
+    },
+    uriSet: !!process.env.MONGO_URI,
+    uri: process.env.MONGO_URI ? 'URI is set (hidden for security)' : 'Not set'
+  };
+  
+  res.json(dbStatus);
+});
 
 // Test route to check all dependencies
 app.get('/test-dependencies', async (req, res) => {
@@ -234,12 +240,13 @@ app.get('/test-dependencies', async (req, res) => {
         morgan: '✅ Working',
         dotenv: process.env.MONGO_URI ? '✅ Working' : '⚠️  MONGO_URI not found',
         bcryptjs: `✅ Working (Hash test: ${isPasswordValid ? 'Passed' : 'Failed'})`,
-        jsonwebtoken: `✅ Working (Token test: ${decoded.userId === 'test123' ? 'Passed' : 'Failed'})`
+        jsonwebtoken: `✅ Working (Token test: ${decoded.userId === 'test123' ? 'Passed' : 'Failed'})`,
+        database: dbConnected ? '✅ Connected' : '❌ Not connected'
       },
       details: {
         mongoDB: {
           connectionStatus: mongoStatus,
-          uri: process.env.MONGO_URI || 'Not provided'
+          uri: process.env.MONGO_URI ? 'Set' : 'Not provided'
         },
         jwt: {
           tokenGenerated: token ? 'Yes' : 'No',
@@ -249,6 +256,9 @@ app.get('/test-dependencies', async (req, res) => {
           saltGenerated: salt ? 'Yes' : 'No',
           hashGenerated: hashedPassword ? 'Yes' : 'No',
           comparisonResult: isPasswordValid
+        },
+        database: {
+          connected: dbConnected
         }
       }
     });
@@ -256,10 +266,34 @@ app.get('/test-dependencies', async (req, res) => {
     console.error('Dependency test failed:', error);
     res.status(500).json({
       status: 'Error testing dependencies',
-      error: error.message
+      error: error.message,
+      database: {
+        connected: dbConnected
+      }
     });
   }
 });
+
+// Auth routes
+app.use('/auth', authRoutes);
+
+// Category routes
+app.use('/api/categories', categoryRoutes);
+
+// Course routes
+app.use('/api/courses', courseRoutes);
+
+// Review routes
+app.use('/api/courses/:courseId/reviews', reviewRoutes);
+
+// Admin routes
+app.use('/api/admin', adminRoutes);
+
+// Analytics routes
+app.use('/api/analytics', analyticsRoutes);
+
+// Home page review routes
+app.use('/api/homepage-reviews', homePageReviewRoutes);
 
 const PORT = process.env.PORT || 3003; // Use PORT from environment or default to 3003
 
