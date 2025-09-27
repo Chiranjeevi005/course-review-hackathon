@@ -16,11 +16,14 @@ dotenv.config();
 // Connect to MongoDB
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    // Use the MongoDB Atlas URI from environment variables or fallback to localhost
+    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/course-review-db';
+    const conn = await mongoose.connect(mongoUri);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
+    return true;
   } catch (error) {
     console.error(`Error: ${error.message}`);
-    process.exit(1);
+    return false;
   }
 };
 
@@ -37,40 +40,52 @@ const readCoursesData = () => {
   }
 };
 
-// Define category mappings
+// Generate slug from name
+const generateSlug = (name) => {
+  if (!name) return 'category-' + Date.now();
+  return name.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'category-' + Date.now();
+};
+
+// Define category mappings with slugs
 const categoryMappings = {
   'Web Development': {
     name: 'Web Development',
+    slug: generateSlug('Web Development'),
     description: 'Learn to build modern websites and web applications',
     icon: '💻',
     filter: 'technology'
   },
   'Mobile Development': {
     name: 'Mobile Development',
+    slug: generateSlug('Mobile Development'),
     description: 'Create mobile applications for iOS and Android',
     icon: '📱',
     filter: 'mobile-development'
   },
   'Data Science': {
     name: 'Data Science',
+    slug: generateSlug('Data Science'),
     description: 'Analyze data and extract meaningful insights',
     icon: '📊',
     filter: 'data-science'
   },
   'Artificial Intelligence': {
     name: 'Artificial Intelligence',
+    slug: generateSlug('Artificial Intelligence'),
     description: 'Explore machine learning and AI technologies',
     icon: '🤖',
     filter: 'ai'
   },
   'Cloud Computing': {
     name: 'Cloud Computing',
+    slug: generateSlug('Cloud Computing'),
     description: 'Deploy and manage applications in the cloud',
     icon: '☁️',
     filter: 'cloud'
   },
   'Cybersecurity': {
     name: 'Cybersecurity',
+    slug: generateSlug('Cybersecurity'),
     description: 'Protect systems and data from cyber threats',
     icon: '🔒',
     filter: 'cybersecurity'
@@ -160,7 +175,12 @@ const seedCourses = async (categoryMap) => {
 
 // Main seeding function
 const seedDatabase = async () => {
-  await connectDB();
+  const isConnected = await connectDB();
+  
+  if (!isConnected) {
+    console.log('Failed to connect to database');
+    process.exit(1);
+  }
   
   try {
     // Seed categories first
@@ -173,6 +193,8 @@ const seedDatabase = async () => {
   } catch (error) {
     console.error('Error during seeding:', error);
   } finally {
+    await mongoose.connection.close();
+    console.log('Database connection closed');
     process.exit();
   }
 };

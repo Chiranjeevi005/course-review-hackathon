@@ -16,3 +16,15 @@ services:
         value: ''
       - key: REDIS_PORT
         value: ''
+      # Note: For security, these sensitive environment variables should be set in the Render dashboard
+      # rather than in this file. This is just for reference:
+      # - key: MONGO_URI
+      #   value: your_mongodb_connection_string
+      # - key: JWT_SECRET
+      #   value: your_jwt_secret_key
+      # - key: JWT_EXPIRES_IN
+      #   value: 1h
+      # - key: REFRESH_TOKEN_SECRET
+      #   value: your_refresh_token_secret
+      # - key: REFRESH_TOKEN_EXPIRES_IN
+      #   value: 7d

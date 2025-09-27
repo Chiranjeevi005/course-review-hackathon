@@ -9,7 +9,9 @@ dotenv.config();
 // Connect to MongoDB
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    // Use the MongoDB Atlas URI from environment variables or fallback to localhost
+    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/course-review-db';
+    const conn = await mongoose.connect(mongoUri);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
     return true;
   } catch (error) {
