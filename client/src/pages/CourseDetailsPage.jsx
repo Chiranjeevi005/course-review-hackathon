@@ -44,18 +44,15 @@ const CourseDetailsPage = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showImage, setShowImage] = useState(true);
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         setLoading(true);
-        console.log('Fetching course with ID:', courseId);
         
         // First, try to fetch from the API (for real database courses)
         try {
           const response = await axios.get(`/api/courses/${courseId}`);
-          console.log('API response:', response.data);
           
           if (response.data.success && response.data.data) {
             // Transform API course data to match our expected format
@@ -101,13 +98,11 @@ const CourseDetailsPage = () => {
             return;
           }
         } catch (apiError) {
-          console.log('API fetch failed:', apiError.message);
         }
         
         // If API fetch fails, show error since we want to use database data
         setError(`Course with ID '${courseId}' not found in the database. Please ensure the backend server is running and the course exists in the database.`);
       } catch (err) {
-        console.error('Error fetching course:', err);
         setError(`Failed to load course details: ${err.message}`);
       } finally {
         setLoading(false);

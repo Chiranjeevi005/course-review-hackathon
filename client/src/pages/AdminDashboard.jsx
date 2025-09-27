@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { motion } from 'framer-motion';
-import CourseManagement from '../components/CourseManagement';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import axios from '../services/axiosConfig';
+import Stats from '../components/Stats';
 import ReviewManagement from '../components/ReviewManagement';
 import UserManagement from '../components/UserManagement';
+import CourseManagement from '../components/CourseManagement';
 import CategoryManagement from '../components/CategoryManagement';
-import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
-import Navbar from '../layouts/Navbar'; 
+import Navbar from '../layouts/Navbar';
+import { motion } from 'framer-motion';
+import { ResponsiveContainer, LineChart, BarChart, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, Bar, Area } from 'recharts';
 
 const AdminDashboard = ({ socket }) => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin } = useContext(AuthContext);
   const [activeUsers, setActiveUsers] = useState(0);
   const [totalCourses, setTotalCourses] = useState(0);
   const [newReviewsToday, setNewReviewsToday] = useState(0);
@@ -43,7 +44,7 @@ const AdminDashboard = ({ socket }) => {
       const response = await axios.get('/api/admin/stats');
       const { usersOnline, coursesAvailable, reviewsSubmittedToday } = response.data;
       
-      setActiveUsers(usersOnline);
+      setActiveUsers(usersOnline); // This now represents total active registered users
       setTotalCourses(coursesAvailable);
       setNewReviewsToday(reviewsSubmittedToday);
     } catch (err) {
@@ -240,23 +241,13 @@ const AdminDashboard = ({ socket }) => {
     }
   }, [user, isAdmin]);
 
-  // Debugging: Log data to check for issues
-  useEffect(() => {
-    console.log('Active Users:', activeUsers);
-    console.log('Total Courses:', totalCourses);
-    console.log('New Reviews Today:', newReviewsToday);
-    console.log('Trending Category:', trendingCategory);
-    console.log('Online Users:', onlineUsers);
-    console.log('Activity Stream:', activityStream);
-  }, [activeUsers, totalCourses, newReviewsToday, trendingCategory, onlineUsers, activityStream]);
-
   // Set up real-time updates with Socket.IO
   useEffect(() => {
+    // Add a check to ensure socket exists before setting up listeners
     if (!socket || !user || !isAdmin) return;
 
     // Listen for user status changes
     const handleUserStatusChange = (data) => {
-      console.log('User status change received:', data);
       // Refresh active users and stats when user status changes
       fetchStats();
       fetchActiveUsers();
@@ -264,19 +255,24 @@ const AdminDashboard = ({ socket }) => {
 
     // Listen for new events
     const handleNewEvent = (data) => {
-      console.log('New event received:', data);
       // Refresh activity stream and stats when new events occur
       fetchRecentEvents();
       fetchStats();
     };
 
-    socket.on('user_status_change', handleUserStatusChange);
-    socket.on('new_event', handleNewEvent);
+    // Add socket event listeners only if socket is defined
+    if (socket) {
+      socket.on('user_status_change', handleUserStatusChange);
+      socket.on('new_event', handleNewEvent);
+    }
 
     // Clean up event listeners
     return () => {
-      socket.off('user_status_change', handleUserStatusChange);
-      socket.off('new_event', handleNewEvent);
+      // Check if socket exists before removing listeners
+      if (socket) {
+        socket.off('user_status_change', handleUserStatusChange);
+        socket.off('new_event', handleNewEvent);
+      }
     };
   }, [socket, user, isAdmin]);
 
@@ -304,11 +300,8 @@ const AdminDashboard = ({ socket }) => {
   const saveRecommendationSettings = async () => {
     try {
       // In a real implementation, you would send this to an API endpoint
-      console.log('Saving recommendation weights:', recommendationWeights);
-      // await axios.post('/api/admin/recommendation-settings', recommendationWeights);
       alert('Recommendation settings saved successfully!');
     } catch (err) {
-      console.error('Error saving recommendation settings:', err);
       setError('Failed to save recommendation settings');
     }
   };
@@ -325,7 +318,7 @@ const AdminDashboard = ({ socket }) => {
 
   // Hero cards data
   const heroCards = useMemo(() => [
-    { title: 'Active Users', value: activeUsers, change: '+12%', icon: '👥', color: 'bg-blue-500', id: 'active-users' },
+    { title: 'Active Users', value: activeUsers, change: '+12%', icon: '👥', color: 'bg-blue-500', id: 'active-users'},
     { title: 'Total Courses', value: totalCourses, change: '+5%', icon: '📚', color: 'bg-green-500', id: 'total-courses' },
     { title: 'New Reviews Today', value: newReviewsToday, change: '+8%', icon: '⭐', color: 'bg-yellow-500', id: 'new-reviews' },
     { title: 'Trending Category', value: trendingCategory, change: 'Hot 🔥', icon: '🔥', color: 'bg-red-500', id: 'trending-category' }
@@ -493,6 +486,11 @@ const AdminDashboard = ({ socket }) => {
                         </dl>
                       </div>
                     </div>
+                    {card.description && (
+                      <div className="mt-2">
+                        <p className="text-xs text-gray-500">{card.description}</p>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}

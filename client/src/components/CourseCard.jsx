@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import Rating from './Rating';
 import BookmarkIcon from '../assets/icons/BookmarkIcon';
-import CoursePlaceholder from './CoursePlaceholder';
+import Rating from './Rating';
+import { generatePlaceholderImage } from '../utils/placeholderGenerator';
 
 const CourseCard = ({ course }) => {
+  const navigate = useNavigate();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -35,6 +36,10 @@ const CourseCard = ({ course }) => {
       // If it's a string
       return course.category;
     }
+    // Check if categoryId exists and is an object with name
+    if (course.categoryId && typeof course.categoryId === 'object' && course.categoryId.name) {
+      return course.categoryId.name;
+    }
     // Fallback
     return 'Course';
   };
@@ -43,9 +48,9 @@ const CourseCard = ({ course }) => {
   const renderImage = () => {
     return (
       <div className="w-full h-32 sm:h-40 md:h-44 lg:h-48">
-        <CoursePlaceholder 
-          courseTitle={course.title}
-          courseDescription={course.description}
+        <img 
+          src={generatePlaceholderImage(course.title, course.description)}
+          alt={course.title}
           className="w-full h-full object-cover rounded-t-lg"
         />
       </div>
@@ -117,12 +122,12 @@ const CourseCard = ({ course }) => {
           whileTap={{ scale: 0.98 }}
           className="w-full"
         >
-          <Link 
-            to={`/courses/${getCourseId()}`}
+          <button 
+            onClick={() => navigate(`/courses/${getCourseId()}`)}
             className="block w-full bg-primary-700 text-white py-2 sm:py-2.5 md:py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 ease-in-out font-semibold focus:outline-none focus:ring-2 focus:ring-primary-700 focus:ring-opacity-50 text-center text-xs sm:text-sm md:text-base"
           >
             View Details
-          </Link>
+          </button>
         </motion.div>
       </div>
     </div>

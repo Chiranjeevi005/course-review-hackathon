@@ -29,7 +29,7 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? process.env.CLIENT_ORIGIN || 'https://your-production-domain.com' 
+      ? process.env.CLIENT_ORIGIN || 'https://your-vercel-app-url.vercel.app' 
       : 'http://localhost:5173',
     credentials: true
   }
@@ -45,7 +45,7 @@ console.log('Current directory:', __dirname);
 // Middleware
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? process.env.CLIENT_ORIGIN || 'https://your-production-domain.com' 
+    ? process.env.CLIENT_ORIGIN || 'https://your-vercel-app-url.vercel.app' 
     : 'http://localhost:5173', // Fixed frontend port
   credentials: true
 };
@@ -161,6 +161,28 @@ app.get('/', (req, res) => {
   res.send('Course Review API is running 🚀');
 });
 
+// Health check endpoint for deployment monitoring
+app.get('/health', (req, res) => {
+  const healthStatus = {
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    memoryUsage: process.memoryUsage(),
+    environment: process.env.NODE_ENV || 'development'
+  };
+  
+  // Check MongoDB connection if it exists
+  if (mongoose.connection) {
+    healthStatus.mongodb = {
+      connected: mongoose.connection.readyState === 1,
+      connecting: mongoose.connection.readyState === 2,
+      disconnecting: mongoose.connection.readyState === 3
+    };
+  }
+  
+  res.status(200).json(healthStatus);
+});
+
 // Auth routes
 app.use('/auth', authRoutes);
 
@@ -233,5 +255,5 @@ app.get('/test-dependencies', async (req, res) => {
   }
 });
 
-const PORT = 3003; // Fixed port for backend
+const PORT = process.env.PORT || 3003; // Use PORT from environment or default to 3003
 server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

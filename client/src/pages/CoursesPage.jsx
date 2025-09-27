@@ -99,7 +99,14 @@ const CoursesPage = () => {
           return course.category._id === filterParams.category;
         }
         // If course.category is a string, compare directly
-        return course.category === filterParams.category;
+        if (course.category) {
+          return course.category === filterParams.category;
+        }
+        // If course.categoryId is an object, compare with its _id
+        if (course.categoryId && typeof course.categoryId === 'object' && course.categoryId._id) {
+          return course.categoryId._id === filterParams.category;
+        }
+        return false;
       });
     }
     
@@ -225,7 +232,14 @@ const CoursesPage = () => {
         return course.category._id === categoryId;
       }
       // If course.category is a string, compare directly
-      return course.category === categoryId;
+      if (course.category) {
+        return course.category === categoryId;
+      }
+      // If course.categoryId is an object, compare with its _id
+      if (course.categoryId && typeof course.categoryId === 'object' && course.categoryId._id) {
+        return course.categoryId._id === categoryId;
+      }
+      return false;
     }).length;
   };
 

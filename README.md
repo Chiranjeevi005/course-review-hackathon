@@ -5,7 +5,6 @@ A comprehensive web application that allows users to discover, review, and get r
 ## 🚀 Key Features
 
 - **User Authentication**: Secure email/password registration and login with JWT tokens
-- **Google OAuth Integration**: One-click sign-in with Google accounts
 - **Course Discovery**: Browse and search courses across 22 categories
 - **Course Reviews**: Rate and review courses with detailed feedback
 - **Admin Dashboard**: Real-time analytics and content management
@@ -17,7 +16,7 @@ A comprehensive web application that allows users to discover, review, and get r
 
 - **Frontend**: React + Vite + Tailwind CSS
 - **Backend**: Node.js + Express.js + MongoDB
-- **Authentication**: JWT + bcrypt + Google OAuth
+- **Authentication**: JWT + bcrypt
 - **Real-time Communication**: Socket.IO
 - **Caching**: Redis
 - **Deployment**: Vercel (client) / Render (server)
@@ -98,10 +97,6 @@ JWT_EXPIRES_IN=7d
 REFRESH_TOKEN_SECRET=your_refresh_token_secret_here
 REFRESH_TOKEN_EXPIRES_IN=7d
 
-# Google OAuth Configuration
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
 # Redis Configuration
 REDIS_HOST=localhost
 REDIS_PORT=6379
@@ -112,7 +107,6 @@ REDIS_PORT=6379
 # Client Configuration
 VITE_API_BASE_URL=http://localhost:3003
 VITE_API_URL=http://localhost:3003
-VITE_GOOGLE_CLIENT_ID=your_google_client_id
 ```
 
 ### Running the Application
@@ -137,10 +131,9 @@ VITE_GOOGLE_CLIENT_ID=your_google_client_id
 
 ## 🔐 Authentication
 
-The platform supports two authentication methods:
+The platform supports traditional email/password authentication:
 
-1. **Email/Password**: Traditional registration and login
-2. **Google OAuth**: One-click sign-in with Google accounts
+1. **Email/Password**: Registration and login with email and password
 
 ### Default Admin Account
 - Email: admin@coursefinder.com
@@ -148,7 +141,7 @@ The platform supports two authentication methods:
 
 ## 📊 Admin Dashboard
 
-Access the admin dashboard at `/admin` after logging in as an admin user. Features include:
+Access the admin dashboard at `/admin-dashboard` after logging in as an admin user. Features include:
 
 - Real-time statistics and analytics
 - User management (view, edit, deactivate)
@@ -184,7 +177,6 @@ npm run test:realtime
 ### Authentication
 - `POST /auth/register` - Register a new user
 - `POST /auth/login` - Login with email and password
-- `POST /auth/google` - Google login
 - `POST /auth/refresh` - Refresh access token
 - `POST /auth/logout` - Logout user
 - `GET /auth/profile` - Get user profile (protected)
@@ -214,22 +206,39 @@ npm run test:realtime
 - CORS configured for frontend domain only
 - Input validation and sanitization
 - Role-based access control
+- Comprehensive `.gitignore` configuration to prevent sensitive files from being committed
+- Environment variables for all sensitive configuration
+- Security check scripts to verify no sensitive files are committed
+- See our [Security Guide](SECURITY_GUIDE.md) for detailed security practices
 
 ## 🚀 Deployment
 
-### Backend (Render)
+For detailed deployment instructions, please refer to our [Deployment Guide](DEPLOYMENT_GUIDE.md).
+
+### Quick Deployment Overview
+
+#### Backend (Render)
 1. Create a new Web Service on Render
 2. Connect your GitHub repository
 3. Set build command: `npm install`
 4. Set start command: `npm start`
-5. Add environment variables in the Render dashboard
+5. Set the root directory to `/server`
+6. Add environment variables in the Render dashboard:
+   - `NODE_ENV`: production
+   - `PORT`: 3003
+   - `MONGO_URI`: your MongoDB connection string
+   - `JWT_SECRET`: your JWT secret key
+   - `CLIENT_ORIGIN`: your Vercel frontend URL
 
-### Frontend (Vercel)
+#### Frontend (Vercel)
 1. Create a new project on Vercel
 2. Connect your GitHub repository
-3. Set build command: `npm run build`
-4. Set output directory: `dist`
-5. Add environment variables in the Vercel dashboard
+3. Set the root directory to `/client`
+4. Set build command: `npm run build`
+5. Set output directory: `dist`
+6. Add environment variables in the Vercel dashboard:
+   - `VITE_API_URL`: your Render backend URL
+   - `VITE_CLIENT_ORIGIN`: your Vercel frontend URL
 
 ## 🤝 Contributing
 

@@ -118,6 +118,20 @@ config.json
 secrets.json
 credentials.json
 
+# Additional security patterns for sensitive files
+*config*.json
+*secret*.json
+*credential*.json
+*private*.key
+*private*.pem
+.*history*
+.env*
+.*rc
+.*_history
+.*_credentials
+.*_secrets
+.*_config
+
 # Database files
 *.db
 *.sqlite
@@ -126,3 +140,49 @@ credentials.json
 # Backup files
 *.bak
 *.backup
+*~
+
+# SSH keys
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+ssh_host_*
+
+# AWS credentials
+credentials
+.aws/*
+
+# Google Cloud credentials
+gcloud-service-key.json
+application_default_credentials.json
+
+# Azure credentials
+azureProfile.json
+
+# Docker
+.dockercfg
+.dockerignore
+
+# Kubernetes
+.kube/config
+
+# Terraform
+terraform.tfvars
+*.tfstate
+*.tfstate.backup
+
+# Ansible
+vault_password_file
+
+# CI/CD
+.travis.yml
+.gitlab-ci.yml
+Jenkinsfile
+
+# Redis
+*.rdb
+*.aof
+
+# PM2
+ecosystem.config.js
