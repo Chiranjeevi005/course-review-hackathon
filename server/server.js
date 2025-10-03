@@ -274,6 +274,37 @@ app.get('/test-dependencies', async (req, res) => {
   }
 });
 
+app.get('/api/seed-reviews', async (req, res) => {
+  // Add basic protection - only allow in development or with a secret key
+  const seedKey = req.query.key;
+  const expectedKey = process.env.SEED_KEY || 'default-seed-key';
+  
+  // In production, require a seed key
+  if (process.env.NODE_ENV === 'production' && seedKey !== expectedKey) {
+    return res.status(403).json({
+      success: false,
+      message: 'Forbidden: Invalid or missing seed key'
+    });
+  }
+  
+  try {
+    // Import the review seeding function
+    const { seedReviewsOnly } = await import('./seedAllData.js');
+    
+    // Run the seeding
+    const result = await seedReviewsOnly();
+    
+    res.json(result);
+  } catch (error) {
+    console.error('Error seeding reviews:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to seed reviews',
+      error: error.message
+    });
+  }
+});
+
 // Auth routes
 app.use('/auth', authRoutes);
 

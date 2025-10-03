@@ -10,6 +10,9 @@ export const getCourseReviews = async (req, res) => {
     const { courseId } = req.params;
     const { page = 1, limit = 10, rating, sortBy = 'createdAt', sortOrder = -1 } = req.query;
     
+    console.log('Fetching reviews for course:', courseId);
+    console.log('Query params:', { page, limit, rating, sortBy, sortOrder });
+    
     // Validate courseId
     if (!mongoose.Types.ObjectId.isValid(courseId)) {
       return res.status(400).json({
@@ -29,19 +32,24 @@ export const getCourseReviews = async (req, res) => {
     // Build sort object
     let sort = {};
     if (sortBy === 'helpful') {
-      sort.likes = sortOrder;
+      sort.likes = parseInt(sortOrder);
     } else if (sortBy === 'rating') {
-      sort.rating = sortOrder;
+      sort.rating = parseInt(sortOrder);
     } else {
-      sort.createdAt = sortOrder;
+      sort.createdAt = parseInt(sortOrder);
     }
+    
+    console.log('Query object:', query);
+    console.log('Sort object:', sort);
     
     // Execute query with pagination
     const reviews = await Review.find(query)
       .sort(sort)
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .skip((parseInt(page) - 1) * parseInt(limit))
       .populate('userId', 'name');
+    
+    console.log('Found reviews:', reviews.length);
     
     // Get total count for pagination
     const total = await Review.countDocuments(query);
@@ -51,14 +59,15 @@ export const getCourseReviews = async (req, res) => {
       count: reviews.length,
       total,
       page: parseInt(page),
-      pages: Math.ceil(total / limit),
+      pages: Math.ceil(total / parseInt(limit)),
       data: reviews
     });
   } catch (error) {
     console.error('Error fetching course reviews:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error while fetching course reviews'
+      message: 'Server error while fetching course reviews',
+      error: error.message
     });
   }
 };

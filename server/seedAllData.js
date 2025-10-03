@@ -487,19 +487,25 @@ const seedReviews = async (courseIds, userIds) => {
     
     // For each course, create reviews from different users
     for (const courseId of courseIds) {
-      // Shuffle users to randomize selection
-      const shuffledUsers = [...userIds].sort(() => 0.5 - Math.random());
-      
-      // Create 3-5 reviews per course (or fewer if not enough users)
-      const reviewCount = Math.min(Math.floor(Math.random() * 3) + 3, shuffledUsers.length);
-      
-      for (let i = 0; i < reviewCount; i++) {
-        const userId = shuffledUsers[i];
+      try {
+        // Shuffle users to randomize selection
+        const shuffledUsers = [...userIds].sort(() => 0.5 - Math.random());
         
-        const reviewData = generateReviewData(userId, courseId);
-        allReviews.push(reviewData);
+        // Create 3-5 reviews per course (or fewer if not enough users)
+        const reviewCount = Math.min(Math.floor(Math.random() * 3) + 3, shuffledUsers.length);
+        
+        for (let i = 0; i < reviewCount; i++) {
+          const userId = shuffledUsers[i];
+          
+          const reviewData = generateReviewData(userId, courseId);
+          allReviews.push(reviewData);
+        }
+      } catch (courseError) {
+        console.error(`Error processing course ${courseId}:`, courseError);
       }
     }
+    
+    console.log(`Attempting to insert ${allReviews.length} reviews`);
     
     // Insert reviews one by one to handle duplicates gracefully
     let insertedCount = 0;
@@ -511,6 +517,8 @@ const seedReviews = async (courseIds, userIds) => {
         // Skip duplicate reviews
         if (error.code !== 11000) {
           console.error('Error inserting review:', error);
+        } else {
+          console.log('Skipping duplicate review for user:', review.userId, 'course:', review.courseId);
         }
       }
     }
@@ -518,27 +526,38 @@ const seedReviews = async (courseIds, userIds) => {
     console.log(`Reviews seeded: ${insertedCount}`);
     
     // Update course ratings and reviews count
-    const Course = (await import('./models/Course.js')).default;
-    
-    for (const courseId of courseIds) {
-      // Get all reviews for this course
-      const reviews = await Review.find({ courseId });
+    try {
+      const Course = (await import('./models/Course.js')).default;
       
-      // Calculate average rating
-      const totalReviews = reviews.length;
-      const sumRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
-      const averageRating = totalReviews > 0 ? (sumRatings / totalReviews) : 0;
+      for (const courseId of courseIds) {
+        try {
+          // Get all reviews for this course
+          const reviews = await Review.find({ courseId });
+          
+          // Calculate average rating
+          const totalReviews = reviews.length;
+          const sumRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+          const averageRating = totalReviews > 0 ? (sumRatings / totalReviews) : 0;
+          
+          // Update course
+          await Course.findByIdAndUpdate(courseId, {
+            rating: parseFloat(averageRating.toFixed(1)),
+            reviewsCount: totalReviews
+          });
+        } catch (courseUpdateError) {
+          console.error(`Error updating course ${courseId}:`, courseUpdateError);
+        }
+      }
       
-      // Update course
-      await Course.findByIdAndUpdate(courseId, {
-        rating: parseFloat(averageRating.toFixed(1)),
-        reviewsCount: totalReviews
-      });
+      console.log('Course ratings and reviews count updated');
+    } catch (updateError) {
+      console.error('Error updating course ratings:', updateError);
     }
     
-    console.log('Course ratings and reviews count updated');
+    return insertedCount;
   } catch (error) {
     console.error('Error seeding reviews:', error);
+    throw error;
   }
 };
 
@@ -549,6 +568,71 @@ const ensureAdminUser = async () => {
     console.log('Admin user ensured');
   } catch (error) {
     console.error('Error ensuring admin user:', error);
+  }
+};
+
+// Export functions for use in server.js
+export { seedCategories, seedCourses, seedReviews, ensureAdminUser };
+
+// Add a function to seed only reviews
+export const seedReviewsOnly = async () => {
+  let connectionClosed = false;
+  
+  try {
+    const isConnected = await connectDB();
+    
+    if (!isConnected) {
+      console.log('Failed to connect to database');
+      return { success: false, message: 'Failed to connect to database' };
+    }
+    
+    // Get all courses and users for creating reviews
+    const Course = (await import('./models/Course.js')).default;
+    const User = (await import('./models/User.js')).default;
+    const Review = (await import('./models/Review.js')).default;
+    
+    const courses = await Course.find({});
+    const users = await User.find({});
+    
+    console.log(`Found ${courses.length} courses and ${users.length} users`);
+    
+    if (courses.length === 0) {
+      return { success: false, message: 'No courses found in database. Please seed courses first.' };
+    }
+    
+    if (users.length === 0) {
+      return { success: false, message: 'No users found in database. Please ensure users exist.' };
+    }
+    
+    // Extract IDs
+    const courseIds = courses.map(course => course._id);
+    const userIds = users.map(user => user._id);
+    
+    // Seed reviews
+    const insertedCount = await seedReviews(courseIds, userIds);
+    
+    console.log('Reviews seeding completed successfully!');
+    return { 
+      success: true, 
+      message: 'Reviews seeded successfully!', 
+      courseCount: courseIds.length, 
+      userCount: userIds.length,
+      reviewCount: insertedCount
+    };
+  } catch (error) {
+    console.error('Error during reviews seeding:', error);
+    return { success: false, message: 'Error during reviews seeding', error: error.message };
+  } finally {
+    // Only close connection if it was opened
+    if (!connectionClosed) {
+      try {
+        await mongoose.connection.close();
+        console.log('Database connection closed');
+        connectionClosed = true;
+      } catch (closeError) {
+        console.error('Error closing database connection:', closeError);
+      }
+    }
   }
 };
 
