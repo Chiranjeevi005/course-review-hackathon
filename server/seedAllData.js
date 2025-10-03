@@ -438,6 +438,110 @@ const seedCourses = async (categoryMap) => {
   }
 };
 
+// Sample review texts
+const sampleReviewTexts = [
+  'This course completely transformed my understanding of the subject. The instructor explains complex topics in a very accessible way.',
+  'Excellent content and well-structured modules. The hands-on projects really helped solidify my learning.',
+  'As a beginner, this course gave me the foundational knowledge I needed to advance my skills. Highly recommended!',
+  'The course material is comprehensive and up-to-date. I appreciated the real-world examples and practical exercises.',
+  'Outstanding instruction and clear explanations. This course exceeded my expectations in every way.',
+  'Great value for money. The depth of content is impressive and the instructor is very knowledgeable.',
+  'I learned so much from this course. The pacing was perfect and the quizzes helped reinforce key concepts.',
+  'Well-organized curriculum with excellent production quality. The instructor is engaging and easy to follow.',
+  'This course helped me land a new job! The skills I gained were directly applicable to what employers are looking for.',
+  'Fantastic course with practical applications. I was able to implement what I learned immediately in my work.'
+];
+
+// Sample review tags
+const sampleReviewTags = [
+  'Beginner-friendly', 'Comprehensive', 'Practical', 'Well-structured', 
+  'Engaging', 'Up-to-date', 'Challenging', 'Value-for-money', 
+  'Hands-on', 'Expert-instructor'
+];
+
+// Generate realistic review data
+const generateReviewData = (userId, courseId) => {
+  return {
+    userId: userId,
+    courseId: courseId,
+    rating: Math.floor(Math.random() * 5) + 1, // Rating between 1 and 5
+    text: sampleReviewTexts[Math.floor(Math.random() * sampleReviewTexts.length)],
+    tags: sampleReviewTags
+      .sort(() => 0.5 - Math.random())
+      .slice(0, Math.floor(Math.random() * 3) + 1) // 1-3 random tags
+  };
+};
+
+// Seed reviews for courses
+const seedReviews = async (courseIds, userIds) => {
+  try {
+    // Import Review model
+    const Review = (await import('./models/Review.js')).default;
+    
+    // Clear existing reviews
+    await Review.deleteMany({});
+    console.log('Reviews cleared');
+    
+    // Generate reviews - create one review per user per course combination
+    const allReviews = [];
+    
+    // For each course, create reviews from different users
+    for (const courseId of courseIds) {
+      // Shuffle users to randomize selection
+      const shuffledUsers = [...userIds].sort(() => 0.5 - Math.random());
+      
+      // Create 3-5 reviews per course (or fewer if not enough users)
+      const reviewCount = Math.min(Math.floor(Math.random() * 3) + 3, shuffledUsers.length);
+      
+      for (let i = 0; i < reviewCount; i++) {
+        const userId = shuffledUsers[i];
+        
+        const reviewData = generateReviewData(userId, courseId);
+        allReviews.push(reviewData);
+      }
+    }
+    
+    // Insert reviews one by one to handle duplicates gracefully
+    let insertedCount = 0;
+    for (const review of allReviews) {
+      try {
+        await Review.create(review);
+        insertedCount++;
+      } catch (error) {
+        // Skip duplicate reviews
+        if (error.code !== 11000) {
+          console.error('Error inserting review:', error);
+        }
+      }
+    }
+    
+    console.log(`Reviews seeded: ${insertedCount}`);
+    
+    // Update course ratings and reviews count
+    const Course = (await import('./models/Course.js')).default;
+    
+    for (const courseId of courseIds) {
+      // Get all reviews for this course
+      const reviews = await Review.find({ courseId });
+      
+      // Calculate average rating
+      const totalReviews = reviews.length;
+      const sumRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+      const averageRating = totalReviews > 0 ? (sumRatings / totalReviews) : 0;
+      
+      // Update course
+      await Course.findByIdAndUpdate(courseId, {
+        rating: parseFloat(averageRating.toFixed(1)),
+        reviewsCount: totalReviews
+      });
+    }
+    
+    console.log('Course ratings and reviews count updated');
+  } catch (error) {
+    console.error('Error seeding reviews:', error);
+  }
+};
+
 // Ensure admin user exists
 const ensureAdminUser = async () => {
   try {
@@ -466,6 +570,20 @@ const seedAllData = async () => {
     
     // Then seed courses
     await seedCourses(categoryMap);
+    
+    // Get all courses and users for creating reviews
+    const Course = (await import('./models/Course.js')).default;
+    const User = (await import('./models/User.js')).default;
+    
+    const courses = await Course.find({});
+    const users = await User.find({});
+    
+    // Extract IDs
+    const courseIds = courses.map(course => course._id);
+    const userIds = users.map(user => user._id);
+    
+    // Seed reviews
+    await seedReviews(courseIds, userIds);
     
     console.log('All data seeding completed successfully!');
   } catch (error) {

@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import Course from './models/Course.js';
 import Category from './models/Category.js';
 import User from './models/User.js';
+import Review from './models/Review.js';
 
 // Load environment variables
 dotenv.config();
@@ -42,6 +43,10 @@ const verifyAllData = async () => {
     const userCount = await User.countDocuments();
     console.log(`Total Users: ${userCount}`);
     
+    // Count reviews
+    const reviewCount = await Review.countDocuments();
+    console.log(`Total Reviews: ${reviewCount}`);
+    
     // Check for admin user
     const adminUser = await User.findOne({ email: 'admin@coursefinder.com' });
     if (adminUser) {
@@ -64,14 +69,22 @@ const verifyAllData = async () => {
       console.log(`- ${course.title} (${course.categoryId?.name || 'No Category'})`);
     });
     
+    // Show sample reviews
+    const sampleReviews = await Review.find().populate('userId').populate('courseId').limit(3);
+    console.log('\nSample Reviews:');
+    sampleReviews.forEach(review => {
+      console.log(`- User: ${review.userId?.name || 'Unknown'} | Course: ${review.courseId?.title || 'Unknown'} | Rating: ${review.rating}/5`);
+    });
+    
     console.log('\n✅ Verification completed successfully!');
     console.log('\n📊 Summary:');
     console.log(`   Categories: ${categoryCount}/22`);
     console.log(`   Courses: ${courseCount}/88`);
     console.log(`   Users: ${userCount}`);
+    console.log(`   Reviews: ${reviewCount}`);
     console.log(`   Admin User: ${adminUser ? '✅ Present' : '❌ Missing'}`);
     
-    if (categoryCount === 22 && courseCount === 88 && adminUser) {
+    if (categoryCount === 22 && courseCount === 88 && adminUser && reviewCount > 0) {
       console.log('\n🎉 All data has been successfully seeded!');
       console.log('   You can now access your deployed application with realistic data.');
       console.log('   Admin credentials:');

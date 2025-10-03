@@ -67,7 +67,6 @@ The authentication system implements JWT-based authentication with refresh token
 
 ### Features
 - Email/password registration and login
-- Google OAuth integration
 - JWT access tokens with 7-day expiration
 - HttpOnly refresh tokens stored in cookies
 - Protected routes with role-based access control
